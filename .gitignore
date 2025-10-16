@@ -48,3 +48,18 @@ htmlcov/
 .dmypy.json
 dmypy.json
 .pyre/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Workspace and temporary files (for agent workflows)
+.work/
+**/workspace/*/.work/
+failed/
+
+# Session and transcript files
+.claude/sessions/
+transcripts/
