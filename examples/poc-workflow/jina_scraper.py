@@ -12,7 +12,7 @@ This demonstrates:
 import anyio
 import os
 from claude_agent_sdk import (
-    query,
+    ClaudeSDKClient,
     ClaudeAgentOptions,
     AgentDefinition,
     AssistantMessage,
@@ -41,11 +41,12 @@ async def main():
     print()
 
     # Configure Jina MCP server with API key
+    # CRITICAL: Use "jina-mcp-tools" package (matches Claude Desktop config)
     # KEY DIFFERENCE FROM CLI: SDK needs 'env' field for API keys
     mcp_servers = {
         "jina": {
             "command": "npx",
-            "args": ["-y", "@jina-ai/mcp-server-jina"],
+            "args": ["-y", "jina-mcp-tools"],
             "env": {
                 "JINA_API_KEY": jina_api_key
             }
@@ -100,44 +101,52 @@ async def main():
 
     found_url = None
 
-    # Execute the workflow
+    # Execute the workflow using streaming mode (required for MCP servers)
     try:
-        async for message in query(prompt=workflow_prompt, options=options):
-            if isinstance(message, AssistantMessage):
-                for block in message.content:
-                    if isinstance(block, TextBlock):
-                        print(f"💬 Claude: {block.text}")
-                        print()
+        async with ClaudeSDKClient(options=options) as client:
+            # Send the query
+            await client.query(workflow_prompt)
 
-                        # Try to extract URL from response
-                        if "vsga.org/courselisting" in block.text:
-                            # Simple extraction
-                            import re
-                            urls = re.findall(r'https://vsga\.org/courselisting/\d+\?hsLang=en', block.text)
-                            if urls:
-                                found_url = urls[0]
+            # Receive and process the response
+            async for message in client.receive_response():
+                if isinstance(message, AssistantMessage):
+                    for block in message.content:
+                        if isinstance(block, TextBlock):
+                            print(f"💬 Claude: {block.text}")
+                            print()
 
-            elif isinstance(message, SystemMessage):
-                print(f"🔧 System: {message.subtype}")
-                if message.data:
-                    print(f"   Data: {message.data}")
-                print()
+                            # Try to extract URL from response
+                            if "vsga.org/courselisting" in block.text:
+                                # Simple extraction
+                                import re
+                                urls = re.findall(r'https://vsga\.org/courselisting/\d+\?hsLang=en', block.text)
+                                if urls:
+                                    found_url = urls[0]
 
-            elif isinstance(message, ResultMessage):
-                print("=" * 70)
-                print("✅ Scraping Complete!")
-                print(f"⏱️  Duration: {message.duration_ms / 1000:.2f}s")
-                print(f"🔄 Turns: {message.num_turns}")
-                if message.total_cost_usd:
-                    print(f"💰 Cost: ${message.total_cost_usd:.4f}")
+                elif isinstance(message, SystemMessage):
+                    print(f"🔧 System: {message.subtype}")
+                    if message.data:
+                        # Show MCP server status
+                        mcp_servers = message.data.get('mcp_servers', [])
+                        if mcp_servers:
+                            print(f"   MCP Servers: {mcp_servers}")
+                    print()
 
-                if found_url:
-                    print("\n" + "=" * 70)
-                    print("🎯 RESULT FOUND:")
-                    print(f"   {found_url}")
+                elif isinstance(message, ResultMessage):
                     print("=" * 70)
-                else:
-                    print("\n⚠️  Could not extract URL from response")
+                    print("✅ Scraping Complete!")
+                    print(f"⏱️  Duration: {message.duration_ms / 1000:.2f}s")
+                    print(f"🔄 Turns: {message.num_turns}")
+                    if message.total_cost_usd:
+                        print(f"💰 Cost: ${message.total_cost_usd:.4f}")
+
+                    if found_url:
+                        print("\n" + "=" * 70)
+                        print("🎯 RESULT FOUND:")
+                        print(f"   {found_url}")
+                        print("=" * 70)
+                    else:
+                        print("\n⚠️  Could not extract URL from response")
 
     except Exception as e:
         print(f"\n❌ Error occurred: {e}")
