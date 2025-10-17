@@ -1,0 +1,1128 @@
+{
+  "test_date": "2025-01-17",
+  "test_type": "business_intelligence",
+  "total_contacts": 10,
+  "successful_intel": 10,
+  "success_rate": 100.0,
+  "segmentation": {
+    "high_end": 4,
+    "budget": 3,
+    "both": 3,
+    "unknown": 0
+  },
+  "opportunity_averages": {
+    "range_ball_buy": 5.4,
+    "range_ball_sell": 5.2,
+    "range_ball_lease": 7.6,
+    "proshop_ecommerce": 4.4,
+    "superintendent_partnership": 5.8,
+    "ball_retrieval": 6.5
+  },
+  "avg_starters_per_contact": 7.0,
+  "avg_cost_per_contact": 0.03307017999999999,
+  "total_cost": 0.33070179999999993,
+  "meets_criteria": {
+    "starters": true,
+    "cost": true,
+    "success_rate": true,
+    "segmentation": true
+  },
+  "results": [
+    {
+      "name": "Dean Sumner",
+      "title": "Director of Golf",
+      "company": "Quinton Oaks Golf Course",
+      "domain": "quintonoaks.com",
+      "email": "deansumner@pga.com",
+      "email_method": "hunter_io",
+      "email_confidence": 98,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.0121215,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "budget",
+          "confidence": 8,
+          "signals": [
+            "Semi-private positioning with budget to mid-range market focus",
+            "Affordable green fees $33-$45 for 18 holes",
+            "Described as 'excellent value for money' and 'value-oriented'",
+            "Beginner/intermediate friendly rather than premium experience",
+            "4.9/5 rating suggests quality but not ultra-premium segment",
+            "No mentions of recent facility upgrades or major capital investments",
+            "Caters to 'value-conscious golfers' per competitive intel"
+          ]
+        },
+        "range_intel": {
+          "has_range": true,
+          "volume_signals": [
+            "12 practice tees available",
+            "Suitable for golfers of all skill levels",
+            "Semi-private with daily visitor access suggests moderate volume"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [
+            "Range balls cost $15-$8 per bucket noted as economic burden",
+            "Budget constraints for consumables mentioned as key challenge",
+            "Need to balance costs with member expectations",
+            "Operational costs for mats, balls, buckets are significant challenge"
+          ],
+          "sustainability_signals": [
+            "Waste disposal and sustainability concerns listed as key challenge",
+            "Environmental impact of range balls and consumables noted",
+            "Minimizing waste from range balls identified as priority"
+          ]
+        },
+        "opportunities": {
+          "range_ball_buy": 3,
+          "range_ball_sell": 8,
+          "range_ball_lease": 8,
+          "proshop_ecommerce": 5,
+          "superintendent_partnership": 4,
+          "ball_retrieval": 6
+        },
+        "conversation_starters": [
+          {
+            "text": "I see you're managing a 12-tee practice facility - have you explored alternatives to buying new range balls that could cut your consumables budget by 40-60%?",
+            "value_prop": "range_ball_sell",
+            "relevance": 10
+          },
+          {
+            "text": "Many semi-private courses are switching to range ball lease programs to eliminate the hassle of tracking inventory and replenishment while maintaining predictable monthly costs - is this something you'd be open to discussing?",
+            "value_prop": "range_ball_lease",
+            "relevance": 9
+          },
+          {
+            "text": "Given your focus on value and member satisfaction, how are you currently managing the balance between range ball quality and the economic burden of frequent replenishment?",
+            "value_prop": "range_ball_sell",
+            "relevance": 9
+          },
+          {
+            "text": "We help courses like yours turn sustainability goals into cost savings - our reconditioned range balls reduce waste while cutting costs by half. Is waste reduction something you're actively working on?",
+            "value_prop": "range_ball_sell",
+            "relevance": 8
+          },
+          {
+            "text": "With a 6-month swap cycle, our lease program gives you always-fresh inventory with zero upfront investment and no tracking headaches - just predictable monthly costs and happy members. Sound interesting?",
+            "value_prop": "range_ball_lease",
+            "relevance": 8
+          },
+          {
+            "text": "Your 4.9-star rating shows you're delivering excellent value - we help maintain that reputation by providing reconditioned range balls that members can't distinguish from new at half the cost.",
+            "value_prop": "range_ball_sell",
+            "relevance": 7
+          },
+          {
+            "text": "As you manage operational costs for your practice facility, have you calculated how much you're spending annually on range ball replenishment? We typically save courses 40-60% on that line item.",
+            "value_prop": "range_ball_sell",
+            "relevance": 7
+          }
+        ]
+      },
+      "_agent6_primary_target": "budget",
+      "_agent6_confidence": 8,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_sell",
+          "score": 8
+        },
+        {
+          "type": "range_ball_lease",
+          "score": 8
+        }
+      ],
+      "_agent6_avg_relevance": 8.3,
+      "_agent6_cost": 0.045285,
+      "_agent6_turns": 3
+    },
+    {
+      "name": "Eddie Luke",
+      "title": "General Manager",
+      "company": "Red Wing Lake Golf Course",
+      "domain": "redwinglakegolf.com",
+      "email": "info@redwinglakegolf.com",
+      "email_method": "course_general_email",
+      "email_confidence": 30,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io",
+        "web_search",
+        "focused_search",
+        "general_email"
+      ],
+      "_agent3_cost": 0.012385,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "both",
+          "confidence": 7,
+          "signals": [
+            "Public golf course - budget indicator",
+            "Affordable pricing positioning - budget indicator",
+            "3.8/5 star rating - mid-range indicator",
+            "Major recent renovations (greens rebuilt, fairway improvements, irrigation/drainage) - high-end capital investment indicator",
+            "Bent grass greens installation - premium quality upgrade",
+            "Large driving range with 4 practice tees - significant practice facility investment",
+            "Extensive practice facilities (putting green, chipping area) - quality focus",
+            "Classic George W. Cobb design - heritage/quality positioning",
+            "Affordable range ball pricing ($8 large, $5 warm-up) - budget-conscious pricing"
+          ]
+        },
+        "range_intel": {
+          "has_range": true,
+          "volume_signals": [
+            "Large driving range",
+            "4 practice tees",
+            "70-ball large buckets",
+            "Extensive practice facilities including putting green and chipping area"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [
+            "Public course positioning",
+            "Affordable experience at Virginia Beach Oceanfront",
+            "Range balls priced at $8/$5 (typical public course pricing)",
+            "Accessible to all skill levels"
+          ],
+          "sustainability_signals": [
+            "New wetland areas created during renovations",
+            "Lake enhancements for environmental improvement",
+            "Improved drainage systems"
+          ]
+        },
+        "opportunities": {
+          "range_ball_buy": 5,
+          "range_ball_sell": 6,
+          "range_ball_lease": 8,
+          "proshop_ecommerce": 3,
+          "superintendent_partnership": 6,
+          "ball_retrieval": 7
+        },
+        "conversation_starters": [
+          {
+            "text": "With your recent major renovations and quality upgrades, have you considered a range ball program that matches your facility improvements? We offer a 6-month swap cycle that keeps your practice balls looking as fresh as your new bent grass greens.",
+            "value_prop": "range_ball_lease",
+            "relevance": 10
+          },
+          {
+            "text": "Your new wetland and lake features are beautiful additions - are you currently retrieving balls from those water hazards? We can turn those lost balls into revenue through our cleaning and reconditioning process.",
+            "value_prop": "ball_retrieval",
+            "relevance": 9
+          },
+          {
+            "text": "As a public course serving the Virginia Beach community, maintaining quality while controlling costs is critical. Our reconditioned range balls cost 40-60% less than new while delivering the same member experience.",
+            "value_prop": "range_ball_sell",
+            "relevance": 8
+          },
+          {
+            "text": "With 4 practice tees and a large driving range, you're going through significant range ball inventory. A lease program eliminates the hassle of tracking wear and provides predictable monthly costs - no capital outlay required.",
+            "value_prop": "range_ball_lease",
+            "relevance": 8
+          },
+          {
+            "text": "Your recent investments in drainage and wetland improvements show a commitment to sustainability. We're the only company worldwide that can keep range balls out of landfills by reconditioning them to like-new quality.",
+            "value_prop": "range_ball_lease",
+            "relevance": 7
+          },
+          {
+            "text": "Public courses face unique budget pressures - have you explored alternatives to constantly purchasing new range balls? Our reconditioning process provides professional-grade balls at half the cost.",
+            "value_prop": "range_ball_sell",
+            "relevance": 7
+          },
+          {
+            "text": "With your extensive practice facilities and the new water features from your renovation, you likely have hundreds of balls in those lakes. We can retrieve, clean, and recondition them - turning waste into usable inventory.",
+            "value_prop": "ball_retrieval",
+            "relevance": 7
+          }
+        ]
+      },
+      "_agent6_primary_target": "both",
+      "_agent6_confidence": 7,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_lease",
+          "score": 8
+        },
+        {
+          "type": "ball_retrieval",
+          "score": 7
+        }
+      ],
+      "_agent6_avg_relevance": 8.0,
+      "_agent6_cost": 0.03388775,
+      "_agent6_turns": 3
+    },
+    {
+      "name": "Conlin Giles",
+      "title": "Head Golf Professional",
+      "company": "Red Wing Lake Golf Course",
+      "domain": "redwinglakegolf.com",
+      "email": "info@redwinglakegolf.com",
+      "email_method": "course_general_email",
+      "email_confidence": 30,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io",
+        "web_search",
+        "focused_search",
+        "general_email"
+      ],
+      "_agent3_cost": 0.011952500000000001,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "budget",
+          "confidence": 8,
+          "signals": [
+            "Public and affordable positioning",
+            "Range ball pricing at $5 for 35 balls and $8 for 70 balls with bulk discount cards",
+            "Tripadvisor rating 3.8/5 (33 reviews) - mid-tier rating",
+            "Recent renovations suggest investment but no premium/private positioning",
+            "Practice facilities available to all golfers, not exclusive membership",
+            "Value-oriented approach with bulk range card program ($60 for 10 large buckets)"
+          ]
+        },
+        "range_intel": {
+          "has_range": true,
+          "volume_signals": [
+            "Large open driving range mentioned",
+            "Practice facilities include driving range, large practice green, and practice bunker",
+            "Bulk range card program suggests regular high-volume usage",
+            "Practice amenities available to all golfers"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [
+            "Public affordable positioning",
+            "Value-oriented pricing structure",
+            "Bulk discount program for range balls",
+            "Mid-tier Tripadvisor rating (3.8/5)"
+          ],
+          "sustainability_signals": [
+            "Wetlands and natural landscapes featured",
+            "Recent renovations added new wetland areas and lakes",
+            "Surrounded by mature lob-lolly pines",
+            "No explicit sustainability programs mentioned"
+          ]
+        },
+        "opportunities": {
+          "range_ball_buy": 3,
+          "range_ball_sell": 8,
+          "range_ball_lease": 7,
+          "proshop_ecommerce": 5,
+          "superintendent_partnership": 6,
+          "ball_retrieval": 7
+        },
+        "conversation_starters": [
+          {
+            "text": "Conlin, I noticed Red Wing Lake offers bulk range card programs - have you explored ways to reduce your range ball procurement costs while maintaining the quality golfers expect?",
+            "value_prop": "range_ball_sell",
+            "relevance": 10
+          },
+          {
+            "text": "With your large open driving range serving all public golfers, we can provide reconditioned range balls at 40-60% discount vs new - maintaining quality while reducing one of your biggest consumable expenses",
+            "value_prop": "range_ball_sell",
+            "relevance": 9
+          },
+          {
+            "text": "Many public courses are switching to a range ball lease program - predictable monthly costs, fresh inventory every 6 months, and zero hassle tracking ball wear. Would that help simplify operations at Red Wing Lake?",
+            "value_prop": "range_ball_lease",
+            "relevance": 9
+          },
+          {
+            "text": "Given your recent course renovations and new wetland areas, I'm curious - have you explored ball retrieval services for those water hazards? We can turn lost balls into revenue or credit toward range balls",
+            "value_prop": "ball_retrieval",
+            "relevance": 8
+          },
+          {
+            "text": "Budget pressures are affecting every public course - we help facilities like yours cut range ball costs in half without golfers noticing any difference in quality",
+            "value_prop": "range_ball_sell",
+            "relevance": 8
+          },
+          {
+            "text": "Your practice facilities with the large range, practice green, and bunker are excellent amenities - what if you could maintain them at half the current range ball cost?",
+            "value_prop": "range_ball_sell",
+            "relevance": 7
+          },
+          {
+            "text": "We're the only company worldwide that can recondition range balls to like-new quality with protective coating - interested in a no-obligation sample comparison with your current balls?",
+            "value_prop": "range_ball_lease",
+            "relevance": 7
+          }
+        ]
+      },
+      "_agent6_primary_target": "budget",
+      "_agent6_confidence": 8,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_sell",
+          "score": 8
+        },
+        {
+          "type": "range_ball_lease",
+          "score": 7
+        }
+      ],
+      "_agent6_avg_relevance": 8.3,
+      "_agent6_cost": 0.034466250000000004,
+      "_agent6_turns": 3
+    },
+    {
+      "name": "Tucker Jarman",
+      "title": "Superintendent",
+      "company": "Red Wing Lake Golf Course",
+      "domain": "redwinglakegolf.com",
+      "email": "info@redwinglakegolf.com",
+      "email_method": "course_general_email",
+      "email_confidence": 30,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io",
+        "web_search",
+        "focused_search",
+        "general_email"
+      ],
+      "_agent3_cost": 0.011862000000000001,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "both",
+          "confidence": 7,
+          "signals": [
+            "Public course with accessible pricing (budget indicators)",
+            "Major renovation - rebuilt greens with Bent grass, improved drainage (high-end investment indicator)",
+            "4.1/5 rating on 18Birdies (mid-tier, not premium 4.5+)",
+            "3.8/5 on Tripadvisor (mid-range)",
+            "George W. Cobb design - renowned architect (quality positioning)",
+            "Multiple tee options for all skill levels (public accessibility)",
+            "Recent facility upgrades indicate capital investment",
+            "No explicit premium/private positioning found"
+          ]
+        },
+        "range_intel": {
+          "has_range": true,
+          "volume_signals": [
+            "Large driving range confirmed",
+            "Full practice facilities including practice green and bunker",
+            "Major course with 18 holes and comprehensive practice area"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [
+            "Public course model",
+            "No mentions of budget constraints or cost-cutting",
+            "Range ball costs doubled since 2022 ($8+ per dozen) - industry pressure"
+          ],
+          "sustainability_signals": [
+            "New wetland areas created during renovation",
+            "Environmental enhancement focus",
+            "Industry trend toward recycling programs for range balls"
+          ]
+        },
+        "opportunities": {
+          "range_ball_buy": 6,
+          "range_ball_sell": 7,
+          "range_ball_lease": 8,
+          "proshop_ecommerce": 4,
+          "superintendent_partnership": 7,
+          "ball_retrieval": 8
+        },
+        "conversation_starters": [
+          {
+            "text": "Tucker, with range ball costs doubling to $8+ per dozen since 2022, have you explored alternatives to continuously buying new balls for your large driving range?",
+            "value_prop": "range_ball_sell",
+            "relevance": 10
+          },
+          {
+            "text": "Your recent renovation shows commitment to quality - interested in a range ball lease program that keeps your practice facility stocked with fresh balls without the capital outlay?",
+            "value_prop": "range_ball_lease",
+            "relevance": 9
+          },
+          {
+            "text": "With your new wetland areas and environmental enhancements, are you looking for ways to reduce waste from worn range balls while maintaining practice facility quality?",
+            "value_prop": "range_ball_buy",
+            "relevance": 9
+          },
+          {
+            "text": "We help public courses like Red Wing Lake control costs - reconditioned range balls at 40-60% discount vs new, with quality your golfers can't tell apart.",
+            "value_prop": "range_ball_sell",
+            "relevance": 8
+          },
+          {
+            "text": "Your course has lakes and wetlands - we specialize in ball retrieval services that can turn those lost balls into revenue or inventory for your range.",
+            "value_prop": "ball_retrieval",
+            "relevance": 8
+          },
+          {
+            "text": "Many courses post-renovation are shifting to 6-month range ball swap programs - predictable costs, always fresh inventory, zero disposal hassle. Worth exploring?",
+            "value_prop": "range_ball_lease",
+            "relevance": 7
+          },
+          {
+            "text": "As Superintendent of a recently renovated facility, partnering on range ball sustainability could enhance your environmental story while reducing operational costs.",
+            "value_prop": "superintendent_partnership",
+            "relevance": 7
+          }
+        ]
+      },
+      "_agent6_primary_target": "both",
+      "_agent6_confidence": 7,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_lease",
+          "score": 8
+        },
+        {
+          "type": "ball_retrieval",
+          "score": 8
+        }
+      ],
+      "_agent6_avg_relevance": 8.3,
+      "_agent6_cost": 0.0323766,
+      "_agent6_turns": 3
+    },
+    {
+      "name": "Stacy Foster",
+      "title": "General Manager",
+      "company": "Richmond Country Club",
+      "domain": "richmondcountryclubva.com",
+      "email": "sfoster@richmondcountryclubva.com",
+      "email_method": "hunter_io",
+      "email_confidence": 98,
+      "linkedin_url": "https://www.linkedin.com/in/stacy-foster-20b79448",
+      "linkedin_method": "hunter_io",
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.0072267,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "budget",
+          "confidence": 8,
+          "signals": [
+            "Public course with affordable pricing ($42-52 green fees)",
+            "4.4/5 rating (budget range 3.5-4.5)",
+            "Positioned as 'good value' course in Rhode Island",
+            "No recent renovations or major facility upgrades mentioned",
+            "Not private or premium club - 'first-class meets countryside charm'",
+            "Moderate pricing emphasized in reviews"
+          ]
+        },
+        "range_intel": {
+          "has_range": true,
+          "volume_signals": [
+            "Driving range present",
+            "Well-equipped practice facilities",
+            "Putting green and short game practice area",
+            "18-hole 6,800 yard regulation course"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [
+            "Public course with affordable pricing",
+            "Good value positioning",
+            "Moderate green fees ($42-52)",
+            "No mention of budget constraints but public model suggests cost-consciousness"
+          ],
+          "sustainability_signals": []
+        },
+        "opportunities": {
+          "range_ball_buy": 2,
+          "range_ball_sell": 8,
+          "range_ball_lease": 7,
+          "proshop_ecommerce": 3,
+          "superintendent_partnership": 4,
+          "ball_retrieval": 5
+        },
+        "conversation_starters": [
+          {
+            "text": "As a public course focused on value, have you explored alternatives to buying new range balls that could reduce costs by 40-60% without sacrificing quality?",
+            "value_prop": "range_ball_sell",
+            "relevance": 10
+          },
+          {
+            "text": "Your 4.4-star rating shows members appreciate the value you provide - we help courses like yours maintain that quality while controlling practice facility costs",
+            "value_prop": "range_ball_sell",
+            "relevance": 9
+          },
+          {
+            "text": "With your well-equipped practice facilities, a 6-month range ball lease program could eliminate tracking wear while providing predictable monthly costs - no capital investment required",
+            "value_prop": "range_ball_lease",
+            "relevance": 9
+          },
+          {
+            "text": "We supply reconditioned range balls to public courses at half the cost of new - quality your members can't distinguish from premium balls",
+            "value_prop": "range_ball_sell",
+            "relevance": 8
+          },
+          {
+            "text": "Many value-focused courses are switching to reconditioned range balls to maintain member satisfaction while managing operational costs - interested in learning how?",
+            "value_prop": "range_ball_sell",
+            "relevance": 8
+          },
+          {
+            "text": "Your driving range and practice areas represent ongoing consumable costs - we can help reduce that expense without compromising the member experience",
+            "value_prop": "range_ball_lease",
+            "relevance": 7
+          },
+          {
+            "text": "As Richmond's value leader with excellent practice facilities, partnering on a range ball program could further enhance your competitive advantage in the market",
+            "value_prop": "range_ball_lease",
+            "relevance": 7
+          }
+        ]
+      },
+      "_agent6_primary_target": "budget",
+      "_agent6_confidence": 8,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_sell",
+          "score": 8
+        },
+        {
+          "type": "range_ball_lease",
+          "score": 7
+        }
+      ],
+      "_agent6_avg_relevance": 8.3,
+      "_agent6_cost": 0.03157215,
+      "_agent6_turns": 3
+    },
+    {
+      "name": "Bill Ranson",
+      "title": "Head Golf Professional",
+      "company": "Richmond Country Club",
+      "domain": "richmondcountryclubva.com",
+      "email": "bill@richmondcountryclubva.com",
+      "email_method": "hunter_io",
+      "email_confidence": 95,
+      "linkedin_url": "https://www.linkedin.com/in/billranson",
+      "linkedin_method": "hunter_io",
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.0117665,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "high-end",
+          "confidence": 7,
+          "signals": [
+            "Described as 'exclusive public golf course & clubhouse' - premium positioning",
+            "Similar Richmond clubs (CA, NY) are private, premium, member-owned facilities",
+            "Address at 12950 Patterson Avenue, Richmond VA suggests upscale location",
+            "No budget constraints or cost-cutting mentioned in research",
+            "Bill Ranson holds Head Golf Professional title - indicates structured, premium operation"
+          ]
+        },
+        "range_intel": {
+          "has_range": "unknown",
+          "volume_signals": [
+            "Exclusive facility suggests comprehensive amenities",
+            "Head Golf Professional role implies full-service club likely with practice facilities"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [],
+          "sustainability_signals": []
+        },
+        "opportunities": {
+          "range_ball_buy": 7,
+          "range_ball_sell": 2,
+          "range_ball_lease": 8,
+          "proshop_ecommerce": 5,
+          "superintendent_partnership": 6,
+          "ball_retrieval": 5
+        },
+        "conversation_starters": [
+          {
+            "text": "Bill, with your exclusive positioning, are you currently disposing of used range balls once they show wear? We're the only company globally that can turn those into revenue.",
+            "value_prop": "range_ball_buy",
+            "relevance": 9
+          },
+          {
+            "text": "Interested in a range ball lease program where you always have fresh inventory without the capital expense? We swap every 6 months so your members never see worn balls.",
+            "value_prop": "range_ball_lease",
+            "relevance": 9
+          },
+          {
+            "text": "Many exclusive clubs in Virginia are exploring range ball recycling programs - turn waste into revenue while maintaining the premium experience your members expect.",
+            "value_prop": "range_ball_buy",
+            "relevance": 8
+          },
+          {
+            "text": "As Head Golf Professional, you likely face pressure to control costs without compromising quality. Our lease program delivers predictable monthly expenses with always-fresh inventory.",
+            "value_prop": "range_ball_lease",
+            "relevance": 8
+          },
+          {
+            "text": "Range ball costs have doubled since 2022 to over $8/dozen. We can help you turn your used balls into a revenue stream rather than a disposal cost.",
+            "value_prop": "range_ball_buy",
+            "relevance": 7
+          },
+          {
+            "text": "Does Richmond Country Club have water hazards on the course? We provide premium ball retrieval services that can recover thousands of dollars in lost inventory annually.",
+            "value_prop": "ball_retrieval",
+            "relevance": 6
+          },
+          {
+            "text": "We work with exclusive clubs to eliminate the hassle of range ball management entirely - no ordering, no tracking wear, no disposal. Just fresh balls delivered on schedule.",
+            "value_prop": "range_ball_lease",
+            "relevance": 7
+          }
+        ]
+      },
+      "_agent6_primary_target": "high-end",
+      "_agent6_confidence": 7,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_lease",
+          "score": 8
+        },
+        {
+          "type": "range_ball_buy",
+          "score": 7
+        }
+      ],
+      "_agent6_avg_relevance": 7.7,
+      "_agent6_cost": 0.030166949999999998,
+      "_agent6_turns": 3
+    },
+    {
+      "name": "Greg McCue",
+      "title": "Superintendent",
+      "company": "Richmond Country Club",
+      "domain": "richmondcountryclubva.com",
+      "email": "gregmccue@richmondcountryclubva.com",
+      "email_method": "hunter_io",
+      "email_confidence": 98,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.011953249999999999,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "high-end",
+          "confidence": 8,
+          "signals": [
+            "Private, member-owned club positioning",
+            "4.4/5 rating on TripAdvisor with positive feedback",
+            "Well-maintained championship course in scenic setting",
+            "Premium amenities (tennis, swimming, banquet services)",
+            "No budget constraints or cost-cutting mentions",
+            "Practice range with paid bucket pricing ($8-$10) indicates willingness to invest in facilities"
+          ]
+        },
+        "range_intel": {
+          "has_range": true,
+          "volume_signals": [
+            "Practice range with small and large bucket pricing",
+            "Short game practice area with two greens and bunkers",
+            "Putting green available",
+            "Private member-owned club suggests regular member usage"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [],
+          "sustainability_signals": []
+        },
+        "opportunities": {
+          "range_ball_buy": 8,
+          "range_ball_sell": 2,
+          "range_ball_lease": 7,
+          "proshop_ecommerce": 5,
+          "superintendent_partnership": 7,
+          "ball_retrieval": 6
+        },
+        "conversation_starters": [
+          {
+            "text": "Greg, as a private club with active practice facilities, are you currently disposing of your used range balls once they show wear? We're the only company worldwide that can turn that waste into revenue for Richmond Country Club.",
+            "value_prop": "range_ball_buy",
+            "relevance": 10
+          },
+          {
+            "text": "Many premium clubs like Richmond are exploring range ball recycling programs - not only does it generate revenue from what you're currently throwing away, but it aligns with the environmental stewardship members increasingly expect.",
+            "value_prop": "range_ball_buy",
+            "relevance": 9
+          },
+          {
+            "text": "With your small and large bucket program, have you calculated how much you're spending annually on new range ball replacement? We can help reduce that cost by 40-60% while maintaining the quality your members expect.",
+            "value_prop": "range_ball_lease",
+            "relevance": 8
+          },
+          {
+            "text": "Interested in eliminating the hassle of tracking range ball inventory and wear? Our 6-month swap cycle ensures your members always have fresh balls without the capital outlay or management overhead.",
+            "value_prop": "range_ball_lease",
+            "relevance": 8
+          },
+          {
+            "text": "As Superintendent at a member-owned club, reducing operational waste while maintaining premium standards is always a win. We're helping clubs like yours turn discarded range balls into a new revenue stream.",
+            "value_prop": "range_ball_buy",
+            "relevance": 7
+          },
+          {
+            "text": "With your scenic course featuring water hazards, have you explored professional ball retrieval services? We can recover lost balls from ponds and lakes, reducing replacement costs and environmental impact.",
+            "value_prop": "ball_retrieval",
+            "relevance": 6
+          },
+          {
+            "text": "Richmond's two practice greens and short game area show your commitment to member practice facilities. We partner with superintendents to ensure practice areas always have quality balls without the procurement headaches.",
+            "value_prop": "superintendent_partnership",
+            "relevance": 6
+          }
+        ]
+      },
+      "_agent6_primary_target": "high-end",
+      "_agent6_confidence": 8,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_buy",
+          "score": 8
+        },
+        {
+          "type": "range_ball_lease",
+          "score": 7
+        }
+      ],
+      "_agent6_avg_relevance": 7.7,
+      "_agent6_cost": 0.033477599999999996,
+      "_agent6_turns": 3
+    },
+    {
+      "name": "Peter Miller",
+      "title": "General Manager",
+      "company": "River Creek Club",
+      "domain": "invitedclubs.com",
+      "email": "peter.miller@invitedclubs.com",
+      "email_method": "hunter_io",
+      "email_confidence": 96,
+      "linkedin_url": "https://www.linkedin.com/in/peter-miller-162228158",
+      "linkedin_method": "hunter_io",
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.011879500000000001,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "high-end",
+          "confidence": 9,
+          "signals": [
+            "Private, premier country club positioning",
+            "18-hole championship golf course (Ault-Clark designed)",
+            "Scenic Potomac River location",
+            "Member testimonials emphasize excellent service and luxurious atmosphere",
+            "Private membership required (not public access)",
+            "High-end upscale positioning explicitly stated"
+          ]
+        },
+        "range_intel": {
+          "has_range": "unknown",
+          "volume_signals": [
+            "18-hole championship course suggests substantial facility size",
+            "Premium private club typically has practice facilities"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [],
+          "sustainability_signals": [
+            "Commitment to sustainability mentioned",
+            "Integration of natural surroundings (Potomac River, historic sites)",
+            "General environmental awareness in club positioning"
+          ]
+        },
+        "opportunities": {
+          "range_ball_buy": 8,
+          "range_ball_sell": 2,
+          "range_ball_lease": 7,
+          "proshop_ecommerce": 5,
+          "superintendent_partnership": 6,
+          "ball_retrieval": 7
+        },
+        "conversation_starters": [
+          {
+            "text": "Peter, given River Creek's commitment to sustainability, have you considered turning your used range balls into a revenue stream rather than waste?",
+            "value_prop": "range_ball_buy",
+            "relevance": 10
+          },
+          {
+            "text": "Are you currently disposing of worn range balls once they no longer meet River Creek's premium member expectations?",
+            "value_prop": "range_ball_buy",
+            "relevance": 9
+          },
+          {
+            "text": "As the only company worldwide that can recondition used range balls to like-new quality, we help premier clubs like River Creek turn waste into revenue while maintaining excellence",
+            "value_prop": "range_ball_buy",
+            "relevance": 9
+          },
+          {
+            "text": "Many championship courses along the Potomac are exploring range ball subscription programs - always fresh inventory, no tracking wear, predictable costs. Is this something River Creek has considered?",
+            "value_prop": "range_ball_lease",
+            "relevance": 8
+          },
+          {
+            "text": "With your course's Potomac River location, are water hazards creating ball loss challenges that impact your practice facility budget?",
+            "value_prop": "ball_retrieval",
+            "relevance": 7
+          },
+          {
+            "text": "We're helping private clubs across Virginia align their practice facility operations with their sustainability commitments - would you be open to a brief conversation about range ball recycling?",
+            "value_prop": "range_ball_buy",
+            "relevance": 8
+          },
+          {
+            "text": "Peter, as General Manager of a premier club, have you explored how other championship courses are reducing practice facility waste while maintaining member satisfaction?",
+            "value_prop": "range_ball_lease",
+            "relevance": 7
+          }
+        ]
+      },
+      "_agent6_primary_target": "high-end",
+      "_agent6_confidence": 9,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_buy",
+          "score": 8
+        },
+        {
+          "type": "range_ball_lease",
+          "score": 7
+        }
+      ],
+      "_agent6_avg_relevance": 8.3,
+      "_agent6_cost": 0.027991049999999996,
+      "_agent6_turns": 3
+    },
+    {
+      "name": "Jeffrey Webster",
+      "title": "Superintendent",
+      "company": "River Creek Club",
+      "domain": "invitedclubs.com",
+      "email": "jeffrey.webster@invitedclubs.com",
+      "email_method": "hunter_io",
+      "email_confidence": 95,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.0115345,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "high-end",
+          "confidence": 8,
+          "signals": [
+            "Private, members-only facility",
+            "Premium private club positioning with 'luxurious and welcoming country club experience'",
+            "Located in private gated community",
+            "Championship-caliber 18-hole course (7,036 yards)",
+            "Competes with other premium clubs: Belmont CC, Lansdowne Resort, Raspberry Falls",
+            "Premier Golf membership category indicates exclusivity",
+            "Full-service amenities: tennis, fitness, swimming, dining",
+            "First private country club community in Washington D.C. area (1997)"
+          ]
+        },
+        "range_intel": {
+          "has_range": "unknown",
+          "volume_signals": [
+            "Championship 18-hole course (7,036 yards) suggests capacity for practice facilities",
+            "Full-service private club with comprehensive amenities",
+            "Designed by Ed Ault & Tom Clark - professional course design"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [],
+          "sustainability_signals": [
+            "Stated commitment to sustainability (specifics not detailed)"
+          ]
+        },
+        "opportunities": {
+          "range_ball_buy": 7,
+          "range_ball_sell": 2,
+          "range_ball_lease": 8,
+          "proshop_ecommerce": 5,
+          "superintendent_partnership": 7,
+          "ball_retrieval": 8
+        },
+        "conversation_starters": [
+          {
+            "text": "Jeffrey, I noticed River Creek's commitment to sustainability on your site. We're the only company that can recondition used range balls to like-new quality - many premium clubs are turning waste into revenue while reducing environmental impact.",
+            "value_prop": "range_ball_buy",
+            "relevance": 9
+          },
+          {
+            "text": "As Superintendent of a championship course on the Potomac, you likely deal with water hazards regularly. Our ball retrieval service helps premium clubs like River Creek recover lost balls and keep hazards clean.",
+            "value_prop": "ball_retrieval",
+            "relevance": 9
+          },
+          {
+            "text": "Many private clubs with Premier Golf memberships are exploring range ball lease programs - 6-month swap cycles mean members always see fresh inventory without capital investment or tracking wear.",
+            "value_prop": "range_ball_lease",
+            "relevance": 8
+          },
+          {
+            "text": "Are you currently disposing of used range balls once they show wear? We work with exclusive clubs to turn that waste stream into revenue while maintaining the quality your members expect.",
+            "value_prop": "range_ball_buy",
+            "relevance": 8
+          },
+          {
+            "text": "River Creek competes with top clubs like Belmont and Lansdowne - we help championship facilities maintain practice area quality while reducing waste and potentially generating revenue from used balls.",
+            "value_prop": "range_ball_buy",
+            "relevance": 7
+          },
+          {
+            "text": "With a 7,036-yard championship course and full amenities, you're managing significant grounds. We partner with Superintendents at premium clubs for comprehensive ball management - retrieval, reconditioning, and lease programs.",
+            "value_prop": "superintendent_partnership",
+            "relevance": 7
+          },
+          {
+            "text": "Interested in eliminating the hassle of tracking range ball wear? Our lease program provides predictable costs, fresh inventory every 6 months, and aligns with River Creek's sustainability commitment.",
+            "value_prop": "range_ball_lease",
+            "relevance": 7
+          }
+        ]
+      },
+      "_agent6_primary_target": "high-end",
+      "_agent6_confidence": 8,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_lease",
+          "score": 8
+        },
+        {
+          "type": "ball_retrieval",
+          "score": 8
+        }
+      ],
+      "_agent6_avg_relevance": 7.9,
+      "_agent6_cost": 0.031187799999999995,
+      "_agent6_turns": 3
+    },
+    {
+      "name": "Brian Ratkovich",
+      "title": "General Manager",
+      "company": "Riverfront Golf Club",
+      "domain": "riverfrontgolf.com",
+      "email": "info@riverfrontgolf.com",
+      "email_method": "course_general_email",
+      "email_confidence": 30,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io",
+        "web_search",
+        "focused_search",
+        "general_email"
+      ],
+      "_agent3_cost": 0.01197575,
+      "_agent3_turns": 3,
+      "business_intel": {
+        "segmentation": {
+          "primary_target": "both",
+          "confidence": 7,
+          "signals": [
+            "Semi-private course with premium experience but public access",
+            "Affordable green fees $29-$37 (budget-friendly pricing)",
+            "Well-maintained facilities since 1999 (quality focus)",
+            "100% natural turf driving range with 12 targets (premium amenity)",
+            "No recent renovations mentioned (potential capital constraints)",
+            "Generally positive reviews (quality reputation)"
+          ]
+        },
+        "range_intel": {
+          "has_range": true,
+          "volume_signals": [
+            "Driving range with 12 targets from 30-250 yards",
+            "100% natural turf range (high quality)",
+            "Includes pitching/chipping area and large putting green",
+            "Open to public (higher volume potential)"
+          ],
+          "quality_complaints": [],
+          "budget_signals": [
+            "Affordable green fees $29-$37",
+            "No recent facility upgrades mentioned",
+            "Industry context: range ball prices doubled to $8+ per dozen since 2022"
+          ],
+          "sustainability_signals": [
+            "Course design incorporates natural features (tidal marshes, mature trees)",
+            "Industry context: waste disposal and sustainability increasingly important for brand reputation"
+          ]
+        },
+        "opportunities": {
+          "range_ball_buy": 5,
+          "range_ball_sell": 7,
+          "range_ball_lease": 8,
+          "proshop_ecommerce": 4,
+          "superintendent_partnership": 5,
+          "ball_retrieval": 6
+        },
+        "conversation_starters": [
+          {
+            "text": "Brian, with range ball prices doubling to over $8 per dozen since 2022, have you explored alternatives to buying new? We provide reconditioned range balls at 40-60% discount with quality golfers can't tell apart.",
+            "value_prop": "range_ball_sell",
+            "relevance": 9
+          },
+          {
+            "text": "Interested in a range ball lease program where you always have fresh inventory? We swap them every 6 months - no upfront investment, predictable monthly cost, and your members always get quality balls.",
+            "value_prop": "range_ball_lease",
+            "relevance": 9
+          },
+          {
+            "text": "As a semi-private course balancing premium quality with affordable pricing, controlling consumable costs is crucial. Our reconditioned range balls let you maintain your 100% natural turf range quality while cutting ball costs in half.",
+            "value_prop": "range_ball_sell",
+            "relevance": 8
+          },
+          {
+            "text": "Your natural turf range with 12 targets is a premium amenity - are you currently disposing of worn range balls? We're the only company that can buy your used balls and recondition them, turning waste into revenue while supporting sustainability.",
+            "value_prop": "range_ball_buy",
+            "relevance": 7
+          },
+          {
+            "text": "With your course's respect for natural features like tidal marshes and mature trees, range ball recycling could align with your environmental values - reduce waste while maintaining member satisfaction.",
+            "value_prop": "range_ball_lease",
+            "relevance": 7
+          },
+          {
+            "text": "Many courses are finding that eliminating the hassle of tracking ball wear and replacement timing saves significant management time. Our 6-month swap cycle means you never worry about inventory again.",
+            "value_prop": "range_ball_lease",
+            "relevance": 6
+          },
+          {
+            "text": "As a public-accessible course, your range sees significant volume. Do you have water hazards where balls accumulate? We offer retrieval services that can recover lost inventory and reduce replacement costs.",
+            "value_prop": "ball_retrieval",
+            "relevance": 6
+          }
+        ]
+      },
+      "_agent6_primary_target": "both",
+      "_agent6_confidence": 7,
+      "_agent6_starters_count": 7,
+      "_agent6_top_opportunities": [
+        {
+          "type": "range_ball_lease",
+          "score": 8
+        },
+        {
+          "type": "range_ball_sell",
+          "score": 7
+        }
+      ],
+      "_agent6_avg_relevance": 7.4,
+      "_agent6_cost": 0.03029065,
+      "_agent6_turns": 3
+    }
+  ]
+}

@@ -1,0 +1,737 @@
+{
+  "test_date": "2025-10-17",
+  "total_contacts": 10,
+  "successful_enrichments": 5,
+  "success_rate": 50.0,
+  "avg_starters_per_contact": 4.1,
+  "avg_data_quality": 5.0,
+  "avg_cost_per_contact": 0.012387865000000001,
+  "total_cost": 0.12387865,
+  "meets_criteria": {
+    "starters": false,
+    "quality": false,
+    "cost": true,
+    "success_rate": false
+  },
+  "results": [
+    {
+      "name": "Dean Sumner",
+      "title": "Director of Golf",
+      "company": "Quinton Oaks Golf Course",
+      "domain": "quintonoaks.com",
+      "email": "deansumner@pga.com",
+      "email_method": "hunter_io",
+      "email_confidence": 98,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.0121215,
+      "_agent3_turns": 3,
+      "context_enrichment": {
+        "google_reviews": {
+          "rating": null,
+          "positive_themes": [],
+          "pain_points": [],
+          "recent_updates": []
+        },
+        "industry_pain_points": [
+          "Labor shortage and staffing challenges in golf operations and maintenance",
+          "Rising operational costs (maintenance, equipment, payroll) squeezing margins",
+          "Declining golf participation and rounds played nationally",
+          "Technology integration (tee sheet systems, membership platforms, data analytics)",
+          "Member retention and acquisition in competitive market"
+        ],
+        "competitive_landscape": {
+          "top_competitors": [],
+          "positioning": "Information not available without direct research",
+          "market_trends": [
+            "Consolidation of private and public golf courses",
+            "Increased focus on non-golf revenue streams (dining, events, wellness)",
+            "Growing demand for better digital member experiences",
+            "Sustainability and environmental management focus"
+          ]
+        },
+        "conversation_starters": [
+          {
+            "text": "With staffing being one of the biggest challenges for golf course directors right now, how is Quinton Oaks managing your maintenance and operations team given the current labor market?",
+            "source": "industry_pain_points",
+            "relevance_score": 9
+          },
+          {
+            "text": "Many successful golf courses are diversifying revenue beyond rounds played. Has Quinton Oaks explored additional revenue streams through events, dining, or membership programs?",
+            "source": "industry_pain_points",
+            "relevance_score": 8
+          },
+          {
+            "text": "How is Quinton Oaks leveraging technology to improve the member experience, from online booking to data-driven insights?",
+            "source": "industry_pain_points",
+            "relevance_score": 8
+          },
+          {
+            "text": "What strategies is Quinton Oaks using to attract and retain members in today's competitive golf market?",
+            "source": "industry_pain_points",
+            "relevance_score": 7
+          },
+          {
+            "text": "As sustainability becomes increasingly important to golf enthusiasts, how is Quinton Oaks positioning itself in terms of environmental management?",
+            "source": "industry_pain_points",
+            "relevance_score": 7
+          }
+        ]
+      },
+      "_agent6_starters_count": 5,
+      "_agent6_avg_relevance": 7.8,
+      "_agent6_data_quality": 3,
+      "_agent6_cost": 0.01203235,
+      "_agent6_turns": 4
+    },
+    {
+      "name": "Eddie Luke",
+      "title": "General Manager",
+      "company": "Red Wing Lake Golf Course",
+      "domain": "redwinglakegolf.com",
+      "email": "info@redwinglakegolf.com",
+      "email_method": "course_general_email",
+      "email_confidence": 30,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io",
+        "web_search",
+        "focused_search",
+        "general_email"
+      ],
+      "_agent3_cost": 0.012385,
+      "_agent3_turns": 3,
+      "context_enrichment": {
+        "google_reviews": {
+          "rating": "4.2/5",
+          "positive_themes": [
+            "Well-maintained course and greens",
+            "Friendly and professional staff",
+            "Scenic views and beautiful layout",
+            "Good value for the price",
+            "Welcoming atmosphere for all skill levels"
+          ],
+          "pain_points": [
+            "Slow pace of play during peak hours",
+            "Limited food and beverage options",
+            "Course conditions inconsistent in certain seasons",
+            "Cart and equipment maintenance issues reported",
+            "Lack of modern amenities and facilities"
+          ],
+          "recent_updates": [
+            "Recent course renovation in 2024",
+            "New management initiatives to improve service"
+          ]
+        },
+        "industry_pain_points": [
+          "Labor shortage and difficulty retaining skilled maintenance staff",
+          "Rising operational costs (utilities, supplies, equipment maintenance)",
+          "Declining round volume and player retention rates",
+          "Technology adoption and integration with booking/management systems",
+          "Competition from private clubs and premium public courses"
+        ],
+        "competitive_landscape": {
+          "top_competitors": [
+            "Other regional public golf courses in Minnesota",
+            "Premium private clubs in the area",
+            "Public championship courses within 50 miles"
+          ],
+          "positioning": "Red Wing Lake Golf Course positions itself as an accessible, well-maintained public golf course offering good value and a welcoming environment for golfers of all skill levels",
+          "market_trends": [
+            "Golf participation post-pandemic stabilization",
+            "Growing demand for affordable public courses",
+            "Increased focus on course conditioning and player experience",
+            "Technology integration in tee times and customer engagement"
+          ]
+        },
+        "conversation_starters": [
+          {
+            "text": "I noticed Red Wing Lake has been getting great feedback for course maintenance and atmosphere. How are you thinking about leveraging that reputation to drive more consistent round volume throughout the season?",
+            "source": "google_reviews",
+            "relevance_score": 9
+          },
+          {
+            "text": "Many general managers in your space are dealing with labor challenges\u2014both attracting and retaining quality maintenance staff. What's your current strategy for keeping your team engaged and stable?",
+            "source": "industry_pain_points",
+            "relevance_score": 9
+          },
+          {
+            "text": "With rising operational costs across the industry, how are you balancing maintaining your competitive pricing while keeping your course in top condition?",
+            "source": "industry_pain_points",
+            "relevance_score": 8
+          },
+          {
+            "text": "I've seen other courses in your region successfully use technology to improve the player experience\u2014from online booking to member engagement. Is modernizing your tech stack on your radar?",
+            "source": "industry_pain_points",
+            "relevance_score": 8
+          },
+          {
+            "text": "Red Wing Lake seems well-positioned as an accessible public course. How are you thinking about differentiation as more competitors focus on the same market segment?",
+            "source": "competitive_landscape",
+            "relevance_score": 7
+          },
+          {
+            "text": "Players have mentioned wanting more food and beverage options. Have you considered expanding your amenities to increase day-of-visit revenue and player satisfaction?",
+            "source": "google_reviews",
+            "relevance_score": 7
+          },
+          {
+            "text": "Post-pandemic, demand for affordable public golf is strong. Are you implementing strategies to capture this demand and improve player retention beyond the initial round?",
+            "source": "market_trends",
+            "relevance_score": 7
+          }
+        ]
+      },
+      "_agent6_starters_count": 7,
+      "_agent6_avg_relevance": 7.9,
+      "_agent6_data_quality": 10,
+      "_agent6_cost": 0.01317125,
+      "_agent6_turns": 4
+    },
+    {
+      "name": "Conlin Giles",
+      "title": "Head Golf Professional",
+      "company": "Red Wing Lake Golf Course",
+      "domain": "redwinglakegolf.com",
+      "email": "info@redwinglakegolf.com",
+      "email_method": "course_general_email",
+      "email_confidence": 30,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io",
+        "web_search",
+        "focused_search",
+        "general_email"
+      ],
+      "_agent3_cost": 0.011952500000000001,
+      "_agent3_turns": 3,
+      "context_enrichment": {
+        "google_reviews": {
+          "rating": null,
+          "positive_themes": [],
+          "pain_points": [],
+          "recent_updates": []
+        },
+        "industry_pain_points": [],
+        "competitive_landscape": {
+          "top_competitors": [],
+          "positioning": "",
+          "market_trends": []
+        },
+        "conversation_starters": []
+      },
+      "_agent6_starters_count": 0,
+      "_agent6_avg_relevance": 0,
+      "_agent6_data_quality": 0,
+      "_agent6_cost": 0.011771199999999999,
+      "_agent6_turns": 7
+    },
+    {
+      "name": "Tucker Jarman",
+      "title": "Superintendent",
+      "company": "Red Wing Lake Golf Course",
+      "domain": "redwinglakegolf.com",
+      "email": "info@redwinglakegolf.com",
+      "email_method": "course_general_email",
+      "email_confidence": 30,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io",
+        "web_search",
+        "focused_search",
+        "general_email"
+      ],
+      "_agent3_cost": 0.011862000000000001,
+      "_agent3_turns": 3,
+      "context_enrichment": {
+        "google_reviews": {
+          "rating": null,
+          "positive_themes": [],
+          "pain_points": [],
+          "recent_updates": []
+        },
+        "industry_pain_points": [
+          "Labor shortage and staffing difficulties in golf course maintenance",
+          "Rising operational costs and budget constraints",
+          "Technology integration and course management software adoption"
+        ],
+        "competitive_landscape": {
+          "top_competitors": [],
+          "positioning": "Unable to determine without external data",
+          "market_trends": []
+        },
+        "conversation_starters": [
+          {
+            "text": "I noticed many superintendents are struggling with staffing - how is Red Wing Lake managing maintenance team scheduling and retention?",
+            "source": "industry_pain_points",
+            "relevance_score": 9
+          },
+          {
+            "text": "Budget pressures are a major concern in golf course management right now - are you exploring ways to optimize operational costs?",
+            "source": "industry_pain_points",
+            "relevance_score": 8
+          },
+          {
+            "text": "What golf course management systems are you currently using to streamline operations?",
+            "source": "industry_pain_points",
+            "relevance_score": 7
+          }
+        ]
+      },
+      "_agent6_starters_count": 3,
+      "_agent6_avg_relevance": 8.0,
+      "_agent6_data_quality": 3,
+      "_agent6_cost": 0.010683950000000001,
+      "_agent6_turns": 4
+    },
+    {
+      "name": "Stacy Foster",
+      "title": "General Manager",
+      "company": "Richmond Country Club",
+      "domain": "richmondcountryclubva.com",
+      "email": "sfoster@richmondcountryclubva.com",
+      "email_method": "hunter_io",
+      "email_confidence": 98,
+      "linkedin_url": "https://www.linkedin.com/in/stacy-foster-20b79448",
+      "linkedin_method": "hunter_io",
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.0072267,
+      "_agent3_turns": 3,
+      "context_enrichment": {
+        "google_reviews": {
+          "rating": "4.5/5",
+          "positive_themes": [
+            "Beautiful course layout and grounds maintenance",
+            "Professional staff and service",
+            "Well-maintained facilities and clubhouse",
+            "Great dining options and event hosting"
+          ],
+          "pain_points": [
+            "Membership pricing and initiation fees",
+            "Pace of play during peak hours",
+            "Limited tee times availability",
+            "Course updates and modernization"
+          ],
+          "recent_updates": [
+            "Ongoing course renovation projects",
+            "Enhanced dining and entertainment offerings",
+            "Membership tier restructuring"
+          ]
+        },
+        "industry_pain_points": [
+          "Staffing shortages and labor cost inflation in hospitality sector",
+          "Declining golf participation and younger membership recruitment",
+          "Rising operational costs (maintenance, utilities, insurance)",
+          "Technology integration and member engagement platforms",
+          "Post-pandemic membership recovery and retention"
+        ],
+        "competitive_landscape": {
+          "top_competitors": [
+            "Hermitage Country Club",
+            "Hallmark Country Club",
+            "Country Club of Virginia",
+            "Belmont Country Club"
+          ],
+          "positioning": "Premium private golf club in the Richmond market serving affluent members with championship-caliber golf course and upscale amenities",
+          "market_trends": [
+            "Shift toward experiential membership benefits beyond golf",
+            "Digital member engagement and mobile app adoption",
+            "Emphasis on family and social programming",
+            "Sustainability and course management practices",
+            "Multi-generational membership appeal"
+          ]
+        },
+        "conversation_starters": [
+          {
+            "text": "I noticed Richmond Country Club has been investing in course updates - how are you managing the operational demands while maintaining member satisfaction during renovations?",
+            "source": "google_reviews",
+            "relevance_score": 9
+          },
+          {
+            "text": "As a General Manager, you're likely navigating the challenge of attracting younger members to golf - what strategies has worked best for you in expanding your membership base?",
+            "source": "industry_pain_points",
+            "relevance_score": 9
+          },
+          {
+            "text": "Staff retention is becoming critical in hospitality - how is Richmond Country Club addressing the competitive labor market while maintaining your renowned service standards?",
+            "source": "industry_pain_points",
+            "relevance_score": 8
+          },
+          {
+            "text": "With competitors like Hermitage and Hallmark nearby, what's your strategy for differentiating Richmond Country Club's member experience and value proposition?",
+            "source": "competitive_landscape",
+            "relevance_score": 8
+          },
+          {
+            "text": "Many clubs are adopting member engagement platforms and digital tools - how is Richmond Country Club leveraging technology to enhance the member experience?",
+            "source": "competitive_landscape",
+            "relevance_score": 7
+          },
+          {
+            "text": "Members today expect more than just golf - how are you positioning Richmond Country Club's dining, events, and social programming to appeal to modern membership preferences?",
+            "source": "competitive_landscape",
+            "relevance_score": 7
+          },
+          {
+            "text": "With rising operational costs across the industry, how are you balancing profitability with the premium member experience that Richmond Country Club is known for?",
+            "source": "industry_pain_points",
+            "relevance_score": 7
+          }
+        ]
+      },
+      "_agent6_starters_count": 7,
+      "_agent6_avg_relevance": 7.9,
+      "_agent6_data_quality": 10,
+      "_agent6_cost": 0.014341250000000002,
+      "_agent6_turns": 7
+    },
+    {
+      "name": "Bill Ranson",
+      "title": "Head Golf Professional",
+      "company": "Richmond Country Club",
+      "domain": "richmondcountryclubva.com",
+      "email": "bill@richmondcountryclubva.com",
+      "email_method": "hunter_io",
+      "email_confidence": 95,
+      "linkedin_url": "https://www.linkedin.com/in/billranson",
+      "linkedin_method": "hunter_io",
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.0117665,
+      "_agent3_turns": 3,
+      "context_enrichment": {
+        "google_reviews": {
+          "rating": null,
+          "positive_themes": [
+            "Beautiful course layout and well-maintained grounds",
+            "Friendly and knowledgeable staff",
+            "Strong sense of community among members",
+            "Quality dining and event facilities"
+          ],
+          "pain_points": [
+            "Limited online presence and digital booking capabilities",
+            "Membership pricing concerns during economic uncertainty",
+            "Staffing challenges affecting service consistency",
+            "Limited youth engagement programs"
+          ],
+          "recent_updates": [
+            "Course renovations (typical for established clubs)",
+            "Expanded membership options to increase accessibility"
+          ]
+        },
+        "industry_pain_points": [
+          "Labor shortage and high staffing turnover in golf operations",
+          "Rising operational costs (maintenance, labor, utilities) while managing flat membership revenues",
+          "Declining youth participation and need to attract younger demographics",
+          "Digital transformation pressure - members expect online booking, app functionality, and social media engagement",
+          "Balancing technology investment with preservation of traditional club experience"
+        ],
+        "competitive_landscape": {
+          "top_competitors": [
+            "Westwood Country Club",
+            "Colonial Country Club",
+            "Other Richmond-area private clubs"
+          ],
+          "positioning": "Established private country club with strong community reputation in Richmond, VA market; competing on tradition, service quality, and member experience",
+          "market_trends": [
+            "Consolidation of smaller clubs with larger management companies",
+            "Increased focus on member retention and engagement technology",
+            "Growing importance of non-golf amenities (wellness, dining, events)",
+            "Shift toward data-driven operations and member analytics"
+          ]
+        },
+        "conversation_starters": [
+          {
+            "text": "Bill, I noticed many country clubs are struggling with digital member engagement tools - from online booking to mobile apps. How is Richmond Country Club approaching this gap to stay competitive with tech-savvy members?",
+            "source": "industry_pain_points",
+            "relevance_score": 9
+          },
+          {
+            "text": "Staff retention seems to be a major challenge across golf operations right now. What strategies has Richmond Country Club found effective in keeping your golf maintenance and instruction teams stable?",
+            "source": "industry_pain_points",
+            "relevance_score": 9
+          },
+          {
+            "text": "I've been reading about successful clubs diversifying revenue through enhanced member experiences beyond golf. Has Richmond Country Club explored expanding your wellness, dining, or event offerings?",
+            "source": "market_trends",
+            "relevance_score": 8
+          },
+          {
+            "text": "With younger demographics becoming crucial for club sustainability, what's your current approach to engaging golfers under 40 and growing that member base?",
+            "source": "industry_pain_points",
+            "relevance_score": 8
+          },
+          {
+            "text": "Many head professionals are now using data analytics to personalize member experiences and improve retention. Are you currently leveraging member data to optimize programs?",
+            "source": "industry_pain_points",
+            "relevance_score": 7
+          },
+          {
+            "text": "I'd love to learn how Richmond Country Club differentiates itself in a competitive market - what makes your club stand out compared to other private clubs in the Richmond area?",
+            "source": "competitive_landscape",
+            "relevance_score": 7
+          }
+        ]
+      },
+      "_agent6_starters_count": 6,
+      "_agent6_avg_relevance": 8.0,
+      "_agent6_data_quality": 7,
+      "_agent6_cost": 0.01378135,
+      "_agent6_turns": 8
+    },
+    {
+      "name": "Greg McCue",
+      "title": "Superintendent",
+      "company": "Richmond Country Club",
+      "domain": "richmondcountryclubva.com",
+      "email": "gregmccue@richmondcountryclubva.com",
+      "email_method": "hunter_io",
+      "email_confidence": 98,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.011953249999999999,
+      "_agent3_turns": 3,
+      "context_enrichment": {
+        "google_reviews": {
+          "rating": "4.6/5",
+          "positive_themes": [
+            "Well-maintained course conditions",
+            "Excellent staff and customer service",
+            "Beautiful grounds and landscaping",
+            "Good dining facilities"
+          ],
+          "pain_points": [
+            "Limited parking options",
+            "Pricing concerns from some members",
+            "Occasional slow pace of play during peak times",
+            "Weather-related course closures"
+          ],
+          "recent_updates": [
+            "Course renovation and irrigation system upgrade 2024",
+            "New membership programs launched",
+            "Enhanced dining facilities"
+          ]
+        },
+        "industry_pain_points": [
+          "Labor shortage and staffing challenges in maintenance crews",
+          "Rising water and utility costs amid drought concerns",
+          "Aging equipment and infrastructure requiring significant capital investment",
+          "Technology adoption for course management and member experience",
+          "Adapting to climate change and unpredictable weather patterns"
+        ],
+        "competitive_landscape": {
+          "top_competitors": [
+            "Farmington Country Club",
+            "Royal Mayfair Golf Club",
+            "Petersburg Country Club",
+            "Hermitage Golf Club"
+          ],
+          "positioning": "Mid-tier regional country club with strong reputation for course maintenance and member experience in Richmond, VA market",
+          "market_trends": [
+            "Increased focus on sustainability and environmental stewardship",
+            "Integration of golf technology (GPS, course management software)",
+            "Shift toward diverse membership and inclusive programming",
+            "Experience-focused amenities beyond golf"
+          ]
+        },
+        "conversation_starters": [
+          {
+            "text": "I noticed Richmond Country Club recently upgraded its irrigation system - that's significant. How is the team managing the ROI and water efficiency gains?",
+            "source": "google_reviews",
+            "relevance_score": 9
+          },
+          {
+            "text": "Superintendents across the country are struggling with maintenance crew staffing. How is Richmond Country Club addressing this challenge?",
+            "source": "industry_pain_points",
+            "relevance_score": 9
+          },
+          {
+            "text": "With rising operational costs, I'm curious how you're balancing course quality with budget constraints - especially with water costs increasing.",
+            "source": "industry_pain_points",
+            "relevance_score": 8
+          },
+          {
+            "text": "Your competitors like Hermitage and Farmington are investing heavily in member technology experiences. What's Richmond Country Club's strategy?",
+            "source": "competitive_landscape",
+            "relevance_score": 8
+          },
+          {
+            "text": "Many clubs in your region are struggling with aging equipment. How do you approach capital planning for course maintenance equipment?",
+            "source": "industry_pain_points",
+            "relevance_score": 7
+          },
+          {
+            "text": "Members seem to love the course conditions here. What operational metrics do you track to maintain that consistency?",
+            "source": "google_reviews",
+            "relevance_score": 7
+          },
+          {
+            "text": "Climate unpredictability is affecting course management everywhere. How are you adapting your maintenance protocols?",
+            "source": "industry_pain_points",
+            "relevance_score": 6
+          }
+        ]
+      },
+      "_agent6_starters_count": 7,
+      "_agent6_avg_relevance": 7.7,
+      "_agent6_data_quality": 10,
+      "_agent6_cost": 0.0146033,
+      "_agent6_turns": 7
+    },
+    {
+      "name": "Peter Miller",
+      "title": "General Manager",
+      "company": "River Creek Club",
+      "domain": "invitedclubs.com",
+      "email": "peter.miller@invitedclubs.com",
+      "email_method": "hunter_io",
+      "email_confidence": 96,
+      "linkedin_url": "https://www.linkedin.com/in/peter-miller-162228158",
+      "linkedin_method": "hunter_io",
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.011879500000000001,
+      "_agent3_turns": 3,
+      "context_enrichment": null,
+      "_agent6_starters_count": 0,
+      "_agent6_avg_relevance": 0,
+      "_agent6_data_quality": 0,
+      "_agent6_cost": 0.010506050000000003,
+      "_agent6_turns": 7
+    },
+    {
+      "name": "Jeffrey Webster",
+      "title": "Superintendent",
+      "company": "River Creek Club",
+      "domain": "invitedclubs.com",
+      "email": "jeffrey.webster@invitedclubs.com",
+      "email_method": "hunter_io",
+      "email_confidence": 95,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io"
+      ],
+      "_agent3_cost": 0.0115345,
+      "_agent3_turns": 3,
+      "context_enrichment": {
+        "google_reviews": {
+          "rating": null,
+          "positive_themes": [
+            "Exclusive membership community",
+            "Well-maintained facilities",
+            "Professional staff and services",
+            "Quality dining and amenities"
+          ],
+          "pain_points": [
+            "Membership engagement during off-seasons",
+            "Facility maintenance and capital improvements",
+            "Staffing consistency and training",
+            "Operational cost management"
+          ],
+          "recent_updates": [
+            "Facility modernization initiatives",
+            "Enhanced digital member communications",
+            "Expanded event programming"
+          ]
+        },
+        "industry_pain_points": [
+          "Staffing recruitment and retention in hospitality/club management",
+          "Budget constraints with rising operational costs and facility maintenance",
+          "Technology integration for member engagement and operational efficiency",
+          "Seasonal member attendance variability and revenue management",
+          "Compliance and safety regulations across multiple facility areas"
+        ],
+        "competitive_landscape": {
+          "top_competitors": [
+            "Other invited/private clubs in the region",
+            "Country clubs with similar membership models",
+            "Resort and hospitality venues offering event spaces"
+          ],
+          "positioning": "Exclusive invited club offering premium facilities and services to a selective membership base",
+          "market_trends": [
+            "Shift toward experiential membership value propositions",
+            "Digital transformation in club management and member communications",
+            "Increased focus on sustainability and operational efficiency",
+            "Post-pandemic normalization of event hosting and gatherings"
+          ]
+        },
+        "conversation_starters": [
+          {
+            "text": "I noticed many clubs like River Creek are investing in technology to streamline member communications and facility management. What tools are you currently using to keep your operations running smoothly?",
+            "source": "competitive_landscape",
+            "relevance_score": 9
+          },
+          {
+            "text": "Staffing and retention seem to be significant challenges across the club industry right now. How is River Creek managing recruitment and keeping your team engaged?",
+            "source": "industry_pain_points",
+            "relevance_score": 9
+          },
+          {
+            "text": "As a Superintendent, you're likely balancing facility maintenance with budget constraints. Are you looking for ways to optimize your operational costs without compromising member experience?",
+            "source": "industry_pain_points",
+            "relevance_score": 8
+          },
+          {
+            "text": "Member engagement during slower seasons is a challenge many clubs face. How does River Creek keep your community active year-round?",
+            "source": "google_reviews",
+            "relevance_score": 8
+          },
+          {
+            "text": "Exclusive clubs are increasingly using data and analytics to enhance member experiences. Is River Creek exploring ways to better understand member preferences and behaviors?",
+            "source": "competitive_landscape",
+            "relevance_score": 7
+          },
+          {
+            "text": "Facility upgrades and modernization are key differentiators in the club market. What's on the horizon for River Creek's facility improvements?",
+            "source": "google_reviews",
+            "relevance_score": 7
+          }
+        ]
+      },
+      "_agent6_starters_count": 6,
+      "_agent6_avg_relevance": 8.0,
+      "_agent6_data_quality": 7,
+      "_agent6_cost": 0.01317525,
+      "_agent6_turns": 4
+    },
+    {
+      "name": "Brian Ratkovich",
+      "title": "General Manager",
+      "company": "Riverfront Golf Club",
+      "domain": "riverfrontgolf.com",
+      "email": "info@riverfrontgolf.com",
+      "email_method": "course_general_email",
+      "email_confidence": 30,
+      "linkedin_url": null,
+      "linkedin_method": null,
+      "steps_attempted": [
+        "hunter_io",
+        "web_search",
+        "focused_search",
+        "general_email"
+      ],
+      "_agent3_cost": 0.01197575,
+      "_agent3_turns": 3,
+      "context_enrichment": null,
+      "_agent6_starters_count": 0,
+      "_agent6_avg_relevance": 0,
+      "_agent6_data_quality": 0,
+      "_agent6_cost": 0.0098127,
+      "_agent6_turns": 4
+    }
+  ]
+}

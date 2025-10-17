@@ -1,0 +1,126 @@
+{
+  "test_date": "2025-10-17",
+  "contacts_tested": 10,
+  "phones_found": 7,
+  "success_rate": 70.0,
+  "avg_cost": 0.011645949999999999,
+  "total_cost": 0.1164595,
+  "results": [
+    {
+      "name": "Dean Sumner",
+      "title": "Director of Golf",
+      "company": "Quinton Oaks Golf Course",
+      "state": "Virginia",
+      "phone": "804-529-5367",
+      "phone_source": "aggregated",
+      "method": "perplexity_ai",
+      "confidence": 90,
+      "_agent5_cost": 0.011915750000000001,
+      "_agent5_turns": 3
+    },
+    {
+      "name": "Eddie Luke",
+      "title": "General Manager",
+      "company": "Red Wing Lake Golf Course",
+      "state": "Virginia",
+      "phone": null,
+      "phone_source": null,
+      "method": "not_found",
+      "confidence": 0,
+      "_agent5_cost": 0.011771,
+      "_agent5_turns": 3
+    },
+    {
+      "name": "Conlin Giles",
+      "title": "Head Golf Professional",
+      "company": "Red Wing Lake Golf Course",
+      "state": "Virginia",
+      "phone": "(757) 437-2037",
+      "phone_source": "aggregated",
+      "method": "perplexity_ai",
+      "confidence": 90,
+      "_agent5_cost": 0.011563499999999999,
+      "_agent5_turns": 3
+    },
+    {
+      "name": "Tucker Jarman",
+      "title": "Superintendent",
+      "company": "Red Wing Lake Golf Course",
+      "state": "Virginia",
+      "phone": null,
+      "phone_source": null,
+      "method": "not_found",
+      "confidence": 0,
+      "_agent5_cost": 0.011588000000000001,
+      "_agent5_turns": 3
+    },
+    {
+      "name": "Stacy Foster",
+      "title": "General Manager",
+      "company": "Richmond Country Club",
+      "state": "Virginia",
+      "phone": "804-592-5861",
+      "phone_source": "aggregated",
+      "confidence": 90,
+      "_agent5_cost": 0.011599749999999999,
+      "_agent5_turns": 3
+    },
+    {
+      "name": "Bill Ranson",
+      "title": "Head Golf Professional",
+      "company": "Richmond Country Club",
+      "state": "Virginia",
+      "phone": "(804) 784-5663",
+      "phone_source": "aggregated",
+      "confidence": 90,
+      "_agent5_cost": 0.0116195,
+      "_agent5_turns": 3
+    },
+    {
+      "name": "Greg McCue",
+      "title": "Superintendent",
+      "company": "Richmond Country Club",
+      "state": "Virginia",
+      "phone": "804-784-5556",
+      "phone_source": "aggregated",
+      "confidence": 90,
+      "_agent5_cost": 0.01159125,
+      "_agent5_turns": 3
+    },
+    {
+      "name": "Peter Miller",
+      "title": "General Manager",
+      "company": "River Creek Club",
+      "state": "Virginia",
+      "phone": "703-779-2022 ext. 5386",
+      "phone_source": "aggregated",
+      "confidence": 90,
+      "_agent5_cost": 0.01149025,
+      "_agent5_turns": 3
+    },
+    {
+      "name": "Jeffrey Webster",
+      "title": "Superintendent",
+      "company": "River Creek Club",
+      "state": "Virginia",
+      "phone": null,
+      "phone_source": null,
+      "method": "not_found",
+      "confidence": 0,
+      "_agent5_cost": 0.011803999999999999,
+      "_agent5_turns": 3
+    },
+    {
+      "name": "Brian Ratkovich",
+      "title": "General Manager",
+      "company": "Riverfront Golf Club",
+      "state": "Virginia",
+      "phone": "(757) 484-2200",
+      "phone_source": "aggregated",
+      "method": "perplexity_ai",
+      "confidence": 90,
+      "_agent5_cost": 0.0115165,
+      "_agent5_turns": 3
+    }
+  ]
+}
