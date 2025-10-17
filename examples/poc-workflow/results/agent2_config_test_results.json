@@ -1,0 +1,188 @@
+{
+  "test_date": "2025-10-16",
+  "test_url": "https://vsga.org/courselisting/11950?hsLang=en",
+  "ground_truth": {
+    "course_name": "Richmond Country Club",
+    "website": "https://www.richmondcountryclubva.com/",
+    "phone": "(804) 784-5663",
+    "staff": [
+      {
+        "name": "Stacy Foster",
+        "title": "GENERAL MANAGER"
+      },
+      {
+        "name": "Bill Ranson",
+        "title": "HEAD GOLF PROFESSIONAL"
+      },
+      {
+        "name": "Greg McCue",
+        "title": "SUPERINTENDENT"
+      }
+    ]
+  },
+  "results": [
+    {
+      "config_name": "custom_tool_haiku_2turns",
+      "cost": 0.0193254,
+      "time_seconds": 12.482,
+      "turns": 2,
+      "tools_used": [
+        "mcp__extract__extract_contacts",
+        "WebFetch"
+      ],
+      "accuracy_score": 0,
+      "accuracy_details": {
+        "website_match": false,
+        "phone_match": false,
+        "staff_count_match": false,
+        "staff_names_match": false,
+        "staff_titles_match": false,
+        "score": 0
+      },
+      "extracted_data": null,
+      "under_budget": true,
+      "perfect_accuracy": false
+    },
+    {
+      "config_name": "custom_tool_haiku_3turns",
+      "cost": 0.01236655,
+      "time_seconds": 10.661,
+      "turns": 7,
+      "tools_used": [
+        "mcp__extract__extract_contacts",
+        "WebFetch"
+      ],
+      "accuracy_score": 80,
+      "accuracy_details": {
+        "website_match": true,
+        "phone_match": true,
+        "staff_count_match": true,
+        "staff_names_match": true,
+        "staff_titles_match": false,
+        "score": 80
+      },
+      "extracted_data": {
+        "club_name": "Richmond Country Club",
+        "website": "https://www.richmondcountryclubva.com/",
+        "phone": "(804) 784-5663",
+        "staff": [
+          {
+            "name": "Stacy Foster",
+            "title": "General Manager"
+          },
+          {
+            "name": "Bill Ranson",
+            "title": "Head Golf Professional"
+          },
+          {
+            "name": "Greg McCue",
+            "title": "Superintendent"
+          }
+        ]
+      },
+      "under_budget": true,
+      "perfect_accuracy": false
+    },
+    {
+      "config_name": "custom_tool_sonnet_2turns",
+      "cost": 0.0418897,
+      "time_seconds": 12.383,
+      "turns": 2,
+      "tools_used": [
+        "mcp__extract__extract_contacts",
+        "WebFetch"
+      ],
+      "accuracy_score": 0,
+      "accuracy_details": {
+        "website_match": false,
+        "phone_match": false,
+        "staff_count_match": false,
+        "staff_names_match": false,
+        "staff_titles_match": false,
+        "score": 0
+      },
+      "extracted_data": null,
+      "under_budget": false,
+      "perfect_accuracy": false
+    },
+    {
+      "config_name": "mcp_jina_haiku_2turns",
+      "cost": 0.0199565,
+      "time_seconds": 8.972,
+      "turns": 4,
+      "tools_used": [
+        "WebFetch"
+      ],
+      "accuracy_score": 80,
+      "accuracy_details": {
+        "website_match": true,
+        "phone_match": true,
+        "staff_count_match": true,
+        "staff_names_match": true,
+        "staff_titles_match": false,
+        "score": 80
+      },
+      "extracted_data": {
+        "organization": "Richmond Country Club",
+        "website": "https://www.richmondcountryclubva.com/",
+        "phone": "(804) 784-5663",
+        "address": "12950 Patterson Avenue, Richmond, VA 23238",
+        "staff": [
+          {
+            "name": "Stacy Foster",
+            "title": "General Manager"
+          },
+          {
+            "name": "Bill Ranson",
+            "title": "Head Golf Professional"
+          },
+          {
+            "name": "Greg McCue",
+            "title": "Superintendent"
+          }
+        ]
+      },
+      "under_budget": true,
+      "perfect_accuracy": false
+    },
+    {
+      "config_name": "mcp_brightdata_haiku_2turns",
+      "cost": 0.01161385,
+      "time_seconds": 8.311,
+      "turns": 4,
+      "tools_used": [
+        "WebFetch"
+      ],
+      "accuracy_score": 80,
+      "accuracy_details": {
+        "website_match": true,
+        "phone_match": true,
+        "staff_count_match": true,
+        "staff_names_match": true,
+        "staff_titles_match": false,
+        "score": 80
+      },
+      "extracted_data": {
+        "website": "https://www.richmondcountryclubva.com/",
+        "phone": "(804) 784-5663",
+        "staff": [
+          {
+            "name": "Stacy Foster",
+            "title": "General Manager"
+          },
+          {
+            "name": "Bill Ranson",
+            "title": "Head Golf Professional"
+          },
+          {
+            "name": "Greg McCue",
+            "title": "Superintendent"
+          }
+        ]
+      },
+      "under_budget": true,
+      "perfect_accuracy": false
+    }
+  ],
+  "winner": null
+}

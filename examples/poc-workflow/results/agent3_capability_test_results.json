@@ -1,0 +1,48 @@
+{
+  "test_date": "2025-10-16",
+  "test_contact": {
+    "name": "Stacy Foster",
+    "title": "General Manager",
+    "company": "Richmond Country Club",
+    "company_website": "https://www.richmondcountryclubva.com/",
+    "company_domain": "richmondcountryclubva.com"
+  },
+  "results": {
+    "email_finding": {
+      "test": "email_finding",
+      "success": false,
+      "email": null,
+      "cost": 0.0357065,
+      "time_seconds": 13.394,
+      "turns": 2,
+      "tools_used": [
+        "WebSearch",
+        "WebFetch"
+      ]
+    },
+    "linkedin_discovery": {
+      "test": "linkedin_discovery",
+      "success": true,
+      "linkedin_url": "https://www.linkedin.com/in/stacy-foster-8b1616238",
+      "cost": 0.0319684,
+      "time_seconds": 11.268,
+      "turns": 4,
+      "tools_used": [
+        "WebSearch"
+      ]
+    },
+    "linkedin_scraping": {
+      "test": "linkedin_scraping",
+      "success": false,
+      "job_history": null,
+      "cost": 0.0068995,
+      "time_seconds": 12.241,
+      "turns": 4,
+      "tools_used": [
+        "WebFetch"
+      ]
+    }
+  },
+  "total_cost": 0.07457440000000001,
+  "successful_tests": 1
+}
