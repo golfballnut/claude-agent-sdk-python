@@ -5,19 +5,21 @@ Agent 1 Batch Test: Find URLs for 5 Courses
 Tests Agent 1 with multiple courses and stores results for Agent 2 testing.
 """
 
-import anyio
 import json
 import re
 from pathlib import Path
 from typing import Any
+
+import anyio
+
 from claude_agent_sdk import (
-    ClaudeSDKClient,
-    ClaudeAgentOptions,
-    tool,
-    create_sdk_mcp_server,
     AssistantMessage,
+    ClaudeAgentOptions,
+    ClaudeSDKClient,
     ResultMessage,
     TextBlock,
+    create_sdk_mcp_server,
+    tool,
 )
 
 
@@ -25,8 +27,9 @@ from claude_agent_sdk import (
 @tool("fetch", "Get golf course listing links from VSGA directory", {"url": str})
 async def fetch(args: dict[str, Any]) -> dict[str, Any]:
     """Fetch and extract ONLY course links"""
-    import httpx
     import re
+
+    import httpx
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         r = await client.get(f"https://r.jina.ai/{args['url']}")
@@ -149,15 +152,15 @@ async def main():
     print(f"{'-'*70}")
     print(f"{'TOTALS':<35} {found_count}/{len(courses):<10} ${total_cost:<9.4f}")
 
-    print(f"\n📈 Statistics:")
+    print("\n📈 Statistics:")
     print(f"   Success Rate: {found_count}/{len(courses)} ({found_count/len(courses)*100:.0f}%)")
     print(f"   Total Cost: ${total_cost:.4f}")
     print(f"   Avg Cost/Course: ${total_cost/len(courses):.4f}")
     print(f"   Avg Time: {avg_time:.1f}s")
 
     print(f"\n💾 Results saved to: {output_file}")
-    print(f"\n✅ Agent 1 is ready for production!")
-    print(f"   Next: Build Agent 2 to extract data from these URLs")
+    print("\n✅ Agent 1 is ready for production!")
+    print("   Next: Build Agent 2 to extract data from these URLs")
 
 
 if __name__ == "__main__":

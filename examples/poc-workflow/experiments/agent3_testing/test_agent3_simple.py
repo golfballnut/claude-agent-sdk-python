@@ -6,17 +6,18 @@ Problem: SDK agents are using WebSearch instead of specified tools
 Solution: Test simpler patterns that work
 """
 
-import anyio
 import json
 import time
+
+import anyio
+
 from claude_agent_sdk import (
-    ClaudeSDKClient,
-    ClaudeAgentOptions,
     AssistantMessage,
+    ClaudeAgentOptions,
+    ClaudeSDKClient,
     ResultMessage,
     TextBlock,
 )
-
 
 TEST_CONTACT = {
     "name": "Stacy Foster",
@@ -175,7 +176,7 @@ async def main():
 
     print(f"Successful: {successful}/2")
     print(f"Total Cost: ${total_cost:.4f}")
-    print(f"Budget Target: $0.02")
+    print("Budget Target: $0.02")
     print(f"Status: {'✅ Under budget' if total_cost < 0.02 else '⚠️ Over budget'}")
 
     if results["linkedin"].get("success"):
@@ -192,7 +193,7 @@ async def main():
             "total_cost": total_cost,
         }, f, indent=2)
 
-    print(f"\n💾 Saved to: ../results/agent3_simple_test.json")
+    print("\n💾 Saved to: ../results/agent3_simple_test.json")
 
 
 if __name__ == "__main__":

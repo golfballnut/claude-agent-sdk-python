@@ -7,7 +7,7 @@ Build and prove a cost-effective, accurate two-agent workflow pattern that can s
 ## Workflow
 
 ```
-Agent 1 (URL Finder) → Agent 2 (Data Extractor) → Structured Output
+Agent 1 (URL Finder) → Agent 2 (Data Extractor) → Agent 3 (Email Finder) → Agent 4 (LinkedIn Finder) → Complete Data
 ```
 
 ### Agent 1: URL Finder
@@ -22,8 +22,20 @@ Agent 1 (URL Finder) → Agent 2 (Data Extractor) → Structured Output
 **Output:** Structured JSON with contact info
 **Status:** ✅ COMPLETE
 
-### Orchestrator (Future)
-**Task:** Manage Agent 1 → Agent 2 flow, handle errors, validate results
+### Agent 3: Email Finder
+**Input:** Contacts from Agent 2
+**Task:** Find professional emails (Hunter.io + fallbacks)
+**Output:** Email + confidence score
+**Status:** ✅ COMPLETE
+
+### Agent 4: LinkedIn Finder
+**Input:** Contacts from Agent 2/3
+**Task:** Find LinkedIn profile URLs
+**Output:** LinkedIn URL + method
+**Status:** 📋 PLANNED
+
+### Orchestrator
+**Task:** Manage Agent 1 → 2 → 3 → 4 flow
 **Status:** 📋 PLANNED
 
 ## Success Criteria
@@ -48,21 +60,30 @@ Agent 1 (URL Finder) → Agent 2 (Data Extractor) → Structured Output
 - Speed: 8.5s avg ✅
 - **STATUS: PRODUCTION READY** ✅
 
-**Combined Workflow:**
-- Total Cost: $0.0276 per workflow (31% under budget) ✅
-- Total Time: ~12s per workflow ✅
+**Agent 3 Results:**
+- Success Rate: 50% email discovery (Hunter.io)
+- Cost: $0.0119 avg (40% under budget) ✅
+- Confidence: 95-98% when found ✅
+- Speed: ~8s per contact ✅
+- **STATUS: PRODUCTION READY** ✅
+
+**Combined Workflow (Agents 1+2+3):**
+- Total Cost: $0.0395 per course (with avg 2.4 contacts)
+- Total Time: ~30s per workflow ✅
 
 ## Next Steps
 
 1. ✅ ~~Build Agent 2 with same winning pattern~~
 2. ✅ ~~Test Agent 2 with 5 URLs from Agent 1~~
-3. 🔄 Build orchestrator to connect Agent 1 + 2
-4. Full workflow test
-5. Deploy to cloud (Cloud Run / Railway)
+3. ✅ ~~Build Agent 3 for email enrichment~~
+4. 🔄 Build Agent 4 for LinkedIn enrichment
+5. Build orchestrator to connect agents
+6. Full workflow test
+7. Deploy to cloud (Cloud Run / Railway)
 
 ## Production Deployment
 
 **Target:** Supabase Edge Function triggers SDK workflow
-**Scale:** 500 workflows/day = $13.81/day = $414/month
-**Architecture:** Single deployment, agent registry pattern
-**Status:** Ready for orchestrator build
+**Scale:** 500 workflows/day = ~$20/day = ~$600/month (with enrichment)
+**Architecture:** Microservices pattern (specialized agents)
+**Status:** Agent 4 + orchestrator remaining

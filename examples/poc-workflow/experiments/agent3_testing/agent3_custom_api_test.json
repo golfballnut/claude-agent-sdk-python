@@ -1,0 +1,26 @@
+{
+  "test": "custom_api_tool",
+  "contact": {
+    "name": "Stacy Foster",
+    "title": "General Manager",
+    "company": "Richmond Country Club",
+    "company_domain": "richmondcountryclubva.com"
+  },
+  "enrichment": {
+    "email": "sfoster@richmondcountryclubva.com",
+    "email_method": "hunter_io",
+    "email_confidence": 98,
+    "linkedin_url": null,
+    "linkedin_method": null,
+    "steps_log": [
+      "Trying Step 1: Hunter.io Email-Finder",
+      "LinkedIn Step 1: Site-filtered search",
+      "LinkedIn Step 2: Jina search"
+    ]
+  },
+  "cost": 0.012207999999999998,
+  "time_seconds": 7.878,
+  "tools_used": [
+    "mcp__enrich__enrich_contact"
+  ]
+}

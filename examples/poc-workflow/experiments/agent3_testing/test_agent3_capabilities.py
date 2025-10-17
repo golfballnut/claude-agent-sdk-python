@@ -10,19 +10,20 @@ Tests each enrichment capability independently:
 - Phone enrichment
 """
 
-import anyio
 import json
 import time
-from typing import Dict, Any
+from typing import Any
+
+import anyio
+
 from claude_agent_sdk import (
-    ClaudeSDKClient,
-    ClaudeAgentOptions,
     AssistantMessage,
+    ClaudeAgentOptions,
+    ClaudeSDKClient,
     ResultMessage,
     TextBlock,
     ToolUseBlock,
 )
-
 
 # Test data from Agent 2 results (Stacy Foster)
 TEST_CONTACT = {
@@ -38,7 +39,7 @@ TEST_CONTACT = {
 # TEST A: Email Finding (Hunter.io)
 # ============================================================================
 
-async def test_email_finding() -> Dict[str, Any]:
+async def test_email_finding() -> dict[str, Any]:
     """Test Hunter.io Email Finder"""
     print("\n" + "="*70)
     print("TEST A: Email Finding (Hunter.io)")
@@ -116,7 +117,7 @@ async def test_email_finding() -> Dict[str, Any]:
 # TEST B: Email Verification (Hunter.io)
 # ============================================================================
 
-async def test_email_verification(email: str) -> Dict[str, Any]:
+async def test_email_verification(email: str) -> dict[str, Any]:
     """Test Hunter.io Email Verifier"""
     print("\n" + "="*70)
     print("TEST B: Email Verification (Hunter.io)")
@@ -167,7 +168,7 @@ async def test_email_verification(email: str) -> Dict[str, Any]:
             "tools_used": tools_used,
         }
 
-        print(f"\n   Result: ✅ Verified")
+        print("\n   Result: ✅ Verified")
         print(f"   Status: {verification_result[:100] if verification_result else 'N/A'}...")
         print(f"   Cost: ${result['cost']:.4f}" if result['cost'] else "   Cost: N/A")
         print(f"   Time: {elapsed:.2f}s")
@@ -187,7 +188,7 @@ async def test_email_verification(email: str) -> Dict[str, Any]:
 # TEST C: LinkedIn URL Discovery
 # ============================================================================
 
-async def test_linkedin_discovery() -> Dict[str, Any]:
+async def test_linkedin_discovery() -> dict[str, Any]:
     """Test LinkedIn URL finding with WebSearch"""
     print("\n" + "="*70)
     print("TEST C: LinkedIn URL Discovery (WebSearch)")
@@ -266,7 +267,7 @@ async def test_linkedin_discovery() -> Dict[str, Any]:
 # TEST D: LinkedIn Profile Scraping
 # ============================================================================
 
-async def test_linkedin_scraping(linkedin_url: str) -> Dict[str, Any]:
+async def test_linkedin_scraping(linkedin_url: str) -> dict[str, Any]:
     """Test LinkedIn profile scraping with Firecrawl"""
     print("\n" + "="*70)
     print("TEST D: LinkedIn Profile Scraping (Firecrawl)")
@@ -348,7 +349,7 @@ async def test_linkedin_scraping(linkedin_url: str) -> Dict[str, Any]:
 # TEST E: Phone Enrichment
 # ============================================================================
 
-async def test_phone_enrichment(email: str) -> Dict[str, Any]:
+async def test_phone_enrichment(email: str) -> dict[str, Any]:
     """Test phone finding via Hunter.io Email Enrichment"""
     print("\n" + "="*70)
     print("TEST E: Phone Enrichment (Hunter.io)")
@@ -493,11 +494,11 @@ async def run_all_tests():
     elif total_cost < 0.04:
         print("⚠️  Split into Micro-Agents")
         print(f"   Cost: ${total_cost:.4f} (over single agent budget)")
-        print(f"   Recommend: Agent 3a (email), Agent 3b (LinkedIn)")
+        print("   Recommend: Agent 3a (email), Agent 3b (LinkedIn)")
     else:
         print("❌ Needs Optimization")
         print(f"   Cost: ${total_cost:.4f} (too expensive)")
-        print(f"   Recommend: Review tool choices, simplify features")
+        print("   Recommend: Review tool choices, simplify features")
 
     # Save results
     output = {

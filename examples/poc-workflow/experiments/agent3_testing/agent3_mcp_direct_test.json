@@ -1,0 +1,19 @@
+{
+  "test_date": "2025-10-16",
+  "contact": {
+    "name": "Stacy Foster",
+    "title": "General Manager",
+    "company": "Richmond Country Club",
+    "company_domain": "richmondcountryclubva.com"
+  },
+  "enrichment_data": null,
+  "tools_used": [
+    "Bash",
+    "Bash"
+  ],
+  "cost": 0.016894499999999996,
+  "time_seconds": 11.913,
+  "turns": 7,
+  "email_found": null,
+  "linkedin_found": null
+}

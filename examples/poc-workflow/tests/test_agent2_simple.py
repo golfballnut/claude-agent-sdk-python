@@ -6,13 +6,15 @@ Based on initial tests, mcp_brightdata performed best.
 This test validates it with strict controls.
 """
 
-import anyio
 import json
 import time
+
+import anyio
+
 from claude_agent_sdk import (
-    ClaudeSDKClient,
-    ClaudeAgentOptions,
     AssistantMessage,
+    ClaudeAgentOptions,
+    ClaudeSDKClient,
     ResultMessage,
     TextBlock,
     ToolUseBlock,
@@ -127,7 +129,7 @@ async def test_webfetch_directly():
                 elapsed = time.time() - start_time
                 accuracy = check_accuracy(extracted_data, GROUND_TRUTH)
 
-                print(f"\n📊 Results:")
+                print("\n📊 Results:")
                 print(f"   Cost: ${msg.total_cost_usd:.4f}")
                 print(f"   Time: {elapsed:.2f}s")
                 print(f"   Accuracy: {accuracy['score']}/100")
@@ -138,7 +140,7 @@ async def test_webfetch_directly():
                 print(f"   Staff: {'✅' if accuracy['staff_match'] else '❌'}")
 
                 if extracted_data:
-                    print(f"\n   Extracted Data:")
+                    print("\n   Extracted Data:")
                     print(f"   {json.dumps(extracted_data, indent=2)}")
 
                 return {
@@ -157,7 +159,7 @@ async def main():
     print("🎯 Agent 2 Simplified Test")
     print("="*70)
     print(f"URL: {TEST_URL}")
-    print(f"Target: < $0.02, 100% accuracy\n")
+    print("Target: < $0.02, 100% accuracy\n")
 
     result = await test_webfetch_directly()
 
@@ -166,18 +168,18 @@ async def main():
     print(f"{'='*70}")
 
     if result["under_budget"] and result["perfect_accuracy"]:
-        print(f"✅ SUCCESS!")
+        print("✅ SUCCESS!")
         print(f"   Cost: ${result['cost']:.4f} (under budget)")
         print(f"   Accuracy: {result['accuracy_score']}/100 (perfect)")
         print(f"   Time: {result['time_seconds']}s")
     elif result["perfect_accuracy"]:
-        print(f"⚠️  Perfect accuracy but over budget")
+        print("⚠️  Perfect accuracy but over budget")
         print(f"   Cost: ${result['cost']:.4f} (${result['cost'] - 0.02:.4f} over)")
     elif result["under_budget"]:
-        print(f"⚠️  Under budget but imperfect accuracy")
+        print("⚠️  Under budget but imperfect accuracy")
         print(f"   Accuracy: {result['accuracy_score']}/100")
     else:
-        print(f"❌ Failed both criteria")
+        print("❌ Failed both criteria")
 
     # Save
     with open("../results/agent2_simple_test.json", "w") as f:

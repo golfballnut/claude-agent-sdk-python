@@ -1,0 +1,26 @@
+{
+  "hunter_io": {
+    "email": null,
+    "tools_used": [
+      "Grep",
+      "Read"
+    ],
+    "cost": 0.010155999999999998,
+    "turns": 2
+  },
+  "brightdata_email": {
+    "email": null,
+    "tools_used": [
+      "Grep",
+      "Read"
+    ],
+    "cost": 0.01160455,
+    "turns": 7
+  },
+  "brightdata_linkedin": {
+    "linkedin_url": null,
+    "tools_used": [],
+    "cost": 0.0038594000000000002,
+    "turns": 1
+  }
+}

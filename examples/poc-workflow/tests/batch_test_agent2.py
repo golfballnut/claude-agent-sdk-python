@@ -6,10 +6,11 @@ Runs Agent 2 against all 5 URLs from Agent 1 results.
 Validates production readiness.
 """
 
-import anyio
 import json
 import sys
 from pathlib import Path
+
+import anyio
 
 # Add agents to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "agents"))
@@ -94,13 +95,13 @@ async def run_batch_test():
         avg_cost = total_cost / successful
         avg_time = total_time / successful
 
-        print(f"\nPerformance:")
+        print("\nPerformance:")
         print(f"   Avg Cost: ${avg_cost:.4f}")
         print(f"   Total Cost: ${total_cost:.4f}")
         print(f"   Avg Time: {avg_time:.2f}s")
         print(f"   Total Time: {total_time:.2f}s")
 
-        print(f"\nBudget Analysis:")
+        print("\nBudget Analysis:")
         if avg_cost < 0.02:
             under_by = ((0.02 - avg_cost) / 0.02) * 100
             print(f"   ✅ ${avg_cost:.4f} per extraction ({under_by:.0f}% under budget)")
@@ -108,7 +109,7 @@ async def run_batch_test():
             over_by = ((avg_cost - 0.02) / 0.02) * 100
             print(f"   ❌ ${avg_cost:.4f} per extraction ({over_by:.0f}% over budget)")
 
-        print(f"\nProduction Projections (500 workflows/day):")
+        print("\nProduction Projections (500 workflows/day):")
         daily_cost = avg_cost * 500
         monthly_cost = daily_cost * 30
         print(f"   Daily: ${daily_cost:.2f}")

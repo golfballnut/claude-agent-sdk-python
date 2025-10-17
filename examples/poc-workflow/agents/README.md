@@ -73,6 +73,64 @@ print(result["data"])
 
 ---
 
+## Agent 3: Email Finder
+
+**File:** `agent3_email_finder.py`
+
+**What it does:**
+Finds professional email addresses for contacts using Hunter.io API + fallback searches
+
+**Performance:**
+- Success Rate: 50% (Hunter.io coverage)
+- Cost: $0.0119/contact (40% under budget)
+- Confidence: 95-98% when found
+- Speed: ~8s per contact
+
+**Usage:**
+```python
+from agent3_email_finder import find_email
+
+contact = {
+    "name": "Stacy Foster",
+    "title": "General Manager",
+    "company": "Richmond Country Club",
+    "domain": "richmondcountryclubva.com"
+}
+
+result = await find_email(contact)
+print(result["email"])  # sfoster@richmondcountryclubva.com
+```
+
+**Input:** Contact dict (from Agent 2)
+**Output:**
+```json
+{
+  "email": "sfoster@richmondcountryclubva.com",
+  "email_method": "hunter_io",
+  "email_confidence": 98,
+  "steps_attempted": ["hunter_io"]
+}
+```
+
+**Pattern:**
+- Custom tool with Hunter.io API
+- 5-step fallback (Hunter → search → search → general → manual flag)
+- SDK MCP server (in-process)
+- max_turns: 2
+
+**Note:** LinkedIn enrichment moved to Agent 4
+
+---
+
+## Agent 4: LinkedIn Specialist
+
+**Status:** 📋 Planned
+
+**Goal:** Find LinkedIn URLs for contacts
+**Target:** < $0.01 per contact
+
+---
+
 ## Using These Agents
 
 1. Review the agent file

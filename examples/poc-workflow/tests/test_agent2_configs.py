@@ -6,19 +6,21 @@ Tests different tool/model/config combinations to find optimal pattern.
 Goal: < $0.02 per extraction, 100% accuracy
 """
 
-import anyio
 import json
 import time
-from typing import Any, Dict, List
+from typing import Any
+
+import anyio
+
 from claude_agent_sdk import (
-    ClaudeSDKClient,
-    ClaudeAgentOptions,
-    tool,
-    create_sdk_mcp_server,
     AssistantMessage,
+    ClaudeAgentOptions,
+    ClaudeSDKClient,
     ResultMessage,
     TextBlock,
     ToolUseBlock,
+    create_sdk_mcp_server,
+    tool,
 )
 
 # Ground truth from screenshot (Richmond Country Club)
@@ -43,8 +45,9 @@ TEST_URL = "https://vsga.org/courselisting/11950?hsLang=en"
 @tool("extract_contacts", "Extract contact info from golf course page", {"url": str})
 async def extract_contacts_custom(args: dict[str, Any]) -> dict[str, Any]:
     """Custom tool - Agent 1's winning pattern"""
-    import httpx
     import re
+
+    import httpx
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         r = await client.get(f"https://r.jina.ai/{args['url']}")
@@ -68,7 +71,7 @@ async def extract_contacts_custom(args: dict[str, Any]) -> dict[str, Any]:
             return {"content": [{"type": "text", "text": contact_section}]}
         else:
             # Fallback: return first 2000 chars
-            print(f"   ⚠ Sections not found, returning first 2000 chars")
+            print("   ⚠ Sections not found, returning first 2000 chars")
             return {"content": [{"type": "text", "text": content[:2000]}]}
 
 
@@ -114,7 +117,7 @@ CONFIGS = {
 # ACCURACY CHECKER
 # ============================================================================
 
-def check_accuracy(extracted: Dict, ground_truth: Dict) -> Dict[str, Any]:
+def check_accuracy(extracted: dict, ground_truth: dict) -> dict[str, Any]:
     """Compare extracted data against ground truth"""
     results = {
         "website_match": False,
@@ -168,7 +171,7 @@ def check_accuracy(extracted: Dict, ground_truth: Dict) -> Dict[str, Any]:
 # TEST RUNNER
 # ============================================================================
 
-async def test_config(config_name: str, config: Dict) -> Dict[str, Any]:
+async def test_config(config_name: str, config: dict) -> dict[str, Any]:
     """Test a single configuration"""
     print(f"\n{'='*70}")
     print(f"Testing: {config_name}")
@@ -252,7 +255,7 @@ async def test_config(config_name: str, config: Dict) -> Dict[str, Any]:
                     }
 
                     # Print summary
-                    print(f"\n📊 Results:")
+                    print("\n📊 Results:")
                     print(f"   Cost: ${msg.total_cost_usd:.4f} {'✅' if result['under_budget'] else '❌'}")
                     print(f"   Time: {elapsed:.2f}s")
                     print(f"   Accuracy: {accuracy['score']}/100 {'✅' if result['perfect_accuracy'] else '❌'}")
@@ -279,7 +282,7 @@ async def main():
     print("🧪 Agent 2 Configuration Testing")
     print("="*70)
     print(f"Test URL: {TEST_URL}")
-    print(f"Target: < $0.02, 100% accuracy")
+    print("Target: < $0.02, 100% accuracy")
     print("")
 
     results = []
