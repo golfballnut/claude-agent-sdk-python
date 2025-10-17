@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Agent 3: Email Finder (Specialist)
-Finds professional email addresses for contacts
+Agent 3: Contact Enricher (Email + LinkedIn)
+Finds professional emails AND LinkedIn URLs via Hunter.io
 
 Performance:
-- Success Rate: 50% (Hunter.io API)
+- Email Success: 50% (Hunter.io API)
+- LinkedIn Success: 67% (included in Hunter.io response!)
 - Cost: $0.0119 avg (40% under budget)
 - Confidence: 95-98% when found
 - Speed: ~8s per contact
@@ -12,11 +13,12 @@ Performance:
 Pattern:
 - Custom tool with Hunter.io API
 - 5-step email fallback sequence
+- Extracts LinkedIn URL from Hunter.io response (bonus!)
 - SDK MCP server (in-process)
 - Haiku 4.5 model
-- Returns JSON with email + metadata
 
-Note: LinkedIn enrichment moved to Agent 4
+Key Discovery: Hunter.io Email-Finder returns linkedin_url field
+No need for separate Agent 4!
 """
 
 import anyio
@@ -35,16 +37,16 @@ from claude_agent_sdk import (
 )
 
 
-@tool("find_email", "Find professional email with 5-step fallback", {
+@tool("enrich_contact", "Find email AND LinkedIn with 5-step fallback", {
     "name": str,
     "title": str,
     "company": str,
     "domain": str
 })
-async def find_email_tool(args: dict[str, Any]) -> dict[str, Any]:
+async def enrich_contact_tool(args: dict[str, Any]) -> dict[str, Any]:
     """
-    5-Step Email Discovery:
-    1. Hunter.io Email-Finder API
+    5-Step Email Discovery + LinkedIn Extraction:
+    1. Hunter.io Email-Finder API (also returns linkedin_url!)
     2. BrightData Search (via Jina scraping Google)
     3. Jina Search
     4. Course General Email fallback
@@ -62,14 +64,19 @@ async def find_email_tool(args: dict[str, Any]) -> dict[str, Any]:
         "email": None,
         "email_method": None,
         "email_confidence": 0,
+        "linkedin_url": None,
+        "linkedin_method": None,
         "steps_attempted": [],
     }
 
-    # Load .env from project root
-    env_path = Path(__file__).parent.parent.parent / ".env"
+    # Load .env from project root (4 levels up from agents/)
+    # agents/ -> poc-workflow/ -> examples/ -> claude-agent-sdk-python/ -> .env
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
     if env_path.exists():
         from dotenv import load_dotenv
         load_dotenv(env_path)
+    else:
+        print(f"   ⚠ .env not found at {env_path}")
 
     # STEP 1: Hunter.io Email Finder
     hunter_api_key = os.getenv("HUNTER_API_KEY")
@@ -90,11 +97,19 @@ async def find_email_tool(args: dict[str, Any]) -> dict[str, Any]:
                 if data.get("data") and data["data"].get("email"):
                     email = data["data"]["email"]
                     confidence = data["data"].get("score", 0)
+                    linkedin_url = data["data"].get("linkedin_url")  # BONUS!
 
                     if confidence >= 70:
                         results["email"] = email
                         results["email_method"] = "hunter_io"
                         results["email_confidence"] = confidence
+
+                        # Extract LinkedIn if present
+                        if linkedin_url:
+                            results["linkedin_url"] = linkedin_url
+                            results["linkedin_method"] = "hunter_io"
+                            print(f"   ✓ Step 1: BONUS - LinkedIn URL also found!")
+
                         # Success - return early
                         return {
                             "content": [{
@@ -173,22 +188,22 @@ async def find_email_tool(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-async def find_email(contact: Dict[str, Any]) -> Dict[str, Any]:
+async def enrich_contact(contact: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Find email for a contact
+    Enrich contact with email AND LinkedIn
 
     Args:
         contact: Dict with name, title, company, domain
 
     Returns:
-        Dict with original contact + email enrichment
+        Dict with original contact + email + linkedin_url
     """
 
-    server = create_sdk_mcp_server("email", tools=[find_email_tool])
+    server = create_sdk_mcp_server("enrich", tools=[enrich_contact_tool])
 
     options = ClaudeAgentOptions(
-        mcp_servers={"email": server},
-        allowed_tools=["mcp__email__find_email"],
+        mcp_servers={"enrich": server},
+        allowed_tools=["mcp__enrich__enrich_contact"],
         disallowed_tools=["WebSearch", "WebFetch", "Task", "TodoWrite", "Bash", "Grep", "Glob"],
         permission_mode="bypassPermissions",
         max_turns=2,
@@ -277,8 +292,8 @@ async def enrich_contacts(contacts: list[Dict[str, Any]]) -> list[Dict[str, Any]
 
 
 async def main():
-    """Demo: Find email for test contact"""
-    print("📧 Agent 3: Email Finder")
+    """Demo: Enrich test contact with email + LinkedIn"""
+    print("🔍 Agent 3: Contact Enricher")
     print("="*70)
 
     test_contact = {
@@ -291,12 +306,14 @@ async def main():
     print(f"Contact: {test_contact['name']}")
     print(f"Company: {test_contact['company']}\n")
 
-    result = await find_email(test_contact)
+    result = await enrich_contact(test_contact)
 
     print(f"\n📊 Result:")
     print(f"   Email: {result.get('email', 'Not found')}")
-    print(f"   Method: {result.get('email_method', 'N/A')}")
-    print(f"   Confidence: {result.get('email_confidence', 0)}%")
+    print(f"   Email Method: {result.get('email_method', 'N/A')}")
+    print(f"   Email Confidence: {result.get('email_confidence', 0)}%")
+    print(f"   LinkedIn: {result.get('linkedin_url', 'Not found')}")
+    print(f"   LinkedIn Method: {result.get('linkedin_method', 'N/A')}")
     print(f"   Cost: ${result.get('_agent3_cost', 0):.4f}")
 
     print(f"\n✅ Complete!")

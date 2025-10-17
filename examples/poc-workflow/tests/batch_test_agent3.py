@@ -13,68 +13,9 @@ from pathlib import Path
 import anyio
 
 # Add agents to path
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "agents"))
 
-# Import the enrichment tool
-from test_agent3_custom_apis import (
-    AssistantMessage,
-    ClaudeAgentOptions,
-    ClaudeSDKClient,
-    ResultMessage,
-    TextBlock,
-    create_sdk_mcp_server,
-    enrich_contact_tool,
-)
-
-
-async def enrich_contact_simple(contact: dict) -> dict:
-    """Enrich a single contact"""
-    server = create_sdk_mcp_server("enrich", tools=[enrich_contact_tool])
-
-    options = ClaudeAgentOptions(
-        mcp_servers={"enrich": server},
-        allowed_tools=["mcp__enrich__enrich_contact"],
-        disallowed_tools=["WebSearch", "WebFetch", "Task", "TodoWrite", "Bash", "Grep", "Glob"],
-        permission_mode="bypassPermissions",
-        max_turns=2,
-        model="claude-haiku-4-5",
-        system_prompt=(
-            "Use enrich_contact tool. It returns pure JSON. "
-            "OUTPUT ONLY THE EXACT JSON - NO MARKDOWN, NO FORMATTING, NO EXPLANATION."
-        ),
-    )
-
-    enrichment_data = None
-    result_message = None
-
-    async with ClaudeSDKClient(options=options) as client:
-        await client.query(
-            f"Enrich: {contact['name']}, {contact['title']}, "
-            f"{contact.get('company', 'company')}, {contact.get('domain', 'domain.com')}"
-        )
-
-        async for msg in client.receive_response():
-            if isinstance(msg, AssistantMessage):
-                for block in msg.content:
-                    if isinstance(block, TextBlock):
-                        # Parse JSON
-                        import re
-                        json_match = re.search(r'\{.*"email".*\}', block.text, re.DOTALL)
-                        if json_match:
-                            try:
-                                enrichment_data = json.loads(json_match.group(0))
-                            except json.JSONDecodeError:
-                                pass
-
-            if isinstance(msg, ResultMessage):
-                result_message = msg
-
-    return {
-        "contact": contact,
-        "enrichment": enrichment_data,
-        "cost": result_message.total_cost_usd if result_message else None,
-        "turns": result_message.num_turns if result_message else None,
-    }
+from agent3_email_finder import enrich_contact
 
 
 async def run_batch_test():
@@ -118,15 +59,14 @@ async def run_batch_test():
         print("-"*70)
 
         try:
-            result = await enrich_contact_simple(contact)
+            result = await enrich_contact(contact)
 
-            enrichment = result.get("enrichment", {})
-            email = enrichment.get("email") if enrichment else None
-            linkedin = enrichment.get("linkedin_url") if enrichment else None
-            cost = result.get("cost", 0)
+            email = result.get("email")
+            email_method = result.get("email_method")
+            linkedin = result.get("linkedin_url")
+            cost = result.get("_agent3_cost", 0)
 
             # Count successes (exclude general/manual fallbacks)
-            email_method = enrichment.get("email_method") if enrichment else None
             if email and email_method not in ["course_general_email", "needs_manual_research"]:
                 email_found += 1
                 print(f"   ✅ Email: {email} ({email_method})")

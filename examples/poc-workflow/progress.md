@@ -5,9 +5,9 @@
 ```
 [✅] Agent 1: URL Finder
 [✅] Agent 2: Data Extractor
-[✅] Agent 3: Email Finder
-[🔄] Agent 4: LinkedIn Finder (Next)
-[📋] Orchestrator
+[✅] Agent 3: Contact Enricher (Email + LinkedIn)
+[❌] Agent 4: Cancelled (Hunter.io includes LinkedIn!)
+[🔄] Orchestrator (Next)
 [📋] Full Workflow Test
 [📋] Production Deployment
 ```
@@ -72,18 +72,19 @@
 
 ---
 
-## Agent 3: Email Finder ✅ COMPLETE
+## Agent 3: Contact Enricher ✅ COMPLETE
 
 **Completed:** 2025-10-16
 
 **Deliverables:**
-- ✅ `agent3_email_finder.py` - Production-ready implementation
+- ✅ `agent3_email_finder.py` - Production enricher (email + LinkedIn)
 - ✅ `batch_test_agent3.py` - Batch testing framework
 - ✅ `results/agent3_batch_test_results.json` - 12 contact enrichments
 
 **Performance:**
-- Success Rate: 50% (6/12 contacts via Hunter.io)
-- Cost: $0.0119/contact (40% under budget)
+- Email Success: 50% (6/12 contacts via Hunter.io)
+- LinkedIn Success: 25% (3/12 bonus from Hunter.io!)
+- Cost: $0.0116/contact (42% under budget)
 - Confidence: 95-98% when found
 - Speed: ~8s per contact
 - Model: claude-haiku-4-5
@@ -95,25 +96,26 @@
 - max_turns=2
 - JSON-only output
 
-**Key Learning:**
-- Hunter.io API provides 50% coverage for golf course staff
-- Remaining 50% need manual research or deeper search
-- LinkedIn requires separate agent (blocked by LinkedIn.com)
+**BREAKTHROUGH Discovery:**
+- Hunter.io Email-Finder returns `linkedin_url` field!
+- Single API call gets BOTH email + LinkedIn
+- No extra cost for LinkedIn data
+- 50% of emails also include LinkedIn URLs
+- **Agent 4 not needed** - One agent does both!
 
 ---
 
-## Agent 4: LinkedIn Finder 📋 PLANNED
+## Agent 4: LinkedIn Finder ❌ CANCELLED
 
-**Goal:** Find LinkedIn profile URLs for contacts
+**Reason:** Hunter.io Email-Finder includes `linkedin_url` field!
 
-**Challenge:** LinkedIn blocks automated scrapers
+**Discovery:**
+- Tested Hunter.io MCP tool via Claude Code
+- Found linkedin_url in response (undocumented feature!)
+- 50% of successful email lookups also return LinkedIn
+- No extra API call or cost needed
 
-**Approaches to Test:**
-1. BrightData API (bypasses blocks)
-2. Playwright MCP (real browser)
-3. Alternative: Skip if not publicly searchable
-
-**Cost Target:** < $0.01 per contact
+**Decision:** Merged into Agent 3 (Contact Enricher)
 
 ---
 
@@ -137,16 +139,16 @@
 |-----------|--------|--------|--------|
 | Agent 1 | $0.02 | $0.0153 | ✅ Under |
 | Agent 2 | $0.02 | $0.0123 | ✅ Under |
-| Agent 3 | $0.02 | $0.0119 | ✅ Under |
-| Agent 4 | $0.01 | TBD | 📋 Testing |
-| Per Course | $0.06 | ~$0.04 | ✅ Under |
+| Agent 3 | $0.02 | $0.0116 | ✅ Under |
+| Agent 4 | $0.01 | N/A | ❌ Cancelled |
+| Per Course | $0.05 | $0.0392 | ✅ Under |
 
 **Daily Projection (500 courses, avg 2.4 contacts each):**
 - Agent 1: $7.65/day
 - Agent 2: $6.16/day
-- Agent 3: $14.28/day (1200 contacts)
-- Agent 4: $12/day (estimated, 1200 contacts)
-- **Total: ~$40/day = ~$1,200/month** (with full enrichment)
+- Agent 3: $13.92/day (1200 contacts, includes LinkedIn!)
+- Agent 4: $0 (merged into Agent 3)
+- **Total: ~$27.73/day = ~$832/month** (full enrichment)
 
 ---
 
@@ -179,5 +181,5 @@
 ## Last Updated
 
 **Date:** 2025-10-16
-**Status:** Agents 1, 2, 3 complete, ready for Agent 4
-**Next Session:** Build Agent 4 (LinkedIn Finder) + Orchestrator
+**Status:** Agents 1, 2, 3 complete (Agent 4 cancelled - not needed!)
+**Next Session:** Build Orchestrator to connect Agent 1 → 2 → 3

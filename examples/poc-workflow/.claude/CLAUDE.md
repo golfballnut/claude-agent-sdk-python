@@ -2,9 +2,26 @@
 
 ## What We're Building
 
-A two-agent workflow proving the pattern for a 500-agent production system.
+A multi-agent workflow proving the pattern for a 500-agent production system.
 
-**Workflow:** URL Finder → Data Extractor → Structured Output
+**Workflow:** URL Finder → Data Extractor → Email Finder → LinkedIn Finder → Complete Data
+
+## API Keys
+
+All agents load from project root `.env`:
+
+```python
+from pathlib import Path
+from dotenv import load_dotenv
+
+env_path = Path(__file__).parent.parent.parent / ".env"
+load_dotenv(env_path)
+
+# Available keys:
+# - HUNTER_API_KEY (email finding)
+# - BRIGHTDATA_API_TOKEN (web scraping)
+# - FIRECRAWL_API_KEY (web scraping)
+```
 
 ## Current State
 

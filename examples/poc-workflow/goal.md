@@ -7,7 +7,7 @@ Build and prove a cost-effective, accurate two-agent workflow pattern that can s
 ## Workflow
 
 ```
-Agent 1 (URL Finder) → Agent 2 (Data Extractor) → Agent 3 (Email Finder) → Agent 4 (LinkedIn Finder) → Complete Data
+Agent 1 (URL Finder) → Agent 2 (Data Extractor) → Agent 3 (Contact Enricher) → Complete Data
 ```
 
 ### Agent 1: URL Finder
@@ -22,20 +22,16 @@ Agent 1 (URL Finder) → Agent 2 (Data Extractor) → Agent 3 (Email Finder) →
 **Output:** Structured JSON with contact info
 **Status:** ✅ COMPLETE
 
-### Agent 3: Email Finder
+### Agent 3: Contact Enricher
 **Input:** Contacts from Agent 2
-**Task:** Find professional emails (Hunter.io + fallbacks)
-**Output:** Email + confidence score
+**Task:** Find emails + LinkedIn URLs (Hunter.io API)
+**Output:** Email (50% success) + LinkedIn (25% bonus) + confidence scores
 **Status:** ✅ COMPLETE
 
-### Agent 4: LinkedIn Finder
-**Input:** Contacts from Agent 2/3
-**Task:** Find LinkedIn profile URLs
-**Output:** LinkedIn URL + method
-**Status:** 📋 PLANNED
+**Discovery:** Hunter.io Email-Finder returns linkedin_url field - no need for separate Agent 4!
 
 ### Orchestrator
-**Task:** Manage Agent 1 → 2 → 3 → 4 flow
+**Task:** Manage Agent 1 → 2 → 3 flow
 **Status:** 📋 PLANNED
 
 ## Success Criteria
@@ -61,11 +57,13 @@ Agent 1 (URL Finder) → Agent 2 (Data Extractor) → Agent 3 (Email Finder) →
 - **STATUS: PRODUCTION READY** ✅
 
 **Agent 3 Results:**
-- Success Rate: 50% email discovery (Hunter.io)
-- Cost: $0.0119 avg (40% under budget) ✅
+- Email Success: 50% (6/12 via Hunter.io)
+- LinkedIn Success: 25% (3/12 bonus from Hunter.io!)
+- Cost: $0.0116 avg (42% under budget) ✅
 - Confidence: 95-98% when found ✅
 - Speed: ~8s per contact ✅
 - **STATUS: PRODUCTION READY** ✅
+- **Bonus Discovery:** Hunter.io includes LinkedIn URLs - Agent 4 not needed!
 
 **Combined Workflow (Agents 1+2+3):**
 - Total Cost: $0.0395 per course (with avg 2.4 contacts)
@@ -75,9 +73,9 @@ Agent 1 (URL Finder) → Agent 2 (Data Extractor) → Agent 3 (Email Finder) →
 
 1. ✅ ~~Build Agent 2 with same winning pattern~~
 2. ✅ ~~Test Agent 2 with 5 URLs from Agent 1~~
-3. ✅ ~~Build Agent 3 for email enrichment~~
-4. 🔄 Build Agent 4 for LinkedIn enrichment
-5. Build orchestrator to connect agents
+3. ✅ ~~Build Agent 3 for email + LinkedIn enrichment~~
+4. ❌ ~~Agent 4 cancelled - Hunter.io includes LinkedIn!~~
+5. 🔄 Build orchestrator to connect Agents 1 → 2 → 3
 6. Full workflow test
 7. Deploy to cloud (Cloud Run / Railway)
 

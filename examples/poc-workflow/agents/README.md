@@ -73,22 +73,23 @@ print(result["data"])
 
 ---
 
-## Agent 3: Email Finder
+## Agent 3: Contact Enricher
 
 **File:** `agent3_email_finder.py`
 
 **What it does:**
-Finds professional email addresses for contacts using Hunter.io API + fallback searches
+Enriches contacts with professional emails AND LinkedIn URLs using Hunter.io API
 
 **Performance:**
-- Success Rate: 50% (Hunter.io coverage)
-- Cost: $0.0119/contact (40% under budget)
+- Email Success: 50% (6/12 contacts)
+- LinkedIn Success: 25% (3/12 contacts - bonus!)
+- Cost: $0.0116/contact (42% under budget)
 - Confidence: 95-98% when found
 - Speed: ~8s per contact
 
 **Usage:**
 ```python
-from agent3_email_finder import find_email
+from agent3_email_finder import enrich_contact
 
 contact = {
     "name": "Stacy Foster",
@@ -97,8 +98,9 @@ contact = {
     "domain": "richmondcountryclubva.com"
 }
 
-result = await find_email(contact)
-print(result["email"])  # sfoster@richmondcountryclubva.com
+result = await enrich_contact(contact)
+print(result["email"])       # sfoster@richmondcountryclubva.com
+print(result["linkedin_url"]) # https://linkedin.com/in/stacy-foster-...
 ```
 
 **Input:** Contact dict (from Agent 2)
@@ -108,6 +110,8 @@ print(result["email"])  # sfoster@richmondcountryclubva.com
   "email": "sfoster@richmondcountryclubva.com",
   "email_method": "hunter_io",
   "email_confidence": 98,
+  "linkedin_url": "https://www.linkedin.com/in/stacy-foster-20b79448",
+  "linkedin_method": "hunter_io",
   "steps_attempted": ["hunter_io"]
 }
 ```
@@ -118,16 +122,10 @@ print(result["email"])  # sfoster@richmondcountryclubva.com
 - SDK MCP server (in-process)
 - max_turns: 2
 
-**Note:** LinkedIn enrichment moved to Agent 4
-
----
-
-## Agent 4: LinkedIn Specialist
-
-**Status:** 📋 Planned
-
-**Goal:** Find LinkedIn URLs for contacts
-**Target:** < $0.01 per contact
+**Key Discovery:** Hunter.io Email-Finder includes linkedin_url field!
+- Single API call returns both email + LinkedIn
+- No extra cost for LinkedIn data
+- Agent 4 not needed!
 
 ---
 
