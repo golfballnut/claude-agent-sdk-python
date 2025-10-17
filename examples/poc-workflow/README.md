@@ -1,72 +1,77 @@
-# Proof of Concept: Multi-Agent Workflow
+# POC Workflow: Building Production-Ready Agents
 
-This is a simple demonstration of the Claude Agent SDK's multi-agent capabilities.
+**Status:** Agent 1 complete ✅ | Agent 2 in progress 🔄
 
-## What This Demonstrates
+## Quick Start
 
-1. **Custom Tools** - Creating in-process MCP tools with `@tool` decorator
-2. **Multiple Agents** - Defining specialized agents with different roles
-3. **Sequential Execution** - Agents working together to complete a task
-4. **Complete Workflow** - End-to-end example from start to finish
+**New engineers/Claude sessions - READ THESE FIRST:**
+1. `goal.md` - Understand the mission
+2. `progress.md` - See current status
+3. `.claude/CLAUDE.md` - Quick context
 
-## The Workflow
+**Then:**
+- Production code: `agents/`
+- Test it: `tests/`
+- Learn from: `experiments/`
 
-This POC creates a workflow with two agents:
-
-### Agent 1: Calculator
-- **Role**: Performs mathematical calculations
-- **Tools**: Custom `calculate` tool
-- **Model**: Sonnet
-
-### Agent 2: Summarizer
-- **Role**: Creates formatted summaries
-- **Tools**: Standard tools (no custom tools needed)
-- **Model**: Sonnet
-
-## How It Works
+## Directory Structure
 
 ```
-User Prompt → Calculator Agent → Summarizer Agent → Final Result
-              (does math)        (formats output)
+poc-workflow/
+├── README.md (this file)        # Overview
+├── goal.md                       # Mission & success criteria
+├── progress.md                   # Current status
+├── .claude/CLAUDE.md            # Handoff context
+│
+├── agents/                       # ✅ Production-ready
+│   ├── agent1_url_finder.py     # Working Agent 1 ($0.015, 100% accuracy)
+│   └── README.md                # How to use
+│
+├── tests/                        # 🧪 Testing
+│   ├── batch_test_agent1.py     # Test Agent 1 performance
+│   └── README.md                # How to run tests
+│
+├── results/                      # 💾 Test data
+│   └── agent1_test_results.json # 5 course URLs for Agent 2
+│
+└── experiments/                  # 📦 Archive (learning reference)
+    ├── README.md                # What each taught us
+    └── [experimental files]     # Failed attempts with lessons
 ```
 
-## Running the POC
+## Current Status
+
+**Agent 1: URL Finder** ✅ COMPLETE
+- Cost: $0.0153/search (24% under budget)
+- Accuracy: 100%
+- File: `agents/agent1_url_finder.py`
+
+**Agent 2: Data Extractor** 🔄 NEXT
+- Goal: Extract contact data from URLs
+- Target: < $0.02/extraction
+- Input: `results/agent1_test_results.json`
+
+## Running Tests
 
 ```bash
-# Make sure you're in the project root
-cd /path/to/claude-agent-sdk-python
+# Test Agent 1
+python tests/batch_test_agent1.py
 
-# Run the POC
-python examples/poc-workflow/simple_workflow.py
+# Run single agent
+python agents/agent1_url_finder.py
 ```
 
-## Expected Output
+## Key Pattern
 
-You should see:
-1. The workflow prompt
-2. Claude using the calculator agent to perform calculations
-3. Claude using the summarizer agent to create a summary
-4. Final statistics (duration, cost, turns)
+See `agents/agent1_url_finder.py` for the proven pattern:
+- Smart tools (pre-process data)
+- SDK MCP servers (in-process)
+- Haiku 4.5 model
+- max_turns=2
+- Cost: $0.015/operation
 
-## Code Structure
+## Reference
 
-- **Custom Tool Definition**: `@tool` decorator creates the calculator
-- **MCP Server**: `create_sdk_mcp_server()` bundles tools
-- **Agent Definitions**: `AgentDefinition` configures each agent's behavior
-- **Workflow Execution**: `query()` runs the entire workflow
-
-## What to Learn
-
-Pay attention to:
-- How agents are defined (description, prompt, tools, model)
-- How custom tools are created
-- How the SDK automatically routes work to the right agents
-- How agents can work sequentially
-
-## Next Steps
-
-After seeing this work:
-1. Try modifying the agents' prompts
-2. Add another custom tool
-3. Add a third agent
-4. Change the workflow logic
+- `/BREAKTHROUGH.md` - Debugging discoveries
+- `/AGENT_SDK_KNOWLEDGE.md` - Complete SDK guide
+- `experiments/README.md` - What we learned
