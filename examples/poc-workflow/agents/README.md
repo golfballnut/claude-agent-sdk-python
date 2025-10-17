@@ -75,7 +75,7 @@ print(result["data"])
 
 ## Agent 3: Contact Enricher
 
-**File:** `agent3_email_finder.py`
+**File:** `agent3_contact_enricher.py`
 
 **What it does:**
 Enriches contacts with professional emails AND LinkedIn URLs using Hunter.io API
@@ -89,7 +89,7 @@ Enriches contacts with professional emails AND LinkedIn URLs using Hunter.io API
 
 **Usage:**
 ```python
-from agent3_email_finder import enrich_contact
+from agent3_contact_enricher import enrich_contact
 
 contact = {
     "name": "Stacy Foster",
@@ -118,14 +118,35 @@ print(result["linkedin_url"]) # https://linkedin.com/in/stacy-foster-...
 
 **Pattern:**
 - Custom tool with Hunter.io API
-- 5-step fallback (Hunter → search → search → general → manual flag)
+- 3-step discovery (Hunter → web search → focused search)
+- **NO FALLBACKS** - returns null if not found (never guesses!)
 - SDK MCP server (in-process)
 - max_turns: 2
+
+**Data Quality Rule:** Returns honest nulls instead of guessed fallbacks
 
 **Key Discovery:** Hunter.io Email-Finder includes linkedin_url field!
 - Single API call returns both email + LinkedIn
 - No extra cost for LinkedIn data
-- Agent 4 not needed!
+- 50% of emails also include LinkedIn URLs
+
+---
+
+## Data Quality Principle
+
+**All agents follow:** Never guess or use generic fallbacks
+
+```python
+# ❌ BAD: Guessing
+if not found:
+    return f"info@{domain}"  # Unreliable guess
+
+# ✅ GOOD: Honest null
+if not found:
+    return None  # Clean, accurate
+```
+
+**Why:** Better to have accurate nulls than unreliable data
 
 ---
 
@@ -136,3 +157,36 @@ print(result["linkedin_url"]) # https://linkedin.com/in/stacy-foster-...
 3. Adapt for your use case
 4. Test before production
 5. Follow same pattern for new agents
+
+---
+
+## Key Learnings
+
+1. **Pre-processing saves tokens:** 78K → 2K = 97% savings (Agent 1)
+2. **Test MCP tools in Claude Code first:** Establish baseline before building SDK
+3. **Custom SDK tools required:** SDK subprocess has no MCP servers (`mcp_servers: []`)
+4. **Direct API calls:** Hunter.io, Jina, etc. called directly (not via MCP)
+5. **Haiku 4.5 for cost:** 10x cheaper than Sonnet, accurate with good tools
+6. **No fallbacks policy:** Return `null` instead of guessing (data quality!)
+7. **Hunter.io Email-Finder bonus:** Includes LinkedIn URLs (50% of results)
+8. **Specialist pattern:** One agent, one clear responsibility
+9. **max_turns=2-3:** Prevents runaway costs
+10. **Block unnecessary tools:** Explicitly disallow WebSearch, Task, TodoWrite, etc.
+
+---
+
+## Building New Agents
+
+**See:** `../template/` folder
+
+Contains:
+- Complete agent template
+- Test framework template
+- Development guide (step-by-step)
+- Shared utilities (env loading, JSON parsing)
+
+**Quick start:**
+```bash
+cp ../template/agent_template.py agent4_new_agent.py
+# Follow ../template/DEVELOPMENT.md
+```

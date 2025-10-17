@@ -15,7 +15,7 @@ import anyio
 # Add agents to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "agents"))
 
-from agent3_email_finder import enrich_contact
+from agent3_contact_enricher import enrich_contact
 
 
 async def run_batch_test():
@@ -66,12 +66,12 @@ async def run_batch_test():
             linkedin = result.get("linkedin_url")
             cost = result.get("_agent3_cost", 0)
 
-            # Count successes (exclude general/manual fallbacks)
-            if email and email_method not in ["course_general_email", "needs_manual_research"]:
+            # Count successes (clean data only - no fallbacks)
+            if email and email_method in ["hunter_io", "web_search", "focused_search"]:
                 email_found += 1
                 print(f"   ✅ Email: {email} ({email_method})")
             else:
-                print("   ❌ Email: Not found")
+                print("   ❌ Email: Not found (clean null)")
 
             if linkedin:
                 linkedin_found += 1

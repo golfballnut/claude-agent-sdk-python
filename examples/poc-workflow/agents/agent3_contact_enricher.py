@@ -5,20 +5,21 @@ Finds professional emails AND LinkedIn URLs via Hunter.io
 
 Performance:
 - Email Success: 50% (Hunter.io API)
-- LinkedIn Success: 67% (included in Hunter.io response!)
-- Cost: $0.0119 avg (40% under budget)
+- LinkedIn Success: 25% (included in Hunter.io response!)
+- Cost: $0.0116 avg (42% under budget)
 - Confidence: 95-98% when found
 - Speed: ~8s per contact
 
 Pattern:
 - Custom tool with Hunter.io API
-- 5-step email fallback sequence
+- 3-step email discovery (NO FALLBACKS - nulls if not found)
 - Extracts LinkedIn URL from Hunter.io response (bonus!)
 - SDK MCP server (in-process)
 - Haiku 4.5 model
 
+Data Quality Rule: Returns null if not found - NEVER guesses or uses generic fallbacks
+
 Key Discovery: Hunter.io Email-Finder returns linkedin_url field
-No need for separate Agent 4!
 """
 
 import anyio
@@ -37,7 +38,7 @@ from claude_agent_sdk import (
 )
 
 
-@tool("enrich_contact", "Find email AND LinkedIn with 5-step fallback", {
+@tool("enrich_contact", "Find email AND LinkedIn (nulls if not found)", {
     "name": str,
     "title": str,
     "company": str,
@@ -45,12 +46,13 @@ from claude_agent_sdk import (
 })
 async def enrich_contact_tool(args: dict[str, Any]) -> dict[str, Any]:
     """
-    5-Step Email Discovery + LinkedIn Extraction:
+    3-Step Email Discovery + LinkedIn Extraction (NO GUESSING):
     1. Hunter.io Email-Finder API (also returns linkedin_url!)
-    2. BrightData Search (via Jina scraping Google)
-    3. Jina Search
-    4. Course General Email fallback
-    5. Flag for manual research
+    2. Web Search (via Jina scraping Google)
+    3. Focused search
+    4. Return nulls if not found (NO fallbacks, NO guessing)
+
+    Data Quality Rule: Better to have accurate nulls than unreliable guesses
     """
     import httpx
     import re
@@ -174,11 +176,11 @@ async def enrich_contact_tool(args: dict[str, Any]) -> dict[str, Any]:
         except Exception:
             pass
 
-    # STEP 4: Course General Email
-    results["steps_attempted"].append("general_email")
-    results["email"] = f"info@{domain}"
-    results["email_method"] = "course_general_email"
-    results["email_confidence"] = 30
+    # STEP 4: Not Found (NO GUESSING - return nulls)
+    results["steps_attempted"].append("not_found")
+    results["email"] = None
+    results["email_method"] = "not_found"
+    results["email_confidence"] = 0
 
     return {
         "content": [{
@@ -271,12 +273,12 @@ async def enrich_contacts(contacts: list[Dict[str, Any]]) -> list[Dict[str, Any]
             method = result.get("email_method")
             confidence = result.get("email_confidence", 0)
 
-            if email and method not in ["course_general_email", "needs_manual_research"]:
+            if email and method == "hunter_io":
                 print(f"   ✅ {email} ({confidence}% confidence)")
-            elif email:
-                print(f"   ⚠️  {email} ({method})")
+            elif email and method in ["web_search", "focused_search"]:
+                print(f"   ✅ {email} ({method}, {confidence}% confidence)")
             else:
-                print(f"   ❌ Not found")
+                print(f"   ❌ Not found (clean null, no guessing)")
 
             print(f"   Cost: ${result.get('_agent3_cost', 0):.4f}")
 
