@@ -32,6 +32,7 @@ async def write_to_supabase(
     course_intel: Dict[str, Any],
     water_data: Dict[str, Any],
     enriched_contacts: List[Dict[str, Any]],
+    state_code: str,  # Required: state code for the course
     use_test_tables: bool = True  # Default to test tables for safety
 ) -> Dict[str, Any]:
     """
@@ -42,6 +43,7 @@ async def write_to_supabase(
         course_intel: Output from Agent 6 (course-level)
         water_data: Output from Agent 7
         enriched_contacts: Contacts from Agents 3/5/6.5
+        state_code: State code (e.g., 'VA', 'MD', 'DC')
         use_test_tables: If True, write to test_golf_courses/test_golf_course_contacts
                         If False, write to production golf_courses/golf_course_contacts
 
@@ -85,6 +87,7 @@ async def write_to_supabase(
         # Extract course-level data
         course_record = {
             "course_name": course_name,
+            "state_code": state_code,  # Required field
             "website": course_data.get("data", {}).get("website"),
             "phone": course_data.get("data", {}).get("phone"),
 

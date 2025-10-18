@@ -304,6 +304,7 @@ async def enrich_course(
             course_intel,
             water_data,
             enriched_contacts,
+            state_code=state_code,
             use_test_tables=use_test_tables
         )
 
