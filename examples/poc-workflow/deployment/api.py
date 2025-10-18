@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-FastAPI wrapper for Agent 7 (Water Hazard Counter)
-Deployment POC for Claude Agent SDK on Render
+FastAPI wrapper for Golf Course Enrichment Pipeline
+Full orchestrator with all 8 agents
 
 Endpoints:
 - GET  /         - Service info
 - GET  /health   - Health check (for Render)
-- POST /count-hazards - Count water hazards on a golf course
+- POST /count-hazards - Count water hazards (Agent 7 only)
+- POST /enrich-course - Full pipeline (Agents 1-8)
 """
 
 from fastapi import FastAPI, HTTPException, Request
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 # Add agents directory to path
 sys.path.insert(0, str(Path(__file__).parent / "agents"))
 
-# Import Agent 7
+# Import Agent 7 (for backwards compatibility)
 try:
     from agent7_water_hazard_counter import count_water_hazards
     logger.info("Successfully imported Agent 7")
@@ -35,16 +36,26 @@ except ImportError as e:
     logger.error(f"Failed to import Agent 7: {e}")
     raise
 
+# Import Orchestrator (full pipeline)
+try:
+    from orchestrator import enrich_course as orchestrator_enrich_course
+    logger.info("Successfully imported Orchestrator")
+except ImportError as e:
+    logger.error(f"Failed to import Orchestrator: {e}")
+    raise
+
 # Initialize FastAPI app
 app = FastAPI(
-    title="Golf Course Water Hazard API",
-    description="Agent 7 - Count water hazards on golf courses using Perplexity AI",
-    version="1.0.0",
+    title="Golf Course Enrichment API",
+    description="Full pipeline: Agents 1-8 for golf course and contact data enrichment",
+    version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
 
 # Request/Response Models
+
+# Agent 7 (Water Hazards) Models
 class CourseRequest(BaseModel):
     """Request body for water hazard counting"""
     course_name: str = Field(..., description="Name of the golf course")
@@ -62,6 +73,37 @@ class CourseRequest(BaseModel):
             ]
         }
     }
+
+
+# Orchestrator (Full Pipeline) Models
+class EnrichCourseRequest(BaseModel):
+    """Request body for full course enrichment (Agents 1-8)"""
+    course_name: str = Field(..., description="Name of the golf course")
+    state_code: str = Field(default="VA", description="State code (e.g., 'VA', 'DC', 'MD')")
+    use_test_tables: bool = Field(default=True, description="Use test Supabase tables (true) or production (false)")
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "course_name": "Richmond Country Club",
+                    "state_code": "VA",
+                    "use_test_tables": True
+                }
+            ]
+        }
+    }
+
+
+class EnrichCourseResponse(BaseModel):
+    """Response with full enrichment results"""
+    success: bool
+    course_name: str
+    state_code: str
+    json_file: str | None
+    summary: dict
+    error: str | None = None
+    agent_results: dict
 
 
 class CourseResponse(BaseModel):
@@ -107,19 +149,29 @@ async def global_exception_handler(request: Request, exc: Exception):
 async def root():
     """Root endpoint with service information"""
     return {
-        "service": "Golf Course Water Hazard Counter",
-        "agent": "Agent 7",
-        "version": "1.0.0",
+        "service": "Golf Course Enrichment Pipeline",
+        "version": "2.0.0",
         "status": "running",
         "endpoints": {
             "health": "GET /health",
-            "count_hazards": "POST /count-hazards",
+            "count_hazards": "POST /count-hazards (Agent 7 only)",
+            "enrich_course": "POST /enrich-course (Full pipeline: Agents 1-8)",
             "docs": "GET /docs",
             "redoc": "GET /redoc"
         },
-        "description": "Count water hazards on golf courses using Perplexity AI search",
-        "cost_per_query": "$0.006 avg",
-        "response_time": "8-15 seconds avg"
+        "description": "Complete golf course enrichment with 8 specialized agents",
+        "agents": {
+            "agent1": "URL Finder",
+            "agent2": "Data Extractor",
+            "agent3": "Email + LinkedIn Finder",
+            "agent5": "Phone Finder",
+            "agent6": "Course Intelligence",
+            "agent6.5": "Contact Background",
+            "agent7": "Water Hazard Counter",
+            "agent8": "Supabase Writer"
+        },
+        "cost_per_course": "$0.155 avg (with 3 contacts)",
+        "response_time": "2-3 minutes avg"
     }
 
 
@@ -196,16 +248,67 @@ async def count_hazards(request: CourseRequest):
         )
 
 
+@app.post("/enrich-course", response_model=EnrichCourseResponse)
+async def enrich_course(request: EnrichCourseRequest):
+    """
+    Run full enrichment pipeline (Agents 1-8)
+
+    This endpoint executes all 8 agents in sequence:
+    1. Agent 1: Find course URL
+    2. Agent 2: Extract course data + staff contacts
+    3. Agent 6: Course intelligence (segment, opportunities)
+    4. Agent 7: Count water hazards
+    5. For each contact:
+       - Agent 3: Find email + LinkedIn
+       - Agent 5: Find phone number
+       - Agent 6.5: Contact background (tenure, previous clubs)
+    6. Agent 8: Write to Supabase
+
+    Args:
+        request: EnrichCourseRequest with course_name, state_code, use_test_tables
+
+    Returns:
+        EnrichCourseResponse with full pipeline results
+
+    Raises:
+        HTTPException: If any agent fails
+    """
+    logger.info(f"🏌️ Full enrichment requested for: {request.course_name}, {request.state_code}")
+
+    try:
+        # Call Orchestrator
+        result = await orchestrator_enrich_course(
+            course_name=request.course_name,
+            state_code=request.state_code,
+            use_test_tables=request.use_test_tables
+        )
+
+        logger.info(
+            f"✅ Orchestrator completed: {request.course_name} - "
+            f"Success: {result.get('success')}, "
+            f"Contacts: {result.get('summary', {}).get('contact_count', 0)}, "
+            f"Cost: ${result.get('summary', {}).get('total_cost', 0):.4f}"
+        )
+
+        return EnrichCourseResponse(**result)
+
+    except Exception as e:
+        logger.error(f"Orchestrator error for {request.course_name}: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Enrichment pipeline failed: {str(e)}"
+        )
+
+
 # Startup event
 @app.on_event("startup")
 async def startup_event():
     """Log startup information"""
     logger.info("="*70)
-    logger.info("🌊 Agent 7 Water Hazard API Starting...")
+    logger.info("🏌️ Golf Course Enrichment API Starting...")
     logger.info("="*70)
-    logger.info(f"Service: Golf Course Water Hazard Counter")
-    logger.info(f"Agent: Agent 7")
-    logger.info(f"Version: 1.0.0")
+    logger.info(f"Service: Full Enrichment Pipeline (Agents 1-8)")
+    logger.info(f"Version: 2.0.0")
     logger.info(f"Timestamp: {datetime.utcnow().isoformat()}")
     logger.info("="*70)
 
