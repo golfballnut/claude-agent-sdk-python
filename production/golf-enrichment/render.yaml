@@ -1,0 +1,70 @@
+# Render Blueprint for Golf Enrichment Pipeline
+# Infrastructure as Code for deployment
+#
+# NOTE: This render.yaml should be copied to repo root for deployment
+# Or update Render to look in production/golf-enrichment/
+
+services:
+  # Golf Enrichment Pipeline (All 8 Agents)
+  - type: web
+    name: golf-enrichment-api
+    runtime: docker
+    plan: starter  # $7/month - 512MB RAM, 0.5 CPU
+    region: oregon  # Change to your preferred region
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+
+    # Environment variables (set actual values in Render dashboard)
+    envVars:
+      # Required: AI/API Keys (set via Render dashboard - DO NOT commit)
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PERPLEXITY_API_KEY
+        sync: false
+      - key: HUNTER_API_KEY
+        sync: false
+
+      # Required: Supabase Database
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+      # Optional: Web Scraping APIs
+      - key: FIRECRAWL_API_KEY
+        sync: false
+      - key: JINA_API_KEY
+        sync: false
+      - key: BRIGHTDATA_API_TOKEN
+        sync: false
+
+      # Configuration
+      - key: LOG_LEVEL
+        value: INFO
+      - key: ENVIRONMENT
+        value: production
+
+    # Health check configuration
+    healthCheckPath: /health
+
+    # Auto-deploy on git push
+    autoDeploy: true
+
+    # Build configuration
+    buildCommand: ""  # Using Dockerfile, no separate build command needed
+    startCommand: ""  # Defined in Dockerfile CMD
+
+    # Scaling (for future)
+    # numInstances: 1
+    # maxShutdownDelaySeconds: 30
+
+# Optional: Add a cron job for scheduled tasks (future enhancement)
+# - type: cron
+#   name: monthly-course-enrichment
+#   schedule: "0 0 1 * *"  # First day of each month at midnight
+#   dockerfilePath: ./deployment/Dockerfile
+#   dockerCommand: python agents/orchestrator.py
+#   envVars:
+#     - fromService:
+#         type: web
+#         name: agent7-water-hazards

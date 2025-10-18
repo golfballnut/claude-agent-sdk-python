@@ -57,7 +57,7 @@ include = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["testing/sdk/unit", "testing/sdk/integration"]
 pythonpath = ["src"]
 addopts = [
     "--import-mode=importlib",

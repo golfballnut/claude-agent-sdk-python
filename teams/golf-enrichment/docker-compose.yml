@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  golf-enrichment-api:
+    build:
+      context: ../../production/golf-enrichment
+      dockerfile: Dockerfile
+    container_name: golf-enrichment-test
+    ports:
+      - "8000:8000"
+    environment:
+      # Load from .env file in this directory
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+      - HUNTER_API_KEY=${HUNTER_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - FIRECRAWL_API_KEY=${FIRECRAWL_API_KEY:-}
+      - JINA_API_KEY=${JINA_API_KEY:-}
+      - BRIGHTDATA_API_TOKEN=${BRIGHTDATA_API_TOKEN:-}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - ENVIRONMENT=development
+    volumes:
+      # Mount results directory for output
+      - ./results:/app/results
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+# To use this docker-compose:
+#
+# 1. Create .env file in teams/golf-enrichment/ with your API keys
+#    (copy from production/golf-enrichment/.env.example)
+#
+# 2. Sync latest code to production:
+#    python production/scripts/sync_to_production.py golf-enrichment
+#
+# 3. Start the service:
+#    docker-compose up --build
+#
+# 4. Test endpoints:
+#    curl http://localhost:8000/
+#    curl -X POST http://localhost:8000/enrich-course \
+#      -H "Content-Type: application/json" \
+#      -d '{"course_name": "Richmond Country Club", "state_code": "VA", "use_test_tables": true}'
+#
+# 5. Stop the service:
+#    docker-compose down
