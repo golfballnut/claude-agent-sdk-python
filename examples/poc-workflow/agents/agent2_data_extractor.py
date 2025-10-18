@@ -18,6 +18,14 @@ Pattern:
 import anyio
 import json
 from typing import Any, Dict
+from pathlib import Path
+import sys
+
+# Add utils to path
+sys.path.insert(0, str(Path(__file__).parent.parent / "template" / "utils"))
+
+from json_parser import extract_json_from_text
+
 from claude_agent_sdk import (
     ClaudeSDKClient,
     ClaudeAgentOptions,
@@ -67,14 +75,11 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
             if isinstance(msg, AssistantMessage):
                 for block in msg.content:
                     if isinstance(block, TextBlock):
-                        # Parse JSON from response
-                        import re
-                        json_match = re.search(r'\{.*\}', block.text, re.DOTALL)
-                        if json_match:
-                            try:
-                                extracted_data = json.loads(json_match.group(0))
-                            except json.JSONDecodeError:
-                                pass
+                        # Use utility function for robust JSON extraction
+                        extracted_data = extract_json_from_text(block.text, required_field="course_name")
+
+                        if not extracted_data:
+                            print(f"   ⚠️ No valid JSON found, response: {block.text[:200]}...")
 
             if isinstance(msg, ResultMessage):
                 result_message = msg
@@ -119,4 +124,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    anyio.run(main())
+    anyio.run(main)

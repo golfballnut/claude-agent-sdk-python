@@ -1,0 +1,255 @@
+{
+  "test_date": "2025-01-17",
+  "test_type": "refactored_agent6_validation",
+  "results": [
+    {
+      "course_info": {
+        "name": "Belmont Golf Course",
+        "state": "VA",
+        "expected_type": "PUBLIC (budget-oriented)",
+        "location": "Richmond, VA"
+      },
+      "result": {
+        "success": true,
+        "course_name": "Belmont Golf Course",
+        "state_code": "VA",
+        "json_file": "/Users/stevemcmillian/llama-3-agents/Apps/projects/claude-agent-sdk-python/examples/poc-workflow/results/enrichment/enrichment_belmont_golf_course_20251017_214441.json",
+        "summary": {
+          "total_cost_usd": 0.159,
+          "total_duration_seconds": 184.8,
+          "contacts_enriched": 3,
+          "agent_costs": {
+            "agent1": 0.01374335,
+            "agent2": 0.01374335,
+            "agent6": 0.0364,
+            "agent7": 0.006,
+            "agent3": 0.0366,
+            "agent5": 0.0359,
+            "agent65": 0.0304,
+            "agent8": 0
+          }
+        },
+        "error": null,
+        "agent_results": {
+          "agent1": {
+            "url": "https://vsga.org/courselisting/11736?hsLang=en",
+            "cost": 0.0212354,
+            "turns": 4
+          },
+          "agent2": {
+            "url": "https://vsga.org/courselisting/11736?hsLang=en",
+            "data": {
+              "course_name": "Belmont Golf Course",
+              "website": "https://playgolfrva.org/belmont/",
+              "phone": "(804) 501-4653",
+              "staff": [
+                {
+                  "name": "Sterling Simmons",
+                  "title": "Head Golf Professional"
+                },
+                {
+                  "name": "Ana Ferreyra Heit",
+                  "title": "Director of Instruction"
+                },
+                {
+                  "name": "Adam Toombs",
+                  "title": "Superintendent"
+                }
+              ]
+            },
+            "cost": 0.01374335,
+            "turns": 4
+          },
+          "agent6": {
+            "segmentation": {
+              "primary_target": "budget",
+              "confidence": 9,
+              "signals": [
+                "Public course positioning",
+                "Affordable/accessible mission stated",
+                "Bucket pricing $7-$19 indicates value positioning",
+                "Municipal course with financial constraints",
+                "County-owned seeking private management for sustainability",
+                "Declining annual play suggests budget market pressures",
+                "No premium/private/exclusive indicators found"
+              ]
+            },
+            "range_intel": {
+              "has_range": true,
+              "volume_signals": [
+                "24 hitting stations total",
+                "10-station covered shelter",
+                "Year-round operation",
+                "Range card programs indicate regular usage",
+                "Dawn to dusk hours suggest high utilization"
+              ],
+              "quality_complaints": [],
+              "budget_signals": [
+                "Financial sustainability challenges mentioned",
+                "County seeking private management partnership",
+                "Affordable mission as primary positioning",
+                "Declining play over past two decades",
+                "Municipal budget constraints implied"
+              ],
+              "sustainability_signals": [
+                "20 solar panels on driving range shelter",
+                "Green energy initiatives for cost offset",
+                "Park district sustainability programs",
+                "Audubon Cooperative Sanctuary certification (Illinois location)"
+              ]
+            },
+            "opportunities": {
+              "range_ball_buy": 2,
+              "range_ball_sell": 8,
+              "range_ball_lease": 9,
+              "proshop_ecommerce": 4,
+              "superintendent_partnership": 5,
+              "ball_retrieval": 6
+            },
+            "cost": 0.036388050000000005,
+            "turns": 4
+          },
+          "agent7": {
+            "water_hazard_count": 7,
+            "confidence": "low",
+            "details": [
+              "The Belmont Golf Course in Richmond, VA, designed by A.W. Tillinghast and opened in 1938, does not have detailed public documentation specifying the exact number of holes with water hazards, ponds, lakes, or creeks. No course scorecards or specific water hazard symbols for this course were found in the available sources[5][7].\n\nHowever, there is a Belmont Country Club golf course in Ashburn, VA, which is an 18-hole Arnold Palmer Signature course known for its extensive water and wetland features. This course is described as having a \"vast amount of wetland hazards\" and natural elevation changes, including tree-lined fairways and many wetlands that challenge golfers. It was rated the third most challenging course in Virginia by the USGA. Though no exact count of water hazards is stated, it clearly features multiple wetlands, ponds, or creeks integrated throughout its layout[2][4][6].\n\nSeparately, The Osprey's Golf Club at Belmont Bay (not \"Belmont Golf Course\") in VA is mentioned to have several water hazards and narrow fairways with some forced carries over water, but specifics on the number of water hazards or bodies of water are not provided[1][3].\n\nIn summary:\n\n| Course Name                  | Location            | Water Hazards Summary                   | Exact Number of Water Hazards Reported |\n|------------------------------|---------------------|---------------------------------------|----------------------------------------|\n| Belmont Golf Course           | Richmond, VA        | No detailed info on water hazards found | Not specified                         |\n| Belmont Country Club          | Ashburn, VA         | Vast wetlands and water hazards; multiple ponds/creeks implied | Not specified                         |\n| Osprey's Golf Club at Belmont Bay | VA (nearby)       | Several water hazards, some forced carries over water | Not specified                         |\n\nNo exact number of water hazards on the Belmont Golf Course in Richmond, VA was identified from available sources. The Belmont Country Club in Ashburn VA has abundant wetlands but exact counts are unavailable.\n\nIf you are specifically referring to the Belmont Golf Course in Richmond, it appears water hazards are not prominently featured or documented. For the Belmont Country Club in Ashburn, expect significant wetland water hazards across many holes though exact totals are unpublished.",
+              "Low confidence: use with caution"
+            ],
+            "query_approach": "direct",
+            "cost": 0.006,
+            "found": true,
+            "approach1_count": 7,
+            "approach1_confidence": "low",
+            "approach2_count": 5,
+            "approach2_confidence": "low"
+          }
+        }
+      }
+    },
+    {
+      "course_info": {
+        "name": "Stonehenge Golf & Country Club",
+        "state": "VA",
+        "expected_type": "PRIVATE (high-end)",
+        "location": "Richmond, VA"
+      },
+      "result": {
+        "success": true,
+        "course_name": "Stonehenge Golf & Country Club",
+        "state_code": "VA",
+        "json_file": "/Users/stevemcmillian/llama-3-agents/Apps/projects/claude-agent-sdk-python/examples/poc-workflow/results/enrichment/enrichment_stonehenge_golf_country_club_20251017_214744.json",
+        "summary": {
+          "total_cost_usd": 0.1467,
+          "total_duration_seconds": 183.3,
+          "contacts_enriched": 3,
+          "agent_costs": {
+            "agent1": 0.012384100000000002,
+            "agent2": 0.012384100000000002,
+            "agent6": 0.0268,
+            "agent7": 0.006,
+            "agent3": 0.0363,
+            "agent5": 0.0356,
+            "agent65": 0.0297,
+            "agent8": 0
+          }
+        },
+        "error": null,
+        "agent_results": {
+          "agent1": {
+            "url": "https://vsga.org/courselisting/11979?hsLang=en",
+            "cost": 0.0139751,
+            "turns": 3
+          },
+          "agent2": {
+            "url": "https://vsga.org/courselisting/11979?hsLang=en",
+            "data": {
+              "course_name": "Stonehenge Golf & Country Club",
+              "website": "https://www.stonehengegcc.com/",
+              "phone": "(804) 378-7845",
+              "staff": [
+                {
+                  "name": "TW Pulliam",
+                  "title": "General Manager"
+                },
+                {
+                  "name": "Isaac Bickel",
+                  "title": "Head Golf Professional"
+                },
+                {
+                  "name": "Chris Roberts",
+                  "title": "Superintendent"
+                }
+              ]
+            },
+            "cost": 0.012384100000000002,
+            "turns": 4
+          },
+          "agent6": {
+            "segmentation": {
+              "primary_target": "both",
+              "confidence": 7,
+              "signals": [
+                "Private golf & country club (high-end indicator)",
+                "Premium to upper mid-tier positioning",
+                "Comprehensive amenities: pool, tennis/pickleball, clubhouse, dining",
+                "Competes with Belle Haven CC, Magnolia Green GC, The Federal Club",
+                "Quality maintenance and attentive staff reputation",
+                "$70 green fee suggests mid-premium not ultra-luxury",
+                "Limited informal practice area (220-yard 'bring your own shag') suggests cost management",
+                "No evidence of recent renovations or luxury upgrades",
+                "Value-oriented for members within private club segment"
+              ]
+            },
+            "range_intel": {
+              "has_range": true,
+              "volume_signals": [
+                "220-yard practice area",
+                "18-hole course with full country club amenities",
+                "Private membership base suggests regular range usage"
+              ],
+              "quality_complaints": [],
+              "budget_signals": [
+                "Informal 'bring your own shag' range setup",
+                "No formal driving range with ball machines",
+                "No bucket pricing or pro shop ball sales mentioned",
+                "Limited capacity (historically 3 people at a time)"
+              ],
+              "sustainability_signals": []
+            },
+            "opportunities": {
+              "range_ball_buy": 4,
+              "range_ball_sell": 3,
+              "range_ball_lease": 7,
+              "proshop_ecommerce": 5,
+              "superintendent_partnership": 6,
+              "ball_retrieval": 6
+            },
+            "cost": 0.026765199999999996,
+            "turns": 4
+          },
+          "agent7": {
+            "water_hazard_count": 7,
+            "confidence": "low",
+            "details": [
+              "The official scorecard for Stonehenge Golf & Country Club in Virginia is available as a PDF on GolfClub.net, showing typical golf scorecard info but without explicit water hazard symbols visible in the document[1]. The club\u2019s own website does not appear to host a downloadable scorecard or map featuring water hazard icons directly[4].\n\nHole-by-hole descriptions mentioning water features or hazards are not found explicitly in the main website content or the linked scorecards from available sources. However, a detailed hole-by-hole flyover or yardage map with distances to hazards including water is referenced on secondary golf information sites but the exact text descriptions are limited or unavailable in the search results[2][5].\n\nA review of available scorecards and course overviews indicates the course has several water features such as ponds or creeks, but the exact count of holes referencing \"water hazard,\" \"pond,\" \"lake,\" or \"creek\" specifically is not directly documented in these search results. The official USGA or club rating sheets that might clarify this are also not presented in the results.\n\nBased on indirect data from the course design and flyover maps mentioned, it is typical for a course like Stonehenge (designed by Edmund B. Ault, ASGCA, opened in 1971) to have several holes with water hazards or water features near the fairways or greens. The precise number of holes with water hazards or features such as ponds and creeks is not explicitly counted in the available sources.\n\n### Summary of findings:\n- **Official scorecard PDF:** Found via GolfClub.net but no clear water hazard symbols[1].\n- **Hole-by-hole water hazard descriptions:** Not explicitly provided on official or secondary sites examined[2][4][5].\n- **Course map with ponds/lakes/creeks:** Referenced in flyover and yardage maps but not displayed or directly linked for public viewing in search results[2][5].\n- **Number of holes with water features mentioned:** Not explicitly counted or stated in available documentation.\n\nIf exact hazard details and visuals are required, contacting Stonehenge Golf & Country Club directly or accessing their full flyover and yardage maps on their website or affiliated platforms might provide the most accurate information. Alternatively, professional golf review sites or USGA course rating documents (not found here) could confirm the count of water hazards on the course holes.",
+              "Low confidence: use with caution"
+            ],
+            "query_approach": "scorecard",
+            "cost": 0.006,
+            "found": true,
+            "approach1_count": null,
+            "approach1_confidence": "none",
+            "approach2_count": 7,
+            "approach2_confidence": "low"
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "total_courses": 2,
+    "successful": 2,
+    "success_rate": "100%"
+  }
+}

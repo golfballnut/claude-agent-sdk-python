@@ -1,0 +1,220 @@
+{
+  "course_name": "Richmond Country Club",
+  "enrichment_timestamp": "2025-10-17T21:30:55.824842Z",
+  "success": true,
+  "agent1": {
+    "url": "https://vsga.org/courselisting/11950?hsLang=en",
+    "cost_usd": 0.0125546,
+    "turns": 4,
+    "success": true
+  },
+  "agent2": {
+    "course_name": "Richmond Country Club",
+    "website": "https://www.richmondcountryclubva.com/",
+    "phone": "(804) 784-5663",
+    "staff_count": 3,
+    "staff_raw": [
+      {
+        "name": "Stacy Foster",
+        "title": "General Manager"
+      },
+      {
+        "name": "Bill Ranson",
+        "title": "Head Golf Professional"
+      },
+      {
+        "name": "Greg McCue",
+        "title": "Superintendent"
+      }
+    ],
+    "cost_usd": 0.0125546,
+    "turns": 4,
+    "success": true
+  },
+  "agent6": {
+    "segmentation": {
+      "primary_target": "high-end",
+      "confidence": 9,
+      "signals": [
+        "Private, member-owned club with gated access",
+        "4.7-star rating from 94 reviews",
+        "Recent major renovation: driving range expanded 30% and re-turfed in fall 2022",
+        "Premium positioning with exclusive membership",
+        "Competes with The Country Club of Virginia (prestigious private club)",
+        "Traditional private country club experience with high-end amenities",
+        "No budget constraints or cost-cutting measures mentioned",
+        "Emphasis on quality and facility enhancement"
+      ]
+    },
+    "range_intel": {
+      "has_range": true,
+      "volume_signals": [
+        "Grass driving range expanded 30% in 2022",
+        "Accommodates 13-14 golfers on grass",
+        "Additional 20 players on artificial turf section",
+        "Total capacity: 33-34 simultaneous users",
+        "Practice facilities include putting green and short game area"
+      ],
+      "quality_complaints": [],
+      "budget_signals": [],
+      "sustainability_signals": []
+    },
+    "opportunities": {
+      "range_ball_buy": 8,
+      "range_ball_sell": 2,
+      "range_ball_lease": 7,
+      "proshop_ecommerce": 5,
+      "superintendent_partnership": 6,
+      "ball_retrieval": 6
+    },
+    "cost_usd": 0.03557295,
+    "turns": 4,
+    "success": true
+  },
+  "agent7": {
+    "water_hazard_count": 7,
+    "confidence": "low",
+    "details": [
+      "Based on the available information, here is the summary of what could be found about the Richmond Country Club in VA:\n\n## Course Layout and Scorecard\n\nWhile the specific official scorecard PDF or image showing water hazard symbols is not directly available from the provided sources, the course layout can be understood from the descriptions of similar courses or general information about golf courses.\n\n## Hole-by-Hole Descriptions\n\nFor precise hole-by-hole descriptions mentioning water features, detailed information is not readily available from the provided sources. However, many golf courses typically include water hazards in their design, which are crucial for strategic play.\n\n## Course Map\n\nA detailed course map showing ponds, lakes, or creeks is not available from the sources provided. However, golf course maps generally highlight these features to help players navigate the course.\n\n## Water Features\n\nThe search results do not provide specific information on the number of holes with water features at Richmond Country Club in VA. Typically, golf courses vary in the number of water hazards they include, but often multiple holes are affected.\n\n**Water Features Count**: Without specific details, it's difficult to count exactly how many holes feature \"water hazard,\" \"pond,\" \"lake,\" or \"creek.\" This would require access to the course's official map or detailed scorecard, which is not available from the given sources.\n\nFor detailed information, contacting the course directly or visiting their website might provide additional insights or access to resources like course maps or scorecards that highlight water features.",
+      "Low confidence: use with caution"
+    ],
+    "query_approach": "scorecard",
+    "cost_usd": 0.006,
+    "success": true
+  },
+  "contacts": [
+    {
+      "name": "Stacy Foster",
+      "title": "General Manager",
+      "company": "Richmond Country Club",
+      "domain": "richmondcountryclubva.com",
+      "agent3": {
+        "email": "sfoster@richmondcountryclubva.com",
+        "email_confidence_score": null,
+        "linkedin_url": "https://www.linkedin.com/in/stacy-foster-20b79448",
+        "cost_usd": 0.0121675,
+        "success": true
+      },
+      "agent5": {
+        "phone": "804-592-5861",
+        "phone_source": "aggregated",
+        "cost_usd": 0.01169175,
+        "success": true
+      },
+      "agent65": {
+        "tenure_years": null,
+        "tenure_confidence": "unknown",
+        "previous_clubs": [],
+        "industry_experience_years": null,
+        "responsibilities": [
+          "oversight of course operations",
+          "staff management",
+          "financial management",
+          "member services",
+          "club facilities management",
+          "operational efficiency",
+          "financial performance"
+        ],
+        "career_notes": "General Manager at Richmond Country Club. Some business directories mention various club roles including Director of Events And Catering and Membership & Communications Director, but these are not confirmed as sequential career steps nor is the timeline clear. No public evidence of career progression available.",
+        "cost_usd": 0.0048332,
+        "turns": 4,
+        "success": true
+      }
+    },
+    {
+      "name": "Bill Ranson",
+      "title": "Head Golf Professional",
+      "company": "Richmond Country Club",
+      "domain": "richmondcountryclubva.com",
+      "agent3": {
+        "email": "bill@richmondcountryclubva.com",
+        "email_confidence_score": null,
+        "linkedin_url": "https://www.linkedin.com/in/billranson",
+        "cost_usd": 0.01191725,
+        "success": true
+      },
+      "agent5": {
+        "phone": "(804) 784-5663",
+        "phone_source": "aggregated",
+        "cost_usd": 0.0115315,
+        "success": true
+      },
+      "agent65": {
+        "tenure_years": null,
+        "tenure_confidence": "unknown",
+        "previous_clubs": [
+          "Brickshire Golf Club",
+          "Meadowbrook Country Club",
+          "The Dominion Club",
+          "Rancho Park Golf Course",
+          "Wintergreen Resort - Stoney Creek",
+          "Breckenridge Golf Club",
+          "Los Angeles Country Club",
+          "Arcadia Golf Course",
+          "Crossroads School"
+        ],
+        "industry_experience_years": null,
+        "responsibilities": [
+          "Golf instruction across all skill levels",
+          "Golf operations oversight",
+          "Player development management",
+          "Customized golf lessons (putting, short game, full swing)",
+          "Club fitting services",
+          "Course strategy instruction",
+          "Golf staff management",
+          "Program implementation",
+          "Member and public engagement"
+        ],
+        "career_notes": "Bill Ranson is a PGA professional with a well-rounded career progression starting as 1st Assistant at The Dominion Club, advancing to Head Professional roles at Meadowbrook Country Club and Brickshire Golf Club, with earlier independent instruction work in Los Angeles. Currently Director of Golf at Richmond Country Club.",
+        "cost_usd": 0.010947199999999999,
+        "turns": 4,
+        "success": true
+      }
+    },
+    {
+      "name": "Greg McCue",
+      "title": "Superintendent",
+      "company": "Richmond Country Club",
+      "domain": "richmondcountryclubva.com",
+      "agent3": {
+        "email": "gregmccue@richmondcountryclubva.com",
+        "email_confidence_score": null,
+        "linkedin_url": null,
+        "cost_usd": 0.011979,
+        "success": true
+      },
+      "agent5": {
+        "phone": "804-784-5556",
+        "phone_source": "aggregated",
+        "cost_usd": 0.01163825,
+        "success": true
+      },
+      "agent65": {
+        "tenure_years": null,
+        "tenure_confidence": "unknown",
+        "previous_clubs": [],
+        "industry_experience_years": null,
+        "responsibilities": [],
+        "career_notes": "No sourced information available for Greg McCue at Richmond Country Club",
+        "cost_usd": 0.008812,
+        "turns": 4,
+        "success": true
+      }
+    }
+  ],
+  "summary": {
+    "total_cost_usd": 0.1622,
+    "contacts_enriched": 3,
+    "success": true,
+    "agent_costs": {
+      "agent1": 0.0125546,
+      "agent2": 0.0125546,
+      "agent6": 0.03557295,
+      "agent7": 0.006,
+      "agent3": 0.036063750000000006,
+      "agent5": 0.034861500000000004,
+      "agent65": 0.0245924,
+      "agent8": 0
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "test_date": "2025-01-17",
+  "agent": "agent7_water_hazard_counter",
+  "total_courses": 5,
+  "successful_finds": 5,
+  "success_rate": 100.0,
+  "avg_cost": 0.0042,
+  "total_cost": 0.021,
+  "confidence_distribution": {
+    "high": 5,
+    "medium": 0,
+    "low": 0,
+    "none": 0
+  },
+  "results": [
+    {
+      "course_name": "Quinton Oaks Golf Course",
+      "state": "Virginia",
+      "website": "https://quintonoaks.com/",
+      "water_hazard_count": 4,
+      "confidence": "high",
+      "details": [
+        "The Quinton Oaks Golf Course scorecard and course layout show that water features are present but not on a large number of holes. The official website (quintonoaks.com) does not provide a directly downloadable official scorecard PDF with water hazard symbols. However, third-party sites like Golfify and GolfTraxx offer detailed scorecards and hole maps.\n\n**Scorecard and Course Layout:**\n- The course is an 18-hole, par 71 course totaling about 6132 yards from the blue tees.\n- Water hazards are indicated in hole descriptions primarily as \"ponds\" or small water features near certain holes[1][2][6][7].\n\n**Hole-by-Hole Water Feature Mentions:**\n- Specific hole descriptions mentioning water hazards are limited in the public records available.\n- No comprehensive official scorecard explicitly marks water hazards with standard water hazard symbols (e.g., blue lines or water droplet icons) was found from the official source.\n- Based on hole maps and reviews, water mainly appears as ponds or small lakes near a few holes, but there is no clear detailed per-hole description listing \"water hazard,\" \"pond,\" \"lake,\" or \"creek\" terms on multiple holes on the official site or common third-party golf platforms.\n\n**Course Map Showing Water Features:**\n- Online interactive course maps (such as on GolfTraxx or Golfify) show ponds or water bodies generally near several holes but do not clearly indicate all water hazards.\n- The visuals suggest fewer than half the holes feature significant water bodies like ponds or creeks.\n\n**Count of Holes with Water Features:**\n- By aggregating third-party sources and hole maps, approximately **3 to 4 holes** on the course feature ponds or water hazards as notable obstacles.\n- None of the official or third-party sources provide a full official water hazard count, but water does not dominate the layout.\n\n**Summary:**\n\n| Item                              | Details                                        |\n|----------------------------------|------------------------------------------------|\n| Official Scorecard with Water Symbols | Not directly available online from official site, but detailed scorecards exist on Golfify and GolfTraxx without explicit water hazard symbols[1][6] |\n| Hole-by-hole Descriptions Mentioning Water | Limited; only a few holes referenced water features, described as \"pond\" or \"water hazard\" in third-party notes |\n| Course Map Showing Ponds/Lakes/Creeks | Interactive maps show ponds near ~3-4 holes but no extensive large water bodies evident[6] |\n| Number of Holes Mentioning Water | Approximately 3-4 holes have water hazards like ponds or creeks noted indirectly |\n\nIf you need the official scorecard PDF with hazard symbols, contacting the course directly via their phone (+1 804-529-5367) or email (sales@quintonoaks.com) may be necessary as it is not publicly posted online.\n\nOverall, Quinton Oaks Golf Course in Virginia features moderate water hazards with about 3-4 holes including water elements like ponds or creeks based on available data, but official detailed documentation on this is not publicly accessible."
+      ],
+      "query_approach": "scorecard",
+      "cost": 0.006,
+      "found": true,
+      "approach1_count": null,
+      "approach1_confidence": "none",
+      "approach2_count": 4,
+      "approach2_confidence": "high"
+    },
+    {
+      "course_name": "Red Wing Lake Golf Course",
+      "state": "Virginia",
+      "website": "https://www.redwinglakegolf.com/",
+      "water_hazard_count": 10,
+      "confidence": "high",
+      "details": [
+        "The Red Wing Lake Golf Course in Virginia Beach has **water hazards on 10 holes** according to its course description[1]. The course is designed in a parkland style with natural water features, including a serene lake around which some holes wrap, plus scattered water hazards that provide strategic challenges on certain holes[6].\n\nAdditional details about the water features include:\n\n- The lake itself forms a significant natural boundary affecting multiple holes[6].\n- Water hazards come into play on roughly half the holes (10 out of 18)[1].\n- The course layout is described as having \"scattered water hazards\" that test course management, without overwhelming players[6].\n\nAlthough exact counts of separate ponds, lakes, or creeks are not explicitly stated in the searched sources, the presence of at least one main lake and associated water hazards appears confirmed.\n\nThe scorecards and detailed hole maps are not directly listed in the sources, but the confirmed number of holes with water hazards is 10[1].\n\nTherefore, there are **10 holes with water hazards** on Red Wing Lake Golf Course, centered around a main lake and additional scattered water features."
+      ],
+      "query_approach": "direct",
+      "cost": 0.003,
+      "found": true,
+      "approach1_count": 10,
+      "approach1_confidence": "high",
+      "approach2_count": null,
+      "approach2_confidence": "skipped"
+    },
+    {
+      "course_name": "Richmond Country Club",
+      "state": "Virginia",
+      "website": "https://www.richmondcountryclubva.com/",
+      "water_hazard_count": 5,
+      "confidence": "high",
+      "details": [
+        "The Richmond Country Club golf course in Virginia has **water hazards on five holes**. This is explicitly stated in the course description from foretee.com, which notes that water hazards come into play on five holes, emphasizing the need for shot accuracy due to these hazards[8].\n\nAdditional details about ponds, lakes, or creeks on the course or a precise count of individual water bodies are not provided in the search results. However, the description emphasizes the presence of narrow, tree-lined fairways with well-positioned sand bunkers, and that the terrain is rolling[8], which is common in courses with natural water features, but it does not specify distinct ponds or lakes.\n\nNo scorecards with water hazard symbols were found directly in the search results, nor were specific course hole descriptions mentioning particular water features other than the general \"water hazards on five holes.\" The older description from a different Richmond course (Richmond County Country Club, New York) or James River information does not pertain directly to this Virginia course.\n\n**Summary:**\n- Richmond Country Club (Virginia) has **5 holes featuring water hazards**[8].\n- No detailed count or description of ponds, lakes, or creeks was found.\n- Course is characterized by rolling terrain with some water hazards and sand bunkers.\n\nThis is the most specific and directly relevant information available from the search."
+      ],
+      "query_approach": "direct",
+      "cost": 0.003,
+      "found": true,
+      "approach1_count": 5,
+      "approach1_confidence": "high",
+      "approach2_count": null,
+      "approach2_confidence": "skipped"
+    },
+    {
+      "course_name": "River Creek Club",
+      "state": "Virginia",
+      "website": "https://www.invitedclubs.com/clubs/river-creek-club",
+      "water_hazard_count": 18,
+      "confidence": "high",
+      "details": [
+        "## Official Scorecard, Water Hazard Symbols, and Course Layout\n\nThe official Invited Clubs website does not provide a PDF scorecard, hole-by-hole descriptions with water hazard symbols, or a detailed course map showing the location of ponds, lakes, or creeks for River Creek Club in Leesburg, Virginia[5]. However, it does state that the course \u201cseamlessly integrates the natural splendor of the Potomac River\u201d and includes \u201cfive holes along the Potomac River[,]\u2026 two holes hugging Goose Creek\u201d[5]. This confirms that water is a major hazard on at least seven holes, but it does not specify which holes or provide a visual with hazard symbols.\n\n**No official PDF scorecard with water hazard symbols is linked or embedded on the Invited Clubs page.**[5]  \n**No hole-by-hole descriptions mentioning water are provided.**[5]\n\n## Course Map and Golf Architecture\n\nThe GolfTraxx website suggests that maps and hole flyovers are available, but these are only accessible through their interactive interface\u2014there is no static map or hole-by-hole description publicly available in the provided search results[4].  \n**No downloadable course map showing ponds, lakes, or creeks is available in the search results.**\n\n## Water Features on the Course\n\nThe Invited Clubs description is the most authoritative source on water features at River Creek Club[5]. It clearly states:\n\n> \u201cFive holes are strategically positioned along the Potomac River\u2026two holes hug Goose Creek\u201d[5]\n\nThis adds up to **at least seven holes with significant water hazards**, but the exact hole numbers are not specified.\n\n### Water Hazard Terminology\n\nThe search results do not provide a hole-by-hole breakdown specifying \u201cwater hazard,\u201d \u201cpond,\u201d \u201clake,\u201d or \u201ccreek\u201d for each hole. However, the official description uses \u201cPotomac River\u201d and \u201cGoose Creek,\u201d so those are definitely in play on at least seven holes[5].\n\n## Summary Table\n\n| Feature                    | Available in Search Results? | Details                                                                 |\n|----------------------------|------------------------------|-------------------------------------------------------------------------|\n| Official scorecard PDF     | No                           | Not found on Invited Clubs or elsewhere in results[1][5]                |\n| Hole-by-hole descriptions  | No                           | Not provided in any detail[5]                                           |\n| Course map with water      | No                           | Only interactive maps suggested[4], no static image found               |\n| Number of water holes      | Yes (partial)                | At least 7 of 18 holes have water (5 on Potomac, 2 on Goose Creek)[5]   |\n| Terminology count          | No                           | No hole-by-hole list of \u201cpond,\u201d \u201clake,\u201d \u201ccreek,\u201d or \u201cwater hazard\u201d      |\n\n## Conclusion\n\n- **There is no official PDF scorecard with water hazard symbols available in the provided search results for River Creek Club.**[1][5]\n- **No hole-by-hole descriptions mentioning water hazards are provided.**[5]\n- **No static course map showing ponds, lakes, or creeks is available.**[4]\n- **At least seven of the 18 holes feature significant water hazards (five along the Potomac River, two along Goose Creek), but the exact holes are not specified.**[5]\n- **No definitive count of holes mentioning \u201cwater hazard,\u201d \u201cpond,\u201d \u201clake,\u201d or \u201ccreek\u201d is possible from the available sources.**\n\nFor a precise hole-by-hole breakdown with water hazard symbols and a static course map, you would need to contact River Creek Club directly or consult a golf course guidebook or architecture review not found in these search results. The Invited Clubs website confirms the prominence of water but does not provide the detailed documentation you requested.[5]"
+      ],
+      "query_approach": "scorecard",
+      "cost": 0.006,
+      "found": true,
+      "approach1_count": 7,
+      "approach1_confidence": "low",
+      "approach2_count": 18,
+      "approach2_confidence": "high"
+    },
+    {
+      "course_name": "Riverfront Golf Club",
+      "state": "Virginia",
+      "website": "https://www.riverfrontgolf.com/",
+      "water_hazard_count": 15,
+      "confidence": "high",
+      "details": [
+        "The Riverfront Golf Club golf course in Virginia features **water hazards along all but three of its 18 holes**, meaning **15 holes have water hazards** such as tidal marshes or water edges bordering at least one side of the fairway or green[3][4].\n\nAdditional details about the water features at Riverfront Golf Club include:\n\n- The course is set on riverfront acreage near the Nansemond River and tidal marshes, which naturally border many holes.\n- The layout integrates these water bodies as direct hazards requiring carries, diagonal challenges, or scenic views.\n- There are significant tidal marsh areas and possibly a lake bordering much of the course, according to architectural reviews.\n- The large majority of holes (15 out of 18) border natural water-related features such as tidal marshes, but the exact count of discrete ponds or lakes is not specified; the focus is more on continuous marsh/water edges than isolated water bodies[3][4][6].\n\nScorecards available online do not provide an explicit count of ponds or lakes but do indicate water hazards marked consistently on many holes, reflecting the extensive water impact on the course design. Reviews underscore the presence of water hazards on about 15 holes, especially challenging par-3 carries over water[3][5][6].\n\nIn summary, **the Riverfront Golf Club course includes water hazards on 15 holes**, mostly comprised of tidal marshes and river edges integrated into the course's natural riverside landscape[3][4]."
+      ],
+      "query_approach": "direct",
+      "cost": 0.003,
+      "found": true,
+      "approach1_count": 15,
+      "approach1_confidence": "high",
+      "approach2_count": null,
+      "approach2_confidence": "skipped"
+    }
+  ]
+}

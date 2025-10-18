@@ -50,20 +50,23 @@
 │  │    └→ {course: ..., staff: [3 contacts]}                   │   │
 │  │                                                            │   │
 │  │                                                            │   │
+│  │  Agent 6: Course-Level Business Intel (once per course)   │   │
+│  │    └→ {segment, range_intel, opportunities}               │   │
+│  │                                                            │   │
 │  │  Agent 7: Water Hazard Counter (once per course)          │   │
-│  │    └→ {water_hazard_count: 10, confidence: 'high'}        │   │
+│  │    └→ {water_hazard_count: 7, confidence: 'low'}         │   │
 │  │                                                            │   │
 │  │  For each contact:                                         │   │
 │  │    Agent 3: Email + LinkedIn enrichment                    │   │
 │  │    Agent 5: Phone number discovery                         │   │
-│  │    Agent 6: Business intelligence (uses water count)       │   │
+│  │    Agent 6.5: Contact background (tenure, prev clubs)     │   │
 │  │                                                            │   │
 │  │  Returns: Fully enriched contacts + course intel          │   │
 │  └────────────────────────────────────────────────────────────┘   │
 │                                                                      │
 │  Processing: ONE course at a time (triggered individually)           │
-│  Time: ~50 seconds per course                                        │
-│  Cost: ~$0.16 per course (includes Agent 7)                          │
+│  Time: ~180 seconds per course (3 minutes)                           │
+│  Cost: ~$0.155 per course (Agents 1-8, avg 3 contacts)              │
 └──────────────────────────────────────────────────────────────────────┘
                               ↓
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -231,23 +234,24 @@ const response = await fetch('https://agent-api.railway.app/api/enrich-course', 
 # Orchestrator executes all agents for THIS course
 # Holds ALL data in memory, writes atomically at end
 
-# Course-level enrichment
+# Course-level enrichment (run ONCE per course)
 url_result = await agent1_find_url(course_name, state_code)
 course_data = await agent2_extract(url_result.url)
-water_data = await agent7_count_hazards(course_name, state_code)  # Once per course
+water_data = await agent7_count_hazards(course_name, state_code, website)
+course_intel = await agent6_enrich_course(course_name, website, water_data.count)  # ONCE!
 
-# Contact-level enrichment
+# Contact-level enrichment (per contact)
 contacts = []
 for staff in course_data.staff:
-    enriched = await agent3_enrich(staff, course_data.website)
-    enriched = await agent5_phone(enriched, state_code)
-    enriched = await agent6_intel(enriched, course_data, water_data)  # Uses water count
+    enriched = await agent3_enrich(staff)  # Email + LinkedIn
+    enriched = await agent5_phone(enriched)  # Phone
+    enriched = await agent65_background(enriched)  # Tenure, previous clubs - NEW!
     contacts.append(enriched)
 
 # Atomic result (all or nothing)
 result = {
   "course_id": request.course_id,
-  "course": {**course_data, **water_data, "segment": contacts[0].segment},
+  "course": {**course_data, **course_intel, **water_data},
   "contacts": contacts,
   "total_cost": sum_all_agent_costs(),
   "total_time": calculate_duration()
