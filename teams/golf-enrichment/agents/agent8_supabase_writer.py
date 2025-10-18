@@ -93,14 +93,11 @@ async def write_to_supabase(
             "segment_confidence": course_intel.get("segmentation", {}).get("confidence"),
             "segment_signals": json.dumps(course_intel.get("segmentation", {}).get("signals", [])),
             "range_intel": json.dumps(course_intel.get("range_intel", {})),
-            "opportunity_scores": json.dumps(course_intel.get("opportunities", {})),
-            "agent6_enriched_at": datetime.utcnow().isoformat(),
+            "opportunities": json.dumps(course_intel.get("opportunities", {})),
 
             # Agent 7: Water Hazards
-            "water_hazard_count": water_data.get("water_hazard_count"),
-            "water_hazard_confidence": water_data.get("confidence"),
-            "water_hazard_details": json.dumps(water_data.get("details", [])),
-            "agent7_enriched_at": datetime.utcnow().isoformat()
+            "water_hazards": water_data.get("water_hazard_count"),
+            "water_hazard_confidence": water_data.get("confidence")
         }
 
         # Add production-only fields (test tables don't have these columns)
