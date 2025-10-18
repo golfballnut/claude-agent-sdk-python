@@ -63,3 +63,7 @@ failed/
 # Session and transcript files
 .claude/sessions/
 transcripts/
+
+# Test results (deployment testing)
+examples/poc-workflow/deployment/test_results/*.json
+!examples/poc-workflow/deployment/test_results/README.md
