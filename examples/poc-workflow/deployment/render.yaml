@@ -1,0 +1,48 @@
+# Render Blueprint for Agent 7 Water Hazard Counter
+# Infrastructure as Code for deployment
+
+services:
+  # Agent 7 Web Service
+  - type: web
+    name: agent7-water-hazards
+    runtime: docker
+    plan: starter  # $7/month - 512MB RAM, 0.5 CPU
+    region: oregon  # Change to your preferred region
+    dockerfilePath: ./deployment/Dockerfile
+    dockerContext: .
+
+    # Environment variables (set actual values in Render dashboard)
+    envVars:
+      - key: PERPLEXITY_API_KEY
+        sync: false  # Must be set via Render dashboard for security
+      - key: ANTHROPIC_API_KEY
+        sync: false  # Must be set via Render dashboard for security
+      - key: LOG_LEVEL
+        value: INFO
+      - key: ENVIRONMENT
+        value: production
+
+    # Health check configuration
+    healthCheckPath: /health
+
+    # Auto-deploy on git push
+    autoDeploy: true
+
+    # Build configuration
+    buildCommand: ""  # Using Dockerfile, no separate build command needed
+    startCommand: ""  # Defined in Dockerfile CMD
+
+    # Scaling (for future)
+    # numInstances: 1
+    # maxShutdownDelaySeconds: 30
+
+# Optional: Add a cron job for scheduled tasks (future enhancement)
+# - type: cron
+#   name: monthly-course-enrichment
+#   schedule: "0 0 1 * *"  # First day of each month at midnight
+#   dockerfilePath: ./deployment/Dockerfile
+#   dockerCommand: python agents/orchestrator.py
+#   envVars:
+#     - fromService:
+#         type: web
+#         name: agent7-water-hazards
