@@ -169,10 +169,10 @@ async def write_to_supabase(
                 contact_record["contact_email"] = contact.get("email")
                 contact_record["contact_phone"] = contact.get("phone")
             else:
-                contact_record["name"] = name
-                contact_record["title"] = contact.get("title")
-                contact_record["email"] = contact.get("email")
-                contact_record["phone"] = contact.get("phone")
+                contact_record["contact_name"] = name
+                contact_record["contact_title"] = contact.get("title")
+                contact_record["contact_email"] = contact.get("email")
+                contact_record["contact_phone"] = contact.get("phone")
 
             # Common fields for both test and production
             contact_record.update({

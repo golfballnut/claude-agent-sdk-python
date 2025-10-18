@@ -17,6 +17,7 @@ import sys
 from pathlib import Path
 from datetime import datetime
 import logging
+import httpx
 
 # Configure logging
 logging.basicConfig(
@@ -43,6 +44,42 @@ try:
 except ImportError as e:
     logger.error(f"Failed to import Orchestrator: {e}")
     raise
+
+
+# Webhook to Supabase Edge Function
+async def send_enrichment_webhook(course_id: int, result: dict) -> None:
+    """
+    Send enrichment results to Supabase edge function
+
+    This triggers database insertion and ClickUp task creation
+
+    Args:
+        course_id: ID from golf_courses table
+        result: Full orchestrator result dict
+    """
+    webhook_url = "https://oadmysogtfopkbmrulmq.supabase.co/functions/v1/receive-agent-enrichment"
+
+    payload = {
+        'course_id': course_id,
+        'success': result.get('success', False),
+        'course_name': result.get('course_name'),
+        'state_code': result.get('state_code'),
+        'summary': result.get('summary'),
+        'agent_results': result.get('agent_results'),
+        'contacts': result.get('enriched_contacts', [])
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(webhook_url, json=payload)
+            response.raise_for_status()
+            logger.info(f"✅ Webhook sent successfully for course_id={course_id}")
+    except httpx.HTTPError as e:
+        logger.error(f"❌ Webhook failed for course_id={course_id}: {e}")
+        # Don't raise - webhook failure shouldn't fail the enrichment
+    except Exception as e:
+        logger.error(f"❌ Unexpected webhook error for course_id={course_id}: {e}")
+
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -289,6 +326,13 @@ async def enrich_course(request: EnrichCourseRequest):
             f"Contacts: {result.get('summary', {}).get('contact_count', 0)}, "
             f"Cost: ${result.get('summary', {}).get('total_cost', 0):.4f}"
         )
+
+        # Send webhook to Supabase (if course_id available from Agent 8)
+        if result.get('agent_results', {}).get('agent8', {}).get('course_id'):
+            course_id = result['agent_results']['agent8']['course_id']
+            await send_enrichment_webhook(course_id, result)
+        else:
+            logger.warning(f"No course_id in result - webhook not sent for {request.course_name}")
 
         return EnrichCourseResponse(**result)
 

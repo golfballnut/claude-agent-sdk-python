@@ -45,7 +45,7 @@ Deno.serve(async (req) => {
     }
 
     // Call Render API (Agent Workflow)
-    const renderUrl = Deno.env.get('RENDER_API_URL') ||
+    const renderUrl = Deno.env.get('GOLF_ENRICHMENT_API_URL') ||
                       'https://agent7-water-hazards.onrender.com'
 
     const response = await fetch(`${renderUrl}/enrich-course`, {
