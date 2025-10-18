@@ -113,13 +113,16 @@ async def write_to_supabase(
         print(f"   🏌️ Upserting course: {course_name}...")
 
         # Check if course exists
-        existing = supabase.table(course_table)\
-            .select("id")\
-            .eq("course_name", course_name)\
-            .maybe_single()\
-            .execute()
+        try:
+            existing = supabase.table(course_table)\
+                .select("id")\
+                .eq("course_name", course_name)\
+                .maybe_single()\
+                .execute()
+        except Exception as e:
+            raise Exception(f"Failed to query {course_table} table: {e}. Make sure the table exists and has proper permissions.")
 
-        if existing.data:
+        if existing and existing.data:
             # Update existing
             course_id = existing.data["id"]
             supabase.table(course_table)\
@@ -129,11 +132,16 @@ async def write_to_supabase(
             print(f"      ✅ Updated existing course (ID: {str(course_id)[:8]}...)")
         else:
             # Insert new
-            result = supabase.table(course_table)\
-                .insert(course_record)\
-                .execute()
-            course_id = result.data[0]["id"]
-            print(f"      ✅ Created new course (ID: {str(course_id)[:8]}...)")
+            try:
+                result = supabase.table(course_table)\
+                    .insert(course_record)\
+                    .execute()
+                if not result or not result.data or len(result.data) == 0:
+                    raise Exception(f"Insert to {course_table} returned empty result")
+                course_id = result.data[0]["id"]
+                print(f"      ✅ Created new course (ID: {str(course_id)[:8]}...)")
+            except Exception as e:
+                raise Exception(f"Failed to insert into {course_table}: {e}")
 
         # ====================================================================
         # STEP 3: Upsert Contacts
@@ -197,14 +205,17 @@ async def write_to_supabase(
             id_field = "contact_id" if use_test_tables else "id"
             name_query_field = "contact_name" if use_test_tables else "name"
 
-            existing_contact = supabase.table(contact_table)\
-                .select(id_field)\
-                .eq("golf_course_id", course_id)\
-                .eq(name_query_field, name)\
-                .maybe_single()\
-                .execute()
+            try:
+                existing_contact = supabase.table(contact_table)\
+                    .select(id_field)\
+                    .eq("golf_course_id", course_id)\
+                    .eq(name_query_field, name)\
+                    .maybe_single()\
+                    .execute()
+            except Exception as e:
+                raise Exception(f"Failed to query {contact_table} for contact {name}: {e}")
 
-            if existing_contact.data:
+            if existing_contact and existing_contact.data:
                 # Update existing
                 contact_id = existing_contact.data[id_field]
                 supabase.table(contact_table)\
