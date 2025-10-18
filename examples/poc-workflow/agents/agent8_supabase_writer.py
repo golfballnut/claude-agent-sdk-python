@@ -100,12 +100,13 @@ async def write_to_supabase(
             "water_hazard_count": water_data.get("water_hazard_count"),
             "water_hazard_confidence": water_data.get("confidence"),
             "water_hazard_details": json.dumps(water_data.get("details", [])),
-            "agent7_enriched_at": datetime.utcnow().isoformat(),
-
-            # Status
-            "enhancement_status": "agent_enrichment_complete",
-            "enrichment_completed_at": datetime.utcnow().isoformat()
+            "agent7_enriched_at": datetime.utcnow().isoformat()
         }
+
+        # Add production-only fields (test tables don't have these columns)
+        if not use_test_tables:
+            course_record["enhancement_status"] = "agent_enrichment_complete"
+            course_record["enrichment_completed_at"] = datetime.utcnow().isoformat()
 
         # ====================================================================
         # STEP 2: Upsert Course
