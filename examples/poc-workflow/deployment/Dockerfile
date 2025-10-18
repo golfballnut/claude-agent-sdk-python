@@ -43,6 +43,13 @@ COPY deployment/api.py .
 # Create results directory for any output
 RUN mkdir -p /app/results
 
+# Create non-root user for security (Claude SDK requirement)
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER appuser
+
 # Expose port for FastAPI
 EXPOSE 8000
 
