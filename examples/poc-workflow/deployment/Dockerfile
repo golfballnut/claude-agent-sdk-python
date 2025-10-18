@@ -29,7 +29,7 @@ RUN which claude && claude --version
 WORKDIR /app
 
 # Copy requirements and install Python dependencies
-COPY requirements.txt .
+COPY deployment/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
@@ -39,8 +39,6 @@ COPY agents/ ./agents/
 COPY template/ ./template/
 # Copy API wrapper
 COPY deployment/api.py .
-# Copy .env.example for reference
-COPY .env.example .
 
 # Create results directory for any output
 RUN mkdir -p /app/results
