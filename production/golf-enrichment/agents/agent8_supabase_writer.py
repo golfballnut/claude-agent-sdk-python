@@ -160,9 +160,10 @@ async def write_to_supabase(
             # Prepare contact record (field names differ between test and production)
             contact_record = {
                 "golf_course_id": course_id,
+                "contact_source": "agent_pipeline",  # Required field - source of the contact data
             }
 
-            # Add name and title (different field names in test vs production)
+            # Add name and title (same field names for both test and production)
             if use_test_tables:
                 contact_record["contact_name"] = name
                 contact_record["contact_title"] = contact.get("title")
