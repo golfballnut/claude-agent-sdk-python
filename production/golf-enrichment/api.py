@@ -328,8 +328,8 @@ async def enrich_course(request: EnrichCourseRequest):
         )
 
         # Send webhook to Supabase (if course_id available from Agent 8)
-        if result.get('agent_results', {}).get('agent8', {}).get('course_id'):
-            course_id = result['agent_results']['agent8']['course_id']
+        if result.get('course_id'):
+            course_id = result['course_id']
             await send_enrichment_webhook(course_id, result)
         else:
             logger.warning(f"No course_id in result - webhook not sent for {request.course_name}")

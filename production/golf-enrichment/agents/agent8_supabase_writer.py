@@ -282,7 +282,7 @@ async def main():
 
     test_course_intel = {
         "segmentation": {
-            "primary_target": "unknown",
+            "primary_target": "budget",  # Valid segment value
             "confidence": 5,
             "signals": ["Test data"]
         },
@@ -330,6 +330,7 @@ async def main():
         test_course_intel,
         test_water_data,
         test_contacts,
+        state_code="VA",  # Required parameter
         use_test_tables=True  # Safe default
     )
 
