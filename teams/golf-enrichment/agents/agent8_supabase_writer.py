@@ -160,7 +160,7 @@ async def write_to_supabase(
             # Prepare contact record (field names differ between test and production)
             contact_record = {
                 "golf_course_id": course_id,
-                "contact_source": "agent_pipeline",  # Required field - source of the contact data
+                "contact_source": "website_scrape",  # Required field - contacts found via Agent 2 website scraping
             }
 
             # Add name and title (same field names for both test and production)
