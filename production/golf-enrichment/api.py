@@ -192,6 +192,7 @@ async def root():
         "endpoints": {
             "health": "GET /health",
             "count_hazards": "POST /count-hazards (Agent 7 only)",
+            "test_agent8": "POST /test-agent8 (Test Agent 8 in isolation)",
             "enrich_course": "POST /enrich-course (Full pipeline: Agents 1-8)",
             "docs": "GET /docs",
             "redoc": "GET /redoc"
@@ -282,6 +283,104 @@ async def count_hazards(request: CourseRequest):
         raise HTTPException(
             status_code=500,
             detail=f"Failed to count water hazards: {str(e)}"
+        )
+
+
+@app.post("/test-agent8")
+async def test_agent8():
+    """
+    Test Agent 8 (Supabase Writer) in isolation
+
+    This endpoint tests Agent 8's ability to write to Supabase without
+    running the full enrichment pipeline. Useful for debugging database
+    connection and schema issues.
+
+    Returns:
+        dict: Agent 8 result with success status, course_id, and contacts_written
+    """
+    logger.info("🧪 Testing Agent 8 in isolation...")
+
+    try:
+        from agent8_supabase_writer import write_to_supabase
+
+        # Minimal test data
+        test_course_data = {
+            "data": {
+                "course_name": "Test Course (API Agent 8)",
+                "website": "https://testcourse.com",
+                "phone": "804-555-9999"
+            }
+        }
+
+        test_course_intel = {
+            "segmentation": {
+                "primary_target": "budget",  # Valid segment value
+                "confidence": 7,
+                "signals": ["API test data"]
+            },
+            "range_intel": {"has_range": True},
+            "opportunities": {
+                "range_ball_buy": 5,
+                "range_ball_lease": 5
+            }
+        }
+
+        test_water_data = {
+            "water_hazard_count": 3,
+            "confidence": "medium",
+            "details": ["API test"]
+        }
+
+        test_contacts = [
+            {
+                "name": "API Test Contact",
+                "title": "Test Manager",
+                "email": "test@testcourse.com",
+                "email_confidence": 50,
+                "email_method": "api_test",
+                "phone": "804-555-8888",
+                "method": "api_test",
+                "confidence": 50,
+                "background": {
+                    "tenure_years": None,
+                    "tenure_confidence": "unknown",
+                    "previous_clubs": [],
+                    "industry_experience_years": None,
+                    "responsibilities": ["Test duty"],
+                    "career_notes": "API test contact"
+                }
+            }
+        ]
+
+        # Call Agent 8 directly
+        result = await write_to_supabase(
+            test_course_data,
+            test_course_intel,
+            test_water_data,
+            test_contacts,
+            state_code="VA",
+            use_test_tables=False  # Write to production tables
+        )
+
+        logger.info(
+            f"✅ Agent 8 test completed - "
+            f"Success: {result.get('success')}, "
+            f"Course ID: {result.get('course_id')}, "
+            f"Contacts: {result.get('contacts_written')}"
+        )
+
+        return {
+            "test": "agent8",
+            "timestamp": datetime.utcnow().isoformat(),
+            "result": result,
+            "note": "Test course created in production database. Clean up manually if needed."
+        }
+
+    except Exception as e:
+        logger.error(f"Agent 8 test failed: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Agent 8 test failed: {str(e)}"
         )
 
 
