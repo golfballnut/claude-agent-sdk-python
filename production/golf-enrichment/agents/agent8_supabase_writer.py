@@ -177,34 +177,41 @@ async def write_to_supabase(
             # Common fields for both test and production
             contact_record.update({
                 # Agent 3: Email + LinkedIn
-                "email_confidence": contact.get("email_confidence"),
-                "email_method": contact.get("email_method"),
                 "linkedin_url": contact.get("linkedin_url"),
-                "linkedin_method": contact.get("linkedin_method"),
 
                 # Agent 5: Phone
-                "phone_method": contact.get("method"),  # Note: contact.method, not contact.phone_method
-                "phone_confidence": contact.get("confidence"),  # Note: contact.confidence
+                "phone_confidence": contact.get("confidence"),
 
                 # Agent 6.5: Background
                 "tenure_years": contact.get("background", {}).get("tenure_years"),
-                "tenure_confidence": contact.get("background", {}).get("tenure_confidence"),
-                "previous_clubs": json.dumps(contact.get("background", {}).get("previous_clubs", [])),
-                "industry_experience_years": contact.get("background", {}).get("industry_experience_years"),
-                "responsibilities": json.dumps(contact.get("background", {}).get("responsibilities", [])),
-                "career_notes": contact.get("background", {}).get("career_notes"),
-                "agent65_enriched_at": datetime.utcnow().isoformat()
+                "previous_clubs": json.dumps(contact.get("background", {}).get("previous_clubs", []))
             })
 
-            # Add production-only fields
-            if not use_test_tables:
-                contact_record["phone_source"] = contact.get("phone_source")
-                contact_record["enrichment_status"] = "agent_enrichment_complete"
-                contact_record["enrichment_completed_at"] = datetime.utcnow().isoformat()
+            # Test-only fields (these columns don't exist in production)
+            if use_test_tables:
+                contact_record.update({
+                    "email_confidence": contact.get("email_confidence"),
+                    "email_method": contact.get("email_method"),
+                    "linkedin_method": contact.get("linkedin_method"),
+                    "phone_method": contact.get("method"),
+                    "tenure_confidence": contact.get("background", {}).get("tenure_confidence"),
+                    "industry_experience_years": contact.get("background", {}).get("industry_experience_years"),
+                    "responsibilities": json.dumps(contact.get("background", {}).get("responsibilities", [])),
+                    "career_notes": contact.get("background", {}).get("career_notes"),
+                    "agent65_enriched_at": datetime.utcnow().isoformat()
+                })
+            else:
+                # Production-only fields (use actual production column names)
+                contact_record.update({
+                    "phone_source": contact.get("method"),  # Maps to phone_source in production
+                    "email_confidence_score": contact.get("email_confidence"),  # Note: different name
+                    "email_discovery_method": contact.get("email_method"),
+                    "discovery_method": contact.get("linkedin_method")
+                })
 
-            # Check if contact exists (use contact_id for test tables, id for production)
-            id_field = "contact_id" if use_test_tables else "id"
-            name_query_field = "contact_name" if use_test_tables else "name"
+            # Check if contact exists (both test and production use same field names)
+            id_field = "contact_id"
+            name_query_field = "contact_name"
 
             try:
                 existing_contact = supabase.table(contact_table)\
