@@ -62,11 +62,11 @@ def sync_team_to_production(team_name: str) -> None:
             shutil.copy2(agent_file, team_agents_dest / agent_file.name)
             print(f"   ✓ Copied agent: {agent_file.name}")
 
-    # 2. Sync orchestrator
+    # 2. Sync orchestrator (to production root, not agents folder)
     orchestrator_src = team_dir / "orchestrator.py"
     if orchestrator_src.exists():
-        shutil.copy2(orchestrator_src, team_agents_dest / "orchestrator.py")
-        print(f"   ✓ Copied orchestrator.py")
+        shutil.copy2(orchestrator_src, prod_dir / "orchestrator.py")
+        print(f"   ✓ Copied orchestrator.py to production root")
 
     # 3. Sync shared utilities
     shared_utils_src = shared_dir / "utils"

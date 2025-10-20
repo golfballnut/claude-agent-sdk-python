@@ -315,6 +315,10 @@ async def enrich_course(
 
         print(f"   💰 Cost: $0.0000 | ⏱️  {agent8_duration:.1f}s\n")
 
+        # Store Agent 8 result in agent_results
+        result["agent_results"]["agent8"] = supabase_result
+
+        # Also extract key fields to top level for convenience
         result["course_id"] = supabase_result["course_id"]
         result["contacts_written"] = supabase_result["contacts_written"]
 

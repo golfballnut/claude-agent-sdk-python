@@ -41,6 +41,7 @@ from agent8_supabase_writer import write_to_supabase
 async def enrich_course(
     course_name: str,
     state_code: str = "VA",
+    course_id: int | None = None,
     use_test_tables: bool = True  # Default to test tables for safety
 ) -> Dict[str, Any]:
     """
@@ -49,6 +50,7 @@ async def enrich_course(
     Args:
         course_name: Name of golf course (e.g., "Richmond Country Club")
         state_code: State code (default: "VA" for Virginia)
+        course_id: Optional course ID to update (ensures correct course, avoids name mismatch)
 
     Returns:
         Dict with:
@@ -294,6 +296,19 @@ async def enrich_course(
             print()  # Blank line between contacts
 
         # ====================================================================
+        # Calculate Total Cost (BEFORE Agent 8 so we can write it to DB)
+        # ====================================================================
+        total_cost_usd = round(
+            course_data.get("cost", 0) +
+            course_intel.get("cost", 0) +
+            water_data.get("cost", 0) +
+            total_agent3_cost +
+            total_agent5_cost +
+            total_agent65_cost,
+            4
+        )
+
+        # ====================================================================
         # AGENT 8: Write to Supabase
         # ====================================================================
         print("💾 [6/8] Agent 8: Writing to Supabase...")
@@ -305,6 +320,9 @@ async def enrich_course(
             water_data,
             enriched_contacts,
             state_code=state_code,
+            course_id=course_id,
+            total_cost=total_cost_usd,
+            contacts_page_url=url_result.get("url"),  # From Agent 1 (VSGA listing)
             use_test_tables=use_test_tables
         )
 
@@ -315,6 +333,10 @@ async def enrich_course(
 
         print(f"   💰 Cost: $0.0000 | ⏱️  {agent8_duration:.1f}s\n")
 
+        # Store Agent 8 result in agent_results
+        result["agent_results"]["agent8"] = supabase_result
+
+        # Also extract key fields to top level for convenience
         result["course_id"] = supabase_result["course_id"]
         result["contacts_written"] = supabase_result["contacts_written"]
 
@@ -324,15 +346,7 @@ async def enrich_course(
         total_duration = time.time() - start_time
 
         result["summary"] = {
-            "total_cost_usd": round(
-                course_data.get("cost", 0) +
-                course_intel.get("cost", 0) +
-                water_data.get("cost", 0) +
-                total_agent3_cost +
-                total_agent5_cost +
-                total_agent65_cost,
-                4
-            ),
+            "total_cost_usd": total_cost_usd,
             "total_duration_seconds": round(total_duration, 1),
             "contacts_enriched": len(enriched_contacts),
             "agent_costs": {
@@ -355,7 +369,14 @@ async def enrich_course(
         print(f"💰 Total Cost: ${result['summary']['total_cost_usd']:.4f}")
         print(f"⏱️  Total Time: {result['summary']['total_duration_seconds']:.1f}s")
         print(f"👥 Contacts: {result['summary']['contacts_enriched']}")
-        print(f"💾 Course ID: {result.get('course_id', 'N/A')[:8]}...")
+        # Handle both int and string course_id
+        course_id_display = result.get('course_id', 'N/A')
+        if isinstance(course_id_display, int):
+            print(f"💾 Course ID: {course_id_display}")
+        elif isinstance(course_id_display, str):
+            print(f"💾 Course ID: {course_id_display[:8]}...")
+        else:
+            print(f"💾 Course ID: {course_id_display}")
         print(f"💾 Contacts Written: {result.get('contacts_written', 0)}")
         print(f"{'='*70}\n")
 

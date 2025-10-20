@@ -282,7 +282,7 @@ async def main():
 
     test_course_intel = {
         "segmentation": {
-            "primary_target": "budget",  # Valid segment value
+            "primary_target": "unknown",
             "confidence": 5,
             "signals": ["Test data"]
         },
