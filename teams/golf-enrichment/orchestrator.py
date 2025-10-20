@@ -33,6 +33,7 @@ from agent2_data_extractor import extract_contact_data
 from agent6_course_intelligence import enrich_course as enrich_course_intel
 from agent7_water_hazard_counter import count_water_hazards
 from agent3_contact_enricher import enrich_contact
+from agent4_linkedin_finder import find_linkedin
 from agent5_phone_finder import find_phone
 from agent65_contact_enrichment import enrich_contact_background
 from agent8_supabase_writer import write_to_supabase
@@ -129,16 +130,19 @@ async def enrich_course(
 
         website = course_data["data"].get("website")
 
-        # Need water hazards first for Agent 6's ball_retrieval scoring
-        # Quick inline water hazard count
-        print("   🌊 Getting water hazard count for opportunity scoring...")
+        # Need water hazards first for Agent 6's opportunity scoring
+        # Get SkyGolf data (water rating + fees for segmentation)
+        print("   🌊 Getting SkyGolf data (water + fees)...")
         water_data = await count_water_hazards(course_name, state_code, website)
-        water_count = water_data.get("water_hazard_count", 0)
+        water_rating = water_data.get("water_hazard_rating")  # scarce/moderate/heavy
+        skygolf_content = water_data.get("skygolf_content")  # Full page content
 
+        # Agent 6 uses water rating + SkyGolf content for fee-based segmentation
         course_intel = await enrich_course_intel(
             course_name,
             website or "",
-            water_count
+            water_hazard_rating=water_rating,
+            skygolf_content=skygolf_content
         )
 
         agent6_duration = time.time() - agent6_start
@@ -153,29 +157,34 @@ async def enrich_course(
         result["agent_results"]["agent6"] = course_intel
 
         # ====================================================================
-        # AGENT 7: Water Hazards (already counted above)
+        # AGENT 7: Water Hazards (already retrieved above via SkyGolf)
         # ====================================================================
-        print(f"🌊 [4/8] Agent 7: Water hazard count")
+        print(f"🌊 [4/8] Agent 7: Water hazard rating (SkyGolf)")
 
+        rating = water_data.get("water_hazard_rating")
         count = water_data.get("water_hazard_count")
-        confidence = water_data.get("confidence", "unknown")
+        source = water_data.get("source", "unknown")
 
-        if count:
-            print(f"   ✅ Found: {count} water hazards ({confidence} confidence)")
+        if rating:
+            print(f"   ✅ Rating: {rating.upper()}")
+            if count:
+                print(f"   ✅ Specific count: {count} holes")
+            print(f"   Source: SkyGolf database")
         else:
-            print(f"   ⚠️  Not found ({confidence})")
+            print(f"   ⚠️  Not found in SkyGolf (40% of courses don't have this data)")
 
-        print(f"   💰 Cost: ${water_data.get('cost', 0):.4f} (included in Agent 6)\n")
+        print(f"   💰 Cost: $0.00 (FREE - SkyGolf scraping)\n")
 
         result["agent_results"]["agent7"] = water_data
 
         # ====================================================================
-        # AGENTS 3, 5, 6.5: Enrich Each Contact
+        # AGENTS 3, 4, 5, 6.5: Enrich Each Contact
         # ====================================================================
-        print(f"👥 [5/8] Enriching {len(staff)} contacts (Agents 3, 5, 6.5)...\n")
+        print(f"👥 [5/8] Enriching {len(staff)} contacts (Agents 3, 4, 5, 6.5)...\n")
 
         enriched_contacts = []
         total_agent3_cost = 0
+        total_agent4_cost = 0
         total_agent5_cost = 0
         total_agent65_cost = 0
 
@@ -228,6 +237,43 @@ async def enrich_course(
             except Exception as e:
                 print(f"         ❌ Error: {e}")
                 contact["_agent3_error"] = str(e)
+
+            # ----------------------------------------------------------------
+            # AGENT 4: LinkedIn (if not found by Agent 3)
+            # ----------------------------------------------------------------
+            # Only run Agent 4 if Agent 3 didn't find LinkedIn
+            if not contact.get("linkedin_url"):
+                print(f"      🔗 Agent 4: Finding LinkedIn (dedicated search)...")
+                agent4_start = time.time()
+
+                try:
+                    linkedin_result = await find_linkedin(
+                        contact,
+                        course_data["data"].get("course_name"),
+                        state_code
+                    )
+
+                    agent4_duration = time.time() - agent4_start
+                    agent4_cost = linkedin_result.get("_agent4_cost", 0)
+                    total_agent4_cost += agent4_cost
+
+                    # Merge LinkedIn data
+                    contact.update(linkedin_result)
+
+                    linkedin = linkedin_result.get("linkedin_url")
+                    if linkedin:
+                        print(f"         ✅ LinkedIn: {linkedin}")
+                        print(f"         Method: {linkedin_result.get('linkedin_method')}")
+                    else:
+                        print(f"         ⚠️  LinkedIn: Not found (tried Firecrawl + fallbacks)")
+
+                    print(f"         💰 ${agent4_cost:.4f} | ⏱️  {agent4_duration:.1f}s")
+
+                except Exception as e:
+                    print(f"         ❌ Error: {e}")
+                    contact["_agent4_error"] = str(e)
+            else:
+                print(f"      🔗 Agent 4: Skipped (LinkedIn found by Agent 3)")
 
             # ----------------------------------------------------------------
             # AGENT 5: Phone Number
@@ -303,6 +349,7 @@ async def enrich_course(
             course_intel.get("cost", 0) +
             water_data.get("cost", 0) +
             total_agent3_cost +
+            total_agent4_cost +
             total_agent5_cost +
             total_agent65_cost,
             4

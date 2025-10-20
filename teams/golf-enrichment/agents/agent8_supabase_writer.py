@@ -103,8 +103,10 @@ async def write_to_supabase(
             "range_intel": json.dumps(course_intel.get("range_intel", {})),
             "opportunities": json.dumps(course_intel.get("opportunities", {})),
 
-            # Agent 7: Water Hazards
-            "water_hazards": water_data.get("water_hazard_count"),
+            # Agent 7: Water Hazards (SkyGolf ratings + optional count)
+            "water_hazards": water_data.get("water_hazard_count"),  # Integer or NULL
+            "water_hazard_rating": water_data.get("water_hazard_rating"),  # scarce/moderate/heavy or NULL
+            "water_hazard_source": water_data.get("source"),  # skygolf/verified/not_found
             "water_hazard_confidence": water_data.get("confidence"),
 
             # Cost Tracking

@@ -111,29 +111,12 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
             raise Exception("Agent 2: No staff contacts found")
 
         # ================================================================
-        # AGENT 6: Course Intelligence
+        # AGENT 7: Water Hazards (SkyGolf Database) - RUN FIRST!
         # ================================================================
-        print("🎯 [3/8] Agent 6 (Local): Gathering course intelligence...")
-        agent6_start = time.time()
-
-        website = agent2_result["data"].get("website")
-        agent6_result = await enrich_course_intel(website, course_name, state_code)
-        agent6_duration = time.time() - agent6_start
-
-        baseline["agent_results"]["agent6"] = agent6_result
-
-        segment = agent6_result.get("segmentation", {}).get("primary_target")
-        confidence = agent6_result.get("segmentation", {}).get("confidence")
-
-        print(f"   ✅ Segment: {segment} (confidence: {confidence}/10)")
-        print(f"   💰 Cost: ${agent6_result.get('cost', 0):.4f} | ⏱️  {agent6_duration:.1f}s\n")
-
-        # ================================================================
-        # AGENT 7: Water Hazards
-        # ================================================================
-        print("💧 [4/8] Agent 7 (Local): Counting water hazards...")
+        print("💧 [3/8] Agent 7 (Local): Finding water hazard rating...")
         agent7_start = time.time()
 
+        website = agent2_result["data"].get("website")
         agent7_result = await count_water_hazards(
             course_name,
             state_code,
@@ -143,30 +126,83 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
 
         baseline["agent_results"]["agent7"] = agent7_result
 
-        print(f"   ✅ Count: {agent7_result.get('water_hazard_count')}")
+        rating = agent7_result.get('water_hazard_rating')
+        count = agent7_result.get('water_hazard_count')
+
+        if rating:
+            print(f"   ✅ Rating: {rating.UPPER()}")
+            if count:
+                print(f"   ✅ Specific count: {count} holes")
+        else:
+            print("   ⚠️  Not found in SkyGolf")
+
         print(f"   💰 Cost: ${agent7_result.get('cost', 0):.4f} | ⏱️  {agent7_duration:.1f}s\n")
 
         # ================================================================
-        # CONTACT ENRICHMENT: Agents 3, 5, 6.5
+        # AGENT 6: Course Intelligence (Uses SkyGolf data from Agent 7)
         # ================================================================
-        print(f"👥 [5/8] Enriching {len(staff)} contacts (Agents 3, 5, 6.5)...\n")
+        print("🎯 [4/8] Agent 6 (Local): Fee-based course segmentation...")
+        agent6_start = time.time()
+
+        # Pass SkyGolf content from Agent 7 to Agent 6 (reuse data!)
+        agent6_result = await enrich_course_intel(
+            course_name,
+            website or "",
+            water_hazard_rating=rating,
+            skygolf_content=agent7_result.get('skygolf_content')
+        )
+        agent6_duration = time.time() - agent6_start
+
+        baseline["agent_results"]["agent6"] = agent6_result
+
+        segment = agent6_result.get("segmentation", {}).get("primary_target")
+        confidence = agent6_result.get("segmentation", {}).get("confidence")
+        weekend_fee = agent6_result.get("segmentation", {}).get("weekend_fee")
+
+        print(f"   ✅ Segment: {segment.upper()} (confidence: {confidence}/10)")
+        if weekend_fee:
+            print(f"   💵 Weekend fee: ${weekend_fee}")
+        print(f"   💰 Cost: ${agent6_result.get('cost', 0):.4f} | ⏱️  {agent6_duration:.1f}s\n")
+
+        # ================================================================
+        # CONTACT ENRICHMENT: Agents 3, 4, 5, 6.5
+        # ================================================================
+        print(f"👥 [5/8] Enriching {len(staff)} contacts (Agents 3, 4, 5, 6.5)...\n")
 
         total_agent3_cost = 0
+        total_agent4_cost = 0
         total_agent5_cost = 0
         total_agent65_cost = 0
 
         for idx, contact in enumerate(staff[:4], 1):  # Limit to 4 contacts
             print(f"   Contact {idx}/{min(len(staff), 4)}: {contact.get('name')} ({contact.get('title')})")
 
-            # Agent 3: Email + LinkedIn
+            # Agent 3: Email + LinkedIn (via Hunter.io)
             print("      📧 Agent 3 (Local): Finding email...")
             try:
                 agent3_result = await enrich_contact(contact, website)
                 contact.update(agent3_result)
                 total_agent3_cost += agent3_result.get("_agent3_cost", 0)
                 print(f"         ✅ Email: {contact.get('email', 'Not found')}")
+                if contact.get('linkedin_url'):
+                    print("         ✅ LinkedIn: Found (via Hunter.io)")
             except Exception as e:
                 print(f"         ❌ Error: {e}")
+
+            # Agent 4: LinkedIn (if not found by Agent 3)
+            if not contact.get('linkedin_url'):
+                print("      🔗 Agent 4 (Local): Finding LinkedIn...")
+                try:
+                    agent4_result = await find_linkedin(contact, course_name, state_code)
+                    contact.update(agent4_result)
+                    total_agent4_cost += agent4_result.get("_agent4_cost", 0)
+                    if contact.get('linkedin_url'):
+                        print(f"         ✅ LinkedIn: {contact.get('linkedin_url')}")
+                        print(f"         Method: {agent4_result.get('linkedin_method')}")
+                    else:
+                        print("         ⚠️  LinkedIn: Not found")
+                except Exception as e:
+                    print(f"         ❌ Error: {e}")
 
             # Agent 5: Phone
             print("      📱 Agent 5 (Local): Finding phone...")
@@ -203,6 +239,7 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
             agent6_result.get("cost", 0) +
             agent7_result.get("cost", 0) +
             total_agent3_cost +
+            total_agent4_cost +
             total_agent5_cost +
             total_agent65_cost,
             4
@@ -218,6 +255,7 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
                 "agent6": agent6_result.get("cost", 0),
                 "agent7": agent7_result.get("cost", 0),
                 "agent3": round(total_agent3_cost, 4),
+                "agent4": round(total_agent4_cost, 4),
                 "agent5": round(total_agent5_cost, 4),
                 "agent65": round(total_agent65_cost, 4)
             }
