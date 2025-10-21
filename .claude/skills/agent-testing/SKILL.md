@@ -1,6 +1,6 @@
 ---
 name: Agent Testing SOP
-description: Complete 6-stage methodology for testing AI agents with architecture patterns for agent consolidation, data flow optimization, and production deployment. Covers MCP validation, implementation, database integration, Docker testing, and controlled production rollout. Validates data accuracy, eliminates hallucination, reduces costs through rapid iteration. Use when developing new agents, fixing bugs, optimizing architecture, or validating changes before production.
+description: Complete 7-stage methodology for testing AI agents with architecture patterns for agent consolidation, data flow optimization, and production deployment. Covers MCP validation, implementation, database integration, Docker testing, production deployment, and log validation. Validates data accuracy, eliminates hallucination, reduces costs through rapid iteration. Use when developing new agents, fixing bugs, optimizing architecture, or validating changes before production.
 allowed-tools: Read, Bash, Edit, Write, mcp__firecrawl__firecrawl_search, mcp__firecrawl__firecrawl_scrape, mcp__BrightData__search_engine, mcp__BrightData__scrape_as_markdown, mcp__jina__jina_search, mcp__jina__jina_reader, mcp__perplexity-ask__perplexity_ask, mcp__supabase__execute_sql, mcp__supabase__list_tables
 ---
 
@@ -25,7 +25,7 @@ allowed-tools: Read, Bash, Edit, Write, mcp__firecrawl__firecrawl_search, mcp__f
 
 ---
 
-## 📐 The 6-Stage Testing Process
+## 📐 The 7-Stage Testing Process
 
 ### **Stage 1: Design Agent Logic**
 Define what the agent should do (inputs, outputs, success criteria).
@@ -47,15 +47,20 @@ Test agent with 2-3 different tools to ensure consistency.
 
 **See:** `STAGE4_VALIDATE.md` (placeholder)
 
-### **Stage 5: Database Integration** ⭐ NEW!
+### **Stage 5: Database Integration**
 Validate agents write data correctly using test tables that mirror production.
 
 **See:** `STAGE5_DATABASE_INTEGRATION.md`
 
-### **Stage 6: Docker & Deployment** ⭐ NEW!
-Test in Docker container, compare to baseline, deploy to production.
+### **Stage 6: Docker Testing**
+Test in Docker container, compare to baseline, validate containerization.
 
 **See:** `STAGE6_DOCKER_TESTING.md`
+
+### **Stage 7: Production Deployment & Validation** ⭐ NEW!
+Deploy to production (Render), validate via logs, verify database changes.
+
+**See:** `STAGE7_PRODUCTION_DEPLOYMENT.md`
 
 ---
 
@@ -156,12 +161,13 @@ Test in Docker container, compare to baseline, deploy to production.
 - `STAGE2_MCP_TESTING.md` - MCP validation methodology ⭐ CRITICAL
 - `STAGE5_DATABASE_INTEGRATION.md` - Database testing with test tables
 - `STAGE6_DOCKER_TESTING.md` - Docker validation & deployment
+- `STAGE7_PRODUCTION_DEPLOYMENT.md` - Production deployment & log validation ⭐ NEW!
 
 **Design & Architecture:**
-- `ARCHITECTURE_PATTERNS.md` - Agent design patterns (consolidation, specialization, data reuse) ⭐ NEW!
+- `ARCHITECTURE_PATTERNS.md` - 14 agent design patterns (consolidation, specialization, parameter flow) ⭐ UPDATED!
 
 **Real Examples:**
-- `EXAMPLES.md` - 4 case studies from golf enrichment
+- `EXAMPLES.md` - 5 case studies from golf enrichment ⭐ UPDATED!
 
 **Placeholders (to be created):**
 - `STAGE1_DESIGN.md` - Agent design principles

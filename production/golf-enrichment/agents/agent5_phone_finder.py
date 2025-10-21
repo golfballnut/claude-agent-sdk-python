@@ -129,7 +129,8 @@ async def find_phone_tool(args: dict[str, Any]) -> dict[str, Any]:
 
                 # Extract phone numbers
                 # Patterns: (XXX) XXX-XXXX, XXX-XXX-XXXX, XXX.XXX.XXXX, with optional ext
-                phone_pattern = r'\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}(?:\s?(?:ext|x)\.?\s?\d+)?'
+                # Fixed: Requires BOTH parens or NEITHER (no mixing!)
+                phone_pattern = r'(?:\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}(?:\s?(?:ext|x)\.?\s?\d+)?'
                 phones = re.findall(phone_pattern, response_text)
 
                 if phones:

@@ -644,6 +644,405 @@ NOTIFY pgrst, 'reload schema';
 
 ---
 
+## Pattern 11: API-Orchestrator-Agent Parameter Flow ⭐
+
+### **Problem**
+Parameters accepted by lower layers (Agent) but not passed through upper layers (API → Orchestrator).
+
+### **Anti-Pattern:**
+```python
+# Agent 8: Accepts course_id parameter
+async def write_to_supabase(
+    course_data,
+    course_id: int | None = None  # ✅ Agent supports it
+):
+    if course_id:
+        # Update by ID (no name mismatch!)
+        ...
+
+# Orchestrator: Passes course_id to Agent 8
+result = await write_to_supabase(
+    course_data,
+    course_id=course_id  # ✅ Orchestrator passes it
+)
+
+# API: Doesn't have course_id field!
+class EnrichCourseRequest(BaseModel):
+    course_name: str  # ❌ No course_id field!
+    state_code: str
+
+# API endpoint: Doesn't pass course_id
+result = await orchestrator_enrich_course(
+    course_name=request.course_name,
+    state_code=request.state_code
+    # ❌ course_id not passed! Always None at Agent 8
+)
+```
+
+### **Better Pattern:**
+```python
+# 1. API Model: Accept parameter
+class EnrichCourseRequest(BaseModel):
+    course_name: str
+    course_id: int | None = None  # ✅ Added
+
+# 2. API Endpoint: Pass parameter
+result = await orchestrator_enrich_course(
+    course_name=request.course_name,
+    course_id=request.course_id,  # ✅ Pass through
+    state_code=request.state_code
+)
+
+# 3. Orchestrator: Pass parameter
+result = await write_to_supabase(
+    course_data,
+    course_id=course_id  # ✅ Pass through
+)
+
+# 4. Agent: Use parameter
+if course_id:
+    # Update by ID ✅
+```
+
+### **Real Example:**
+- **Problem:** course_id supported by Agent 8, but API didn't accept/pass it
+- **Result:** Agent 8 fell back to name lookup → created duplicate course 445
+- **Fix:** Added course_id to API model + endpoint
+- **Outcome:** Course 133 updated correctly (no duplicate)
+
+### **Debugging Strategy:**
+1. **Trace parameter through ALL layers:**
+   - Check API request model (Pydantic schema)
+   - Check API endpoint handler (function call)
+   - Check orchestrator function signature
+   - Check agent function signature
+2. **Verify parameter actually reaches agent:**
+   - Add logging at each layer
+   - Check production logs
+   - Validate parameter value at destination
+
+### **When to Apply:**
+- Adding new optional parameters
+- Debugging "parameter not working" issues
+- Integrating multi-layer systems
+- After syncing code (verify sync copied API changes)
+
+### **Benefits:**
+✅ Parameters flow end-to-end
+✅ Optional params work as designed
+✅ Prevents subtle parameter bugs
+✅ Easier to add new params later
+
+---
+
+## Pattern 12: Sync Script Completeness ⭐
+
+### **Problem**
+Sync scripts copy some files but miss critical deployment files (especially api.py).
+
+### **Anti-Pattern:**
+```python
+# sync_to_production.py
+def sync_team_to_production(team_name):
+    # Copy agents ✅
+    shutil.copy(team_dir / "agents", prod_dir / "agents")
+
+    # Copy orchestrator ✅
+    shutil.copy(team_dir / "orchestrator.py", prod_dir / "orchestrator.py")
+
+    # Copy utils ✅
+    shutil.copy(shared_dir / "utils", prod_dir / "template/utils")
+
+    # ❌ MISSING: api.py is NOT copied!
+```
+
+### **Better Pattern:**
+```python
+def sync_team_to_production(team_name):
+    # 1. Copy agents
+    copy_dir(team_dir / "agents", prod_dir / "agents")
+
+    # 2. Copy orchestrator
+    copy_file(team_dir / "orchestrator.py", prod_dir / "orchestrator.py")
+
+    # 3. Copy API ✅
+    copy_file(team_dir / "api.py", prod_dir / "api.py")
+
+    # 4. Copy utils
+    copy_dir(shared_dir / "utils", prod_dir / "template/utils")
+
+    # 5. Copy requirements
+    copy_file(team_dir / "requirements.txt", prod_dir / "requirements.txt")
+
+    # 6. Copy config (if exists)
+    if (team_dir / "config.py").exists():
+        copy_file(team_dir / "config.py", prod_dir / "config.py")
+```
+
+### **Real Example:**
+- **Problem:** teams/api.py had course_id fix, but sync script didn't copy api.py
+- **Result:** Production api.py was outdated, fix didn't deploy
+- **Fix:** Added api.py to sync script
+- **Outcome:** Production deployment worked after re-sync
+
+### **Deployment Checklist:**
+```bash
+# After syncing, verify all files copied:
+- [ ] agents/*.py (all agent files)
+- [ ] orchestrator.py
+- [ ] api.py ⭐ (often forgotten!)
+- [ ] requirements.txt
+- [ ] shared/utils/*.py
+- [ ] config files (if any)
+- [ ] .env.example (if any)
+```
+
+### **When to Apply:**
+- Creating sync scripts
+- Debugging "fix not deploying" issues
+- After code refactoring (file moves)
+- Setting up new agent teams
+
+### **Testing Sync Scripts:**
+```bash
+# 1. Make change in teams/ folder
+echo "# test" >> teams/my-team/api.py
+
+# 2. Run sync
+python production/scripts/sync_to_production.py my-team
+
+# 3. Verify file copied
+diff teams/my-team/api.py production/my-team/api.py
+# Should be identical!
+```
+
+### **Benefits:**
+✅ All code changes deploy
+✅ No "forgot to sync X" errors
+✅ Repeatable deployments
+✅ Easier onboarding (just run sync)
+
+---
+
+## Pattern 13: ID-based Upserts Over Name Lookups ⭐
+
+### **Problem**
+Name-based database lookups fail on minor variations (punctuation, casing, spacing), creating duplicate records.
+
+### **Anti-Pattern:**
+```python
+# Agent 8: Upsert by name only
+async def write_to_supabase(course_data):
+    course_name = course_data.get("course_name")
+
+    # Look up by name
+    existing = supabase.table("golf_courses")\
+        .select("id")\
+        .eq("course_name", course_name)\  # ❌ Exact match required
+        .maybe_single()\
+        .execute()
+
+    if existing:
+        # Update existing
+        course_id = existing.data["id"]
+    else:
+        # Insert new (creates duplicate if name differs!)
+        result = supabase.table("golf_courses").insert(course_data).execute()
+        course_id = result.data[0]["id"]
+```
+
+### **Better Pattern:**
+```python
+async def write_to_supabase(
+    course_data,
+    course_id: int | None = None  # ✅ Accept ID as optional param
+):
+    # Prefer ID-based update
+    if course_id:
+        # Update by ID (no name mismatch issues!)
+        supabase.table("golf_courses")\
+            .update(course_data)\
+            .eq("id", course_id)\
+            .execute()
+        return course_id
+
+    # Fallback: Name lookup (only if ID not provided)
+    course_name = course_data.get("course_name")
+    existing = supabase.table("golf_courses")\
+        .select("id")\
+        .eq("course_name", course_name)\
+        .maybe_single()\
+        .execute()
+
+    if existing:
+        course_id = existing.data["id"]
+        supabase.table("golf_courses").update(course_data).eq("id", course_id).execute()
+    else:
+        result = supabase.table("golf_courses").insert(course_data).execute()
+        course_id = result.data[0]["id"]
+
+    return course_id
+```
+
+### **Real Example:**
+- **Database:** "Chantilly National Golf **and** Country Club" (course 133)
+- **Agent 2 extracted:** "Chantilly National Golf **&** Country Club"
+- **Name lookup failed** → created duplicate course 445
+- **Fix:** Pass course_id=133 to API → Agent 8 updates by ID
+- **Result:** Course 133 updated correctly (no duplicate)
+
+### **Common Name Mismatch Causes:**
+```
+"and" vs "&"
+"Golf Club" vs "Golf Course"
+"St." vs "Saint"
+"The XYZ Club" vs "XYZ Club"
+Extra spaces, punctuation
+```
+
+### **When to Apply:**
+- Database upsert operations
+- Systems with human-entered data
+- Multi-source data (different scrapers)
+- When IDs are available upstream
+
+### **API Design:**
+```python
+# Make ID optional but preferred
+class UpdateRequest(BaseModel):
+    id: int | None = None  # ✅ Optional but preferred
+    name: str              # ✅ Required (fallback lookup)
+    # ... other fields
+```
+
+### **Benefits:**
+✅ No duplicates from typos
+✅ Reliable updates
+✅ Faster (no string comparison)
+✅ Backwards compatible (ID optional)
+
+---
+
+## Pattern 14: Production Log Validation ⭐
+
+### **Problem**
+Assuming deployments work correctly without verifying actual production behavior.
+
+### **Anti-Pattern:**
+```bash
+# Deploy code
+git push origin main
+
+# ❌ Assume it works (no validation!)
+# "It compiled, ship it!"
+```
+
+### **Better Pattern:**
+```bash
+# 1. Deploy code
+git push origin main
+
+# 2. Wait for deployment
+# Watch Render dashboard or check deployment status
+
+# 3. Fetch production logs
+render logs --tail 100
+
+# 4. Validate architectural changes in logs
+grep "Agent" logs.txt  # Check agent count
+grep "course_id" logs.txt  # Check parameter usage
+grep "ERROR" logs.txt  # Check for errors
+
+# 5. Test production endpoint
+curl -X POST https://api.example.com/enrich-course \
+  -d '{"course_id": 133, ...}'
+
+# 6. Verify database changes
+SELECT * FROM courses WHERE id = 133;
+```
+
+### **Real Example - Agent 4 Consolidation Validation:**
+```
+✅ Verified in logs:
+   "Service: Full Enrichment Pipeline (Agents 1-8)"  ← Was 1-9!
+   "🔗 Agent 4: Finding LinkedIn + Tenure (specialist)..."
+   "Method: firecrawl_search"
+   "⚠️ Tenure: Not in search description"
+   No mention of "Agent 6.5" anywhere
+
+✅ Verified in logs - course_id fix:
+   "✅ Using provided course_id: 133"
+   "✅ Updated course ID: 133"
+   Not: "✅ Created new course (ID: 445)"
+
+✅ Verified in database:
+   Course 133 updated (not duplicate 445 created)
+```
+
+### **What to Check in Production Logs:**
+
+**1. Architecture Changes:**
+- Agent count ("Agents 1-8" vs "Agents 1-9")
+- New agent logic executing
+- Old agent logic NOT executing
+
+**2. Parameter Flow:**
+- Parameters being received
+- Parameters being used
+- Parameters reaching destination
+
+**3. Data Operations:**
+- Correct database operations (UPDATE vs INSERT)
+- Correct IDs being used
+- No duplicate creations
+
+**4. Error Patterns:**
+- New errors introduced?
+- Old errors fixed?
+- Unexpected warnings?
+
+### **Log Analysis Tools:**
+```bash
+# Count agent executions
+grep -c "Agent 4:" production.log
+
+# Check parameter usage
+grep "course_id" production.log | grep -E "(Using|Updated)"
+
+# Check for duplicates
+grep "Created new course" production.log | wc -l
+
+# Check costs
+grep "Total Cost:" production.log | awk '{sum+=$4} END {print sum}'
+```
+
+### **When to Apply:**
+- After architectural changes
+- After bug fixes
+- After parameter additions
+- Before declaring "ready for production"
+
+### **Validation Checklist:**
+```
+- [ ] Deployment succeeded (Render shows "Live")
+- [ ] Logs show new code executing
+- [ ] Logs show old code NOT executing
+- [ ] Parameters flowing correctly
+- [ ] Database operations correct
+- [ ] No new errors introduced
+- [ ] Test endpoint returns expected results
+- [ ] Database queries show expected data
+```
+
+### **Benefits:**
+✅ Catch deployment issues early
+✅ Verify architectural changes working
+✅ Build deployment confidence
+✅ Document "proof it works"
+✅ Easier debugging (concrete evidence)
+
+---
+
 ## Success Metrics
 
 **Applied these patterns in golf enrichment:**
@@ -653,13 +1052,18 @@ NOTIFY pgrst, 'reload schema';
 - ✅ Used test_*.py files (Pattern 4)
 - ✅ Fixed 3 constraints iteratively (Pattern 5)
 - ✅ Tested 3 courses individually (Pattern 6)
+- ✅ Added course_id to API flow (Pattern 11)
+- ✅ Fixed sync script for api.py (Pattern 12)
+- ✅ ID-based upserts prevent duplicates (Pattern 13)
+- ✅ Validated via Render logs (Pattern 14)
 
 **Results:**
 - Agents: 9 → 8 (11% reduction)
 - Cost: $0.003 saved per contact with tenure
-- Reliability: Higher (no LinkedIn blocking)
-- Confidence: 100% (validated through 6 stages)
+- Reliability: Higher (no LinkedIn blocking, no duplicates)
+- Confidence: 100% (validated through all 7 stages)
+- Production: 100% success rate (4 courses tested)
 
 ---
 
-**These patterns apply to ANY agent team using Claude SDK + MCP + Supabase!**
+**These 14 patterns apply to ANY agent team using Claude SDK + MCP + Supabase!**
