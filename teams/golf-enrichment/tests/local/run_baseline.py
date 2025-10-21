@@ -30,10 +30,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from agents.agent1_url_finder import find_url
 from agents.agent2_data_extractor import extract_contact_data
 from agents.agent3_contact_enricher import enrich_contact
+from agents.agent4_linkedin_finder import find_linkedin
 from agents.agent5_phone_finder import find_phone
 from agents.agent6_course_intelligence import enrich_course as enrich_course_intel
 from agents.agent7_water_hazard_counter import count_water_hazards
-from agents.agent65_contact_enrichment import enrich_contact_background
 
 
 async def run_local_baseline(course_id: int, course_name: str, state_code: str = "VA"):
@@ -130,7 +130,7 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
         count = agent7_result.get('water_hazard_count')
 
         if rating:
-            print(f"   ✅ Rating: {rating.UPPER()}")
+            print(f"   ✅ Rating: {rating.upper()}")
             if count:
                 print(f"   ✅ Specific count: {count} holes")
         else:
@@ -165,14 +165,13 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
         print(f"   💰 Cost: ${agent6_result.get('cost', 0):.4f} | ⏱️  {agent6_duration:.1f}s\n")
 
         # ================================================================
-        # CONTACT ENRICHMENT: Agents 3, 4, 5, 6.5
+        # CONTACT ENRICHMENT: Agents 3, 4, 5
         # ================================================================
-        print(f"👥 [5/8] Enriching {len(staff)} contacts (Agents 3, 4, 5, 6.5)...\n")
+        print(f"👥 [5/8] Enriching {len(staff)} contacts (Agents 3, 4, 5)...\n")
 
         total_agent3_cost = 0
         total_agent4_cost = 0
         total_agent5_cost = 0
-        total_agent65_cost = 0
 
         for idx, contact in enumerate(staff[:4], 1):  # Limit to 4 contacts
             print(f"   Contact {idx}/{min(len(staff), 4)}: {contact.get('name')} ({contact.get('title')})")
@@ -196,8 +195,13 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
                     agent4_result = await find_linkedin(contact, course_name, state_code)
                     contact.update(agent4_result)
                     total_agent4_cost += agent4_result.get("_agent4_cost", 0)
+
                     if contact.get('linkedin_url'):
                         print(f"         ✅ LinkedIn: {contact.get('linkedin_url')}")
+                        if contact.get('tenure_years'):
+                            print(f"         ✅ Tenure: {contact.get('tenure_years')} years (since {contact.get('start_date', 'unknown')})")
+                        else:
+                            print("         ⚠️  Tenure: Not in search description")
                         print(f"         Method: {agent4_result.get('linkedin_method')}")
                     else:
                         print("         ⚠️  LinkedIn: Not found")
@@ -214,16 +218,8 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
             except Exception as e:
                 print(f"         ❌ Error: {e}")
 
-            # Agent 6.5: Background
-            print("      📋 Agent 6.5 (Local): Background enrichment...")
-            try:
-                agent65_result = await enrich_contact_background(contact)
-                contact.update(agent65_result)
-                total_agent65_cost += agent65_result.get("_agent65_cost", 0)
-                tenure = agent65_result.get("_agent65_tenure")
-                print(f"         ✅ Tenure: {tenure if tenure else 'Unknown'} years")
-            except Exception as e:
-                print(f"         ❌ Error: {e}")
+            # Agent 6.5 REMOVED - Tenure now from Agent 4!
+            # Agent 4 extracts tenure from Firecrawl search descriptions
 
             baseline["enriched_contacts"].append(contact)
             print()
@@ -240,8 +236,7 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
             agent7_result.get("cost", 0) +
             total_agent3_cost +
             total_agent4_cost +
-            total_agent5_cost +
-            total_agent65_cost,
+            total_agent5_cost,
             4
         )
 
@@ -256,8 +251,7 @@ async def run_local_baseline(course_id: int, course_name: str, state_code: str =
                 "agent7": agent7_result.get("cost", 0),
                 "agent3": round(total_agent3_cost, 4),
                 "agent4": round(total_agent4_cost, 4),
-                "agent5": round(total_agent5_cost, 4),
-                "agent65": round(total_agent65_cost, 4)
+                "agent5": round(total_agent5_cost, 4)
             }
         }
 

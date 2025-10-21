@@ -1,0 +1,95 @@
+{
+  "test_type": "local_baseline",
+  "course_id": 108,
+  "course_name": "Brambleton Golf Course",
+  "state_code": "VA",
+  "timestamp": "2025-10-20T23:24:23.968360",
+  "agent_results": {
+    "agent1": {
+      "url": "https://vsga.org/courselisting/11748?hsLang=en",
+      "cost": 0.0131249,
+      "turns": 4
+    },
+    "agent2": {
+      "url": "https://vsga.org/courselisting/11748?hsLang=en",
+      "data": {
+        "course_name": "Brambleton Golf Course",
+        "website": "https://www.novaparks.com/golf/brambleton-golf-course",
+        "phone": "(703) 327-3403",
+        "staff": [
+          {
+            "name": "Dustin Betthauser",
+            "title": "General Manager"
+          },
+          {
+            "name": "Bryan McFerren",
+            "title": "Superintendent"
+          }
+        ]
+      },
+      "cost": 0.0058849,
+      "turns": 4
+    },
+    "agent7": {
+      "water_hazard_rating": "scarce",
+      "water_hazard_count": null,
+      "source": "skygolf",
+      "confidence": "high",
+      "cost": 0.0,
+      "found": true,
+      "details": [
+        "SkyGolf rating: scarce"
+      ],
+      "skygolf_url": "https://smclubsg.skygolf.com/courses/course/15901/Brambleton_Golf_Course.html",
+      "skygolf_content": "Title: SkyGolf Courses\n\nURL Source: https://smclubsg.skygolf.com/courses/course/15901/Brambleton_Golf_Course.html\n\nMarkdown Content:\nLoading...\n\n![Image 1](https://downloads.skygolf.com/holevue/courseVersionId=176880&holeNumber=18&cw=70&maxheight=200)\n\n#18\n\nBrambleton Golf Course\n\n42180 Ryan Rd\n\nAshburn, VA 20148-6920, United States\n\n703.327.3403\n\nBrambleton Golf Course is a public course owned and operated by the Northern Virginia Regional Park Authority, and located in a well-wooded part of Loudoun County.\n\nThe standard walking rates are $35 Mondays through Thursdays, then $47 on Fridays, weekends, and holidays (carts are $16/person).\n\nread more\n\nThis course has updated information like phone, address, description or scorecard and is pending approval. These changes must be approved before they will be available on a SkyCaddie.\n\n![Image 2](https://smclubsg.skygolf.com/images/icons/16x16/w_star_blank.png)\n\nAverage Rating\n\nYour Review\n\n*   [Overview](https://smclubsg.skygolf.com/courses/course/15901/Brambleton_Golf_Course.html#)\n*   [Scorecard](https://smclubsg.skygolf.com/courses/course/15901/Brambleton_Golf_Course.html)\n*   [Statistics](https://smclubsg.skygolf.com/courses/course/15901/Brambleton_Golf_Course.html)\n*   [Tournament](https://smclubsg.skygolf.com/courses/course/15901/Brambleton_Golf_Course.html)\n*   [Reviews](https://smclubsg.skygolf.com/courses/course/15901/Brambleton_Golf_Course.html)\n\nCourse Details\n\n* * *\n\nType:Public\nGreens Fees (including cart):\nWeekday:$50 - $59\nWeekend:$60 - $74\nGeneral Manager:Dale Riggs\nGuest Policy:open\nDress Code:No Tanktops or Cuttoffs\nSeason Start:March\nSeason End:November\nReserved Tee Times:Online & Phone\nPro Shop :yes\nDriving Range:Grass hitting surface\nShort Game Practice:yes\nWater Hazards:Scarce\nSand Bunkers:Moderate\n\nNearby Courses\n\n* * *\n\nPhoto gallery\n\n* * *\n\nNo images uploaded for this course.\n\nScores\n\n* * *\n\nInclude 9-hole scores Best score per golfer to\n\n#\n\nUser\n\nDate\n\nPutts\n\nFwy %\n\nGIR %\n\nDiff\n\nNet\n\nFair\n\nScore\n\n(*): Score has gametracker data\n\nRecent Reviews\n\n* * *\n\n[dsc123](https://smclubsg.skygolf.com/golfers/dsc123) - 05/22/2012\n\nAverage muni course at twice the price.\n\n[cjgiant](https://smclubsg.skygolf.com/golfers/cjgiant) - 05/15/2011\n\nPlayed early in the year and the course was in fine shape. The rough had some height, and the greens were maybe a tad on the slow side, but there had just been recent rain.\n\nYour Review\n\n* * *\n\nOverall:\n\nValue:\n\nPace of Play:\n\nMaintenance:\n\nHospitality:\n\nScenery:\n\nCourse Admin\n\n* * *\n\n[Request Course Changes](http://remap.skygolf.com/Remap/usa/)\n"
+    },
+    "agent6": {
+      "segmentation": {
+        "primary_target": "both",
+        "confidence": 10,
+        "signals": [
+          "Weekend fee: $74 (mid-tier $50-74)",
+          "Weekday fee: $59"
+        ],
+        "weekend_fee": 74,
+        "weekday_fee": 59,
+        "fee_source": "skygolf"
+      },
+      "opportunities": {
+        "ball_retrieval": 7,
+        "ball_lease": 8,
+        "primary_pitch": "Buy used balls OR lease program"
+      },
+      "range_intel": {
+        "segment": "both",
+        "weekend_fee": 74,
+        "weekday_fee": 59
+      },
+      "cost": 0.0
+    }
+  },
+  "enriched_contacts": [
+    {
+      "name": "Dustin Betthauser",
+      "title": "General Manager"
+    },
+    {
+      "name": "Bryan McFerren",
+      "title": "Superintendent"
+    }
+  ],
+  "summary": {
+    "total_cost_usd": 0.019,
+    "total_duration_seconds": 23.0,
+    "contacts_enriched": 2,
+    "agent_costs": {
+      "agent1": 0.0131249,
+      "agent2": 0.0058849,
+      "agent6": 0.0,
+      "agent7": 0.0,
+      "agent3": 0,
+      "agent4": 0,
+      "agent5": 0
+    }
+  }
+}
