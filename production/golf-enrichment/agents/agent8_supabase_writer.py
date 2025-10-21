@@ -5,12 +5,13 @@ Writes enriched course and contact data to Supabase database
 
 Responsibilities:
 - Upsert golf_courses with Agent 2/6/7 data
-- Upsert golf_course_contacts with Agent 3/5/6.5 data
+- Upsert golf_course_contacts with Agent 3/4/5 data
+- Agent 4 provides LinkedIn URL and tenure (extracted from Firecrawl search)
 - Atomic operation (all-or-nothing)
 - Handle errors gracefully
 
 Schema Requirements:
-- Migrations 001 and 002 must be applied
+- Migrations 001-009 must be applied
 - See: docs/supabase_schema_design.md
 """
 
@@ -33,6 +34,9 @@ async def write_to_supabase(
     water_data: Dict[str, Any],
     enriched_contacts: List[Dict[str, Any]],
     state_code: str,  # Required: state code for the course
+    course_id: int | None = None,  # Optional: Course ID to update (avoids name mismatch)
+    total_cost: float = 0.0,  # Total cost from orchestrator
+    contacts_page_url: str | None = None,  # From Agent 1 (VSGA listing URL)
     use_test_tables: bool = True  # Default to test tables for safety
 ) -> Dict[str, Any]:
     """
@@ -44,6 +48,8 @@ async def write_to_supabase(
         water_data: Output from Agent 7
         enriched_contacts: Contacts from Agents 3/5/6.5
         state_code: State code (e.g., 'VA', 'MD', 'DC')
+        course_id: Optional course ID to update (if provided, skips name lookup)
+        total_cost: Total enrichment cost in USD (for cost tracking)
         use_test_tables: If True, write to test_golf_courses/test_golf_course_contacts
                         If False, write to production golf_courses/golf_course_contacts
 
@@ -98,9 +104,19 @@ async def write_to_supabase(
             "range_intel": json.dumps(course_intel.get("range_intel", {})),
             "opportunities": json.dumps(course_intel.get("opportunities", {})),
 
-            # Agent 7: Water Hazards
-            "water_hazards": water_data.get("water_hazard_count"),
-            "water_hazard_confidence": water_data.get("confidence")
+            # Agent 7: Water Hazards (SkyGolf ratings + optional count)
+            "water_hazards": water_data.get("water_hazard_count"),  # Integer or NULL
+            "water_hazard_rating": water_data.get("water_hazard_rating"),  # scarce/moderate/heavy or NULL
+            "water_hazard_source": water_data.get("source"),  # skygolf/verified/not_found
+            "water_hazard_confidence": water_data.get("confidence"),
+
+            # Cost Tracking
+            "agent_cost_usd": total_cost,
+
+            # Contacts Page URL (from Agent 1 - VSGA listing where contacts were found)
+            "contacts_page_url": contacts_page_url,
+            "contacts_page_search_method": "vsga_directory" if contacts_page_url else None,
+            "contacts_page_found_at": datetime.utcnow().isoformat() if contacts_page_url else None
         }
 
         # Add production-only fields (test tables don't have these columns)
@@ -113,36 +129,47 @@ async def write_to_supabase(
         # ====================================================================
         print(f"   🏌️ Upserting course: {course_name}...")
 
-        # Check if course exists
-        try:
-            existing = supabase.table(course_table)\
-                .select("id")\
-                .eq("course_name", course_name)\
-                .maybe_single()\
-                .execute()
-        except Exception as e:
-            raise Exception(f"Failed to query {course_table} table: {e}. Make sure the table exists and has proper permissions.")
-
-        if existing and existing.data:
-            # Update existing
-            course_id = existing.data["id"]
+        # Use provided course_id if available (from API parameter)
+        if course_id:
+            print(f"      ✅ Using provided course_id: {course_id}")
+            # Update existing course by ID (skip name lookup)
             supabase.table(course_table)\
                 .update(course_record)\
                 .eq("id", course_id)\
                 .execute()
-            print(f"      ✅ Updated existing course (ID: {str(course_id)[:8]}...)")
+            print(f"      ✅ Updated course ID: {course_id}")
         else:
-            # Insert new
+            # Fallback: Check if course exists by name
+            print(f"      🔍 Looking up course by name: {course_name}")
             try:
-                result = supabase.table(course_table)\
-                    .insert(course_record)\
+                existing = supabase.table(course_table)\
+                    .select("id")\
+                    .eq("course_name", course_name)\
+                    .maybe_single()\
                     .execute()
-                if not result or not result.data or len(result.data) == 0:
-                    raise Exception(f"Insert to {course_table} returned empty result")
-                course_id = result.data[0]["id"]
-                print(f"      ✅ Created new course (ID: {str(course_id)[:8]}...)")
             except Exception as e:
-                raise Exception(f"Failed to insert into {course_table}: {e}")
+                raise Exception(f"Failed to query {course_table} table: {e}. Make sure the table exists and has proper permissions.")
+
+            if existing and existing.data:
+                # Update existing
+                course_id = existing.data["id"]
+                supabase.table(course_table)\
+                    .update(course_record)\
+                    .eq("id", course_id)\
+                    .execute()
+                print(f"      ✅ Updated existing course (ID: {course_id})")
+            else:
+                # Insert new
+                try:
+                    result = supabase.table(course_table)\
+                        .insert(course_record)\
+                        .execute()
+                    if not result or not result.data or len(result.data) == 0:
+                        raise Exception(f"Insert to {course_table} returned empty result")
+                    course_id = result.data[0]["id"]
+                    print(f"      ✅ Created new course (ID: {course_id})")
+                except Exception as e:
+                    raise Exception(f"Failed to insert into {course_table}: {e}")
 
         # ====================================================================
         # STEP 3: Upsert Contacts
@@ -183,9 +210,10 @@ async def write_to_supabase(
                 # Agent 5: Phone
                 "phone_confidence": contact.get("confidence"),
 
-                # Agent 6.5: Background
-                "tenure_years": contact.get("background", {}).get("tenure_years"),
-                "previous_clubs": json.dumps(contact.get("background", {}).get("previous_clubs", []))
+                # Agent 4: Tenure (from LinkedIn search description - NEW!)
+                "tenure_years": contact.get("tenure_years"),  # Top-level from Agent 4!
+                "tenure_start_date": contact.get("start_date"),  # From Agent 4
+                "previous_clubs": json.dumps(contact.get("previous_clubs", []) if contact.get("previous_clubs") else [])
             })
 
             # Test-only fields (these columns don't exist in production)
@@ -194,12 +222,10 @@ async def write_to_supabase(
                     "email_confidence": contact.get("email_confidence"),
                     "email_method": contact.get("email_method"),
                     "linkedin_method": contact.get("linkedin_method"),
+                    "linkedin_confidence": contact.get("linkedin_confidence"),
                     "phone_method": contact.get("method"),
-                    "tenure_confidence": contact.get("background", {}).get("tenure_confidence"),
-                    "industry_experience_years": contact.get("background", {}).get("industry_experience_years"),
-                    "responsibilities": json.dumps(contact.get("background", {}).get("responsibilities", [])),
-                    "career_notes": contact.get("background", {}).get("career_notes"),
-                    "agent65_enriched_at": datetime.utcnow().isoformat()
+                    "tenure_source": "agent4_search_description",  # From Agent 4 Firecrawl search
+                    "agent4_enriched_at": datetime.utcnow().isoformat()
                 })
             else:
                 # Production-only fields (use actual production column names)
