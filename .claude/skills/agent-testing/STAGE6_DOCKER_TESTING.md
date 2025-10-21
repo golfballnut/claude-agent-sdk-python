@@ -98,6 +98,103 @@ curl http://localhost:8000/health
 # Should return: {"status": "healthy"}
 ```
 
+### **Step 3.5: Validate Test Data Coverage (CRITICAL!) ⭐**
+
+**Problem:** Docker passing with "lucky" test data that doesn't exercise all code paths.
+
+**Before running enrichment, answer these questions:**
+
+#### **Question 1: Does my agent have multiple code paths?**
+```python
+# Example: Agent with fallback logic
+if data_in_cache:
+    return cache_data  # Path 1
+elif api_available:
+    return api_data    # Path 2
+else:
+    return None        # Path 3
+```
+
+**If YES → You MUST test all paths!**
+
+#### **Question 2: What's the real-world distribution?**
+
+Analyze production data or make educated estimates:
+```
+Agent 4 LinkedIn Finder:
+- 20% have tenure in search description
+- 80% need profile scraping
+- 5% have no LinkedIn
+
+→ Test data should include:
+  1 contact with tenure in description
+  4 contacts needing scraping
+  1 contact with no LinkedIn
+```
+
+#### **Question 3: Will my test data trigger ALL code paths?**
+
+**Before test:**
+```bash
+# Add debug logging to each branch:
+if linkedin_urls and not tenure_years:
+    print("🔍 DEBUG: Entering scraping path")  # Will you see this?
+```
+
+**After test:**
+```bash
+# Check logs - did you see the debug message?
+docker-compose logs | grep "DEBUG"
+
+# If any branch missing → Add test data to trigger it!
+```
+
+#### **Test Data Selection Checklist:**
+
+```
+□ Identified all code branches/paths in agent
+□ Estimated real-world % for each path
+□ Selected test contacts matching distribution
+□ Added debug logging to each code branch
+□ Ran Docker test
+□ Verified ALL debug messages appeared in logs
+□ If any path not executed → Added test data for it
+```
+
+**Example: Agent 4 Test Data (Good vs Bad):**
+
+❌ **Bad Test Data (Docker passed, production failed):**
+```python
+test_courses = [
+    "Brambleton",   # Dustin has tenure in description
+    "Bristow Manor" # Kevin has tenure in description
+]
+# Both contacts hit same code path (description extraction)
+# Scraping code never executed → Bug hidden!
+```
+
+✅ **Good Test Data (Would catch the bug):**
+```python
+test_courses = [
+    "Brambleton",      # 1 contact with tenure in description (20%)
+    "Chantilly National" # 4 contacts WITHOUT tenure (80% - needs scraping)
+]
+# Forces scraping code to execute
+# Would discover 400 Bad Request in Docker, not production!
+```
+
+---
+
+**⚠️ CRITICAL RULE: Don't Sync to Production Until ALL Code Paths Tested!**
+
+If Docker logs don't show ALL branches executing:
+1. Your test data is incomplete
+2. Add more diverse test cases
+3. Re-test until all paths covered
+4. ONLY THEN sync to production
+
+---
+
 ### **Step 4: Test Course Enrichment via Docker API (10 min)**
 
 **Test Course 108 (Brambleton):**

@@ -1056,6 +1056,7 @@ grep "Total Cost:" production.log | awk '{sum+=$4} END {print sum}'
 - ✅ Fixed sync script for api.py (Pattern 12)
 - ✅ ID-based upserts prevent duplicates (Pattern 13)
 - ✅ Validated via Render logs (Pattern 14)
+- ⚠️ Learned representative test data lesson (Pattern 15)
 
 **Results:**
 - Agents: 9 → 8 (11% reduction)
@@ -1066,4 +1067,105 @@ grep "Total Cost:" production.log | awk '{sum+=$4} END {print sum}'
 
 ---
 
-**These 14 patterns apply to ANY agent team using Claude SDK + MCP + Supabase!**
+## Pattern 15: Representative Test Data Coverage ⭐
+
+### **Problem**
+Docker tests pass with small sample, production fails due to test data not covering all code paths.
+
+### **Anti-Pattern:**
+```python
+# Agent 4: LinkedIn finder + tenure extractor
+# Code path 1: Extract tenure from search description (~20% success)
+# Code path 2: Scrape LinkedIn profile for tenure (~80% success)
+
+# Docker Test:
+test_contacts = [
+    "Dustin Betthauser",  # Has tenure in description ✅
+    "Kevin Anderson"       # Has tenure in description ✅
+]
+# Result: 2/2 success! Ship it! 🚢
+# Problem: Only tested 20% path, never tested 80% path (scraping)
+```
+
+### **Better Pattern:**
+```python
+# Docker Test (Representative):
+test_contacts = [
+    # 20% case: Tenure in search description
+    {"name": "Dustin", "expects_tenure_in_description": True},
+
+    # 80% case: Need to scrape profile (MOST COMMON!)
+    {"name": "John", "expects_tenure_in_description": False},
+    {"name": "Brandon", "expects_tenure_in_description": False},
+    {"name": "Peter", "expects_tenure_in_description": False},
+
+    # Edge case: No LinkedIn at all
+    {"name": "Anonymous", "expects_linkedin": False}
+]
+# Result: Tests ALL code paths before production
+```
+
+### **Real Example:**
+- **Agent 4 Docker Test:** 2 contacts with tenure in descriptions → 100% success
+- **Agent 4 Production:** 4 contacts WITHOUT tenure in descriptions → 0% success
+- **Root Cause:** BrightData scraping code never executed in Docker (bug hidden)
+- **Fix:** Test data must match real-world distribution (20% description, 80% scraping)
+
+### **Design Principles:**
+
+**1. Analyze Real-World Distribution FIRST:**
+```python
+# Before selecting test data, understand actual distribution:
+# - 20% of LinkedIn profiles have tenure in search description
+# - 80% require profile scraping
+# - 5% have no LinkedIn at all
+# → Test data should reflect these percentages!
+```
+
+**2. Code Coverage > Sample Size:**
+```
+❌ 100 contacts, all with tenure in description = Poor coverage
+✅ 5 contacts, covering all code paths = Good coverage
+```
+
+**3. Test Fallback Logic Explicitly:**
+```python
+# If agent has: "Try A, if fails try B, if fails return NULL"
+# Must test:
+# - Case where A works (happy path)
+# - Case where A fails, B works (fallback path) ← Often missed!
+# - Case where both fail (edge case)
+```
+
+**4. Representative Test Data Checklist:**
+```
+Before declaring "Docker test passed":
+□ Identified all code branches in agent
+□ Estimated % distribution of real-world data
+□ Selected test data matching distribution
+□ Verified ALL code paths executed (check logs!)
+□ Tested happy path AND fallback paths
+□ Tested edge cases (no data, errors, etc.)
+```
+
+### **When to Apply:**
+- Multi-path agents (if/else logic, fallbacks)
+- Before production deployment
+- After discovering production bugs in tested code
+- When agent has >1 data source or method
+
+### **Benefits:**
+✅ Catch bugs before production
+✅ Realistic success rate estimates
+✅ Confidence in all code paths
+✅ Avoid "lucky test data" false positives
+
+### **Red Flags:**
+🚩 Small sample (2-3 contacts) with 100% success
+🚩 Never seeing fallback code execute in logs
+🚩 Docker success rate much higher than production
+🚩 "We got lucky with our test data"
+
+---
+
+**These 15 patterns apply to ANY agent team using Claude SDK + MCP + Supabase!**

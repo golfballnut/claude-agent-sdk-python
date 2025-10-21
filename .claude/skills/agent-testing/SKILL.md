@@ -164,10 +164,10 @@ Deploy to production (Render), validate via logs, verify database changes.
 - `STAGE7_PRODUCTION_DEPLOYMENT.md` - Production deployment & log validation ⭐ NEW!
 
 **Design & Architecture:**
-- `ARCHITECTURE_PATTERNS.md` - 14 agent design patterns (consolidation, specialization, parameter flow) ⭐ UPDATED!
+- `ARCHITECTURE_PATTERNS.md` - 15 agent design patterns (consolidation, specialization, parameter flow, test data coverage) ⭐ UPDATED!
 
 **Real Examples:**
-- `EXAMPLES.md` - 5 case studies from golf enrichment ⭐ UPDATED!
+- `EXAMPLES.md` - 6 case studies from golf enrichment ⭐ UPDATED!
 
 **Placeholders (to be created):**
 - `STAGE1_DESIGN.md` - Agent design principles

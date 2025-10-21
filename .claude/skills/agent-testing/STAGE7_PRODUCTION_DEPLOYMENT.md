@@ -8,6 +8,97 @@
 
 ---
 
+## Pre-Deployment Checklist: Code Coverage Audit ⭐
+
+**Before deploying to Render, answer this question:**
+
+### **Did Docker Tests Execute ALL Code Paths?**
+
+**How to verify:**
+
+#### **Step 1: Review Agent Code for Branches**
+```python
+# Example: Agent 4 has 3 paths
+if tenure_in_description:
+    # PATH 1: Extract from description
+elif linkedin_url:
+    # PATH 2: Scrape profile  ← Did this execute in Docker?
+else:
+    # PATH 3: Return NULL
+```
+
+#### **Step 2: Check Docker Logs**
+```bash
+docker-compose logs | grep "Scraping LinkedIn profile"
+
+# If you DON'T see the message:
+# → PATH 2 never executed
+# → Bug could be hiding there
+# → DON'T DEPLOY YET!
+```
+
+#### **Step 3: Add Test Data for Missing Paths**
+```python
+# If scraping path not tested:
+test_additional_course = "Chantilly National"
+# This course has contacts without tenure in descriptions
+# Forces scraping path to execute
+```
+
+#### **Step 4: Verify All Paths Executed**
+```bash
+# After adding new test data:
+docker-compose up
+curl -X POST localhost:8000/enrich-course -d '{"course_name": "Chantilly National", ...}'
+
+# Check logs for ALL expected messages:
+✅ "Found LinkedIn URL"
+✅ "Scraping LinkedIn profile"  ← This should appear now!
+✅ "Tenure: X.X years"
+```
+
+---
+
+### **Real-World Example: What We Missed**
+
+**Agent 4 Consolidation (Oct 21):**
+
+**What we tested:**
+- 2 contacts with tenure in search descriptions
+- 100% success rate in Docker
+- Declared "Agent 4 complete!" ✅
+
+**What we missed:**
+- BrightData profile scraping code (PATH 2) never executed
+- 400 Bad Request bug hiding in untested path
+- Discovered only in production (0/4 success)
+
+**What we should have done:**
+```python
+# Test BOTH paths:
+test_contacts = [
+    "Dustin Betthauser",    # PATH 1: Tenure in description
+    "John Stutz"            # PATH 2: Need to scrape profile ← Would catch bug!
+]
+```
+
+---
+
+### **Pre-Deployment Sign-Off**
+
+Before syncing to production, confirm:
+```
+□ All agent code branches identified
+□ Docker logs show ALL branches executed
+□ Test data covers happy path + fallback paths
+□ No untested code going to production
+□ If any path untested → added test data and re-tested
+```
+
+**Only proceed to production when ALL checkboxes checked!**
+
+---
+
 ## Prerequisites
 
 Before starting Stage 7, ensure:

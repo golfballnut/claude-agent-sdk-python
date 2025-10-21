@@ -751,3 +751,282 @@ SELECT id FROM golf_courses WHERE course_name ILIKE '%Chantilly%';
 **Biggest lesson:** Complete the full 7-stage process! Stage 7 (Production Deployment & Validation) caught a critical bug that all previous stages missed. Don't skip deployment validation!
 
 ---
+
+## Example 6: Test Data Coverage Gap (Agent 4 Production Failure)
+
+**Date:** October 21, 2025
+**Team:** Golf Enrichment
+**Issue:** Docker passed, Render production failed
+**Root Cause:** Test data didn't cover all code paths
+**Patterns Applied:** Pattern 15 (Representative Test Data Coverage)
+
+---
+
+### **Context**
+
+Agent 4 consolidation combined LinkedIn finding + tenure extraction:
+- Path 1 (20%): Extract tenure from search description
+- Path 2 (80%): Scrape LinkedIn profile for tenure
+
+The agent was designed to try extracting tenure from Firecrawl search descriptions first, then fall back to scraping LinkedIn profiles with BrightData if the description didn't contain tenure information.
+
+---
+
+### **Docker Test Results**
+
+**Courses tested:** 2 (Brambleton, Bristow Manor)
+**Contacts tested:** 2 (Dustin Betthauser, Kevin Anderson)
+
+**Results:**
+```
+Dustin Betthauser (Brambleton):
+- LinkedIn: ✅ Found
+- Tenure: ✅ 6.8 years (from search description)
+- Method: firecrawl_search (Path 1)
+
+Kevin Anderson (Bristow Manor):
+- LinkedIn: ✅ Found
+- Tenure: ✅ 2.4 years (from search description)
+- Method: firecrawl_search (Path 1)
+
+Verdict: 2/2 success (100%) ✅
+Conclusion: "Agent 4 works perfectly! Deploy it!" ✅
+```
+
+**What we didn't notice:** Both contacts hit the SAME code path (search description extraction). The BrightData scraping code (Path 2) NEVER executed!
+
+---
+
+### **Production Test Results**
+
+**Course tested:** 133 (Chantilly National)
+**Contacts tested:** 4 (John Stutz, Brandon Roseth, Peter Siemsen, Joshua Alpaugh)
+
+**Results:**
+```
+All 4 contacts:
+- LinkedIn: ✅ Found
+- Tenure: ❌ NULL (search descriptions empty)
+- Method attempted: BrightData profile scraping (Path 2)
+- Error: "Profile scrape failed (status 400)"
+
+Verdict: 0/4 tenure extracted (0%) ❌
+```
+
+**Production logs:**
+```
+🔍 Scraping LinkedIn profile for tenure...
+   ⚠️  Profile scrape failed (status 400)
+```
+
+---
+
+### **What Went Wrong**
+
+**The code was identical** in Docker and Render production environments.
+
+**The test data was different:**
+```
+Docker contacts:
+- Both had tenure IN search descriptions
+- Hit Path 1 (description extraction) ✅
+- Never hit Path 2 (profile scraping) ❌
+
+Production contacts:
+- None had tenure in search descriptions
+- Needed Path 2 (profile scraping) ✅
+- Path 2 had bug (400 Bad Request from BrightData API) ❌
+```
+
+**The bug was in Path 2** (BrightData API call on lines 140-151) which never executed during Docker testing:
+
+```python
+# This code never ran in Docker tests:
+response = await client.post(
+    "https://api.brightdata.com/request",  # ← WRONG ENDPOINT
+    headers={
+        "Authorization": f"Bearer {brightdata_token}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "zone": "scraping_browser",  # ← WRONG PARAMETERS
+        "url": linkedin_url,
+        "format": "markdown"
+    }
+)
+# Returns: HTTP 400 Bad Request
+```
+
+---
+
+### **Analysis: Why Docker "Passed"**
+
+**We got lucky with our test data:**
+
+**Docker Test Contacts:**
+- Dustin Betthauser: Firecrawl description = "Park Manager. NVRPA. Jan 2019 - Present 6 years 10 months..."
+  - ✅ Tenure extracted: 6.8 years
+  - **Coverage: Path 1 only**
+
+- Kevin Anderson: Firecrawl description = "...Jun 2023 - Present 2 years 4 months"
+  - ✅ Tenure extracted: 2.4 years
+  - **Coverage: Path 1 only**
+
+**Why we thought it was complete:**
+- 2/2 contacts had tenure ✅ (100% in our small sample!)
+- We validated through all 6 stages
+- Database showed correct tenure values
+- **We didn't realize:** These were the "lucky 20%" who have tenure in descriptions
+
+**Production Exposed The Gap:**
+
+**Course 133 Contacts:**
+- John Stutz: LinkedIn found, description has NO tenure
+- Brandon Roseth: LinkedIn found, description has NO tenure
+- Peter Siemsen: LinkedIn found, description has NO tenure
+- Joshua Alpaugh: LinkedIn found, description has NO tenure
+- **Result:** 0/4 tenure extracted (the "unlucky 80%")
+
+**The Profile Data WAS There:**
+```
+John Stutz LinkedIn Profile (verified with BrightData MCP):
+"General Manager / COO
+ Invited (Chantilly National)
+ Apr 2025 - Present · 7 months"
+
+← This data exists! We just couldn't scrape it programmatically yet.
+```
+
+---
+
+### **The Fix (Two-Part)**
+
+**Part 1: Better Test Data Selection**
+
+❌ **OLD (bad):**
+```python
+docker_test_courses = ["Brambleton", "Bristow Manor"]
+# Both hit same path → incomplete coverage
+```
+
+✅ **NEW (good):**
+```python
+docker_test_courses = [
+    "Brambleton",         # 1 contact with tenure in description (Path 1)
+    "Chantilly National"  # 4 contacts need scraping (Path 2) ← Tests untested code!
+]
+```
+
+**Part 2: Fix BrightData API Format** (Future work)
+
+The BrightData API call needs to be fixed with correct endpoint and parameters. This would have been discovered in Docker if we had tested with Chantilly National.
+
+---
+
+### **Framework Updates**
+
+**Pattern 15: Representative Test Data Coverage**
+Added to `ARCHITECTURE_PATTERNS.md` to document this lesson:
+
+**Key Principles:**
+1. **Analyze Real-World Distribution FIRST**
+   - 20% of LinkedIn profiles have tenure in search description
+   - 80% require profile scraping
+   - → Test data should reflect these percentages!
+
+2. **Code Coverage > Sample Size**
+   - ❌ 100 contacts, all with tenure in description = Poor coverage
+   - ✅ 5 contacts, covering all code paths = Good coverage
+
+3. **Test Fallback Logic Explicitly**
+   - If agent has: "Try A, if fails try B"
+   - Must test: Case where A works AND case where B is needed
+
+**Stage 6 Updates:**
+Added Step 3.5 "Validate Test Data Coverage" to require:
+- Identify all code branches in agent
+- Estimate % distribution of real-world data
+- Select test data matching distribution
+- Verify ALL code paths executed (check logs!)
+
+**Stage 7 Updates:**
+Added "Pre-Deployment Code Coverage Audit" to require:
+- Review all agent code branches
+- Check Docker logs show ALL branches executed
+- Don't deploy if any path untested
+
+---
+
+### **Lessons Learned**
+
+**1. Small sample ≠ Complete coverage**
+- 2/2 success looked good
+- But only tested 20% of real scenarios
+- Production hit the 80% we didn't test
+
+**2. Test all code paths, not just happy path**
+- If agent has fallback: test both paths
+- Add debug logging to verify execution
+- Check logs for ALL expected messages
+
+**3. Match test data to real-world distribution**
+- 20% have tenure in description → test 1 of these
+- 80% need scraping → test 4 of these
+- Don't assume small sample = full coverage
+
+**4. Don't skip Docker paths production will hit**
+- Production will exercise all paths
+- Docker should too (before deployment!)
+- Add test data for EVERY code branch
+
+**5. "Lucky test data" is dangerous**
+- We got lucky: 2 contacts both had tenure in descriptions
+- Gave false confidence in incomplete implementation
+- Production exposed the gap immediately
+
+---
+
+### **Success Metrics**
+
+**After implementing Pattern 15:**
+- ✅ Identified 2 code paths in Agent 4
+- ✅ Analyzed real-world distribution (20/80 split)
+- ✅ Would have selected diverse test data
+- ✅ Would have caught BrightData bug in Docker
+- ✅ Would have fixed before production deployment
+
+**Expected results (with proper test data):**
+- Docker: 1/5 tenure from description, 0/4 from scraping (BrightData 400 error caught!)
+- Fix: Correct BrightData API format
+- Re-test: 1/5 from description, 4/4 from scraping ✅
+- Production: 80% tenure coverage (expected)
+
+**Actual results (with incomplete test data):**
+- Docker: 2/2 tenure from description ✅ (false positive)
+- Production: 0/4 tenure (BrightData bug discovered)
+- Impact: Lost 80% of tenure opportunities
+- Fix: Still pending (needs BrightData API research)
+
+---
+
+### **Critical Takeaway**
+
+> **"Docker passing doesn't mean all code paths work. It means the code paths you TESTED work."**
+
+**Before Pattern 15:**
+- We tested happy path only
+- Fallback code never executed
+- Bugs hiding in untested branches
+- Production exposed the gaps
+
+**After Pattern 15:**
+- Test happy path + fallback paths
+- Match test data to real distribution
+- Verify ALL branches execute
+- Catch bugs before production
+
+---
+
+**This is now the #1 lesson in our testing framework: REPRESENTATIVE TEST DATA MATTERS MORE THAN TEST DATA VOLUME!**
+
+---
