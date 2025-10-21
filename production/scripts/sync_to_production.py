@@ -68,6 +68,12 @@ def sync_team_to_production(team_name: str) -> None:
         shutil.copy2(orchestrator_src, prod_dir / "orchestrator.py")
         print(f"   ✓ Copied orchestrator.py to production root")
 
+    # 3. Sync API (to production root)
+    api_src = team_dir / "api.py"
+    if api_src.exists():
+        shutil.copy2(api_src, prod_dir / "api.py")
+        print(f"   ✓ Copied api.py to production root")
+
     # 3. Sync shared utilities
     shared_utils_src = shared_dir / "utils"
     shared_utils_dest = prod_dir / "template" / "utils"

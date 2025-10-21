@@ -117,6 +117,7 @@ class EnrichCourseRequest(BaseModel):
     """Request body for full course enrichment (Agents 1-8)"""
     course_name: str = Field(..., description="Name of the golf course")
     state_code: str = Field(default="VA", description="State code (e.g., 'VA', 'DC', 'MD')")
+    course_id: int | None = Field(None, description="Optional: Course ID to update (ensures correct course is enriched, avoids name mismatch issues)")
     use_test_tables: bool = Field(default=True, description="Use test Supabase tables (true) or production (false)")
 
     model_config = {
@@ -125,6 +126,7 @@ class EnrichCourseRequest(BaseModel):
                 {
                     "course_name": "Richmond Country Club",
                     "state_code": "VA",
+                    "course_id": 108,
                     "use_test_tables": True
                 }
             ]
@@ -416,6 +418,7 @@ async def enrich_course(request: EnrichCourseRequest):
         result = await orchestrator_enrich_course(
             course_name=request.course_name,
             state_code=request.state_code,
+            course_id=request.course_id,
             use_test_tables=request.use_test_tables
         )
 
