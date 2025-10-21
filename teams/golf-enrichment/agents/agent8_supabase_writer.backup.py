@@ -1,20 +1,13 @@
 #!/usr/bin/env python3
 """
-⚠️ TEST Agent 8: Supabase Writer (Agent 4 Tenure Edition)
-
+Agent 8: Supabase Writer
 Writes enriched course and contact data to Supabase database
-
-CHANGES FROM PRODUCTION:
-- Reads tenure from Agent 4 (top-level: contact.tenure_years)
-- NOT from Agent 6.5 (nested: contact.background.tenure_years)
 
 Responsibilities:
 - Upsert golf_courses with Agent 2/6/7 data
-- Upsert golf_course_contacts with Agent 3/4/5 data (Agent 4 has tenure!)
+- Upsert golf_course_contacts with Agent 3/5/6.5 data
 - Atomic operation (all-or-nothing)
 - Handle errors gracefully
-
-After Docker validation: Sync to production agent8_supabase_writer.py
 
 Schema Requirements:
 - Migrations 001 and 002 must be applied
@@ -216,10 +209,9 @@ async def write_to_supabase(
                 # Agent 5: Phone
                 "phone_confidence": contact.get("confidence"),
 
-                # Agent 4: Tenure (from LinkedIn search description - NEW!)
-                "tenure_years": contact.get("tenure_years"),  # Top-level from Agent 4!
-                "tenure_start_date": contact.get("start_date"),  # From Agent 4
-                "previous_clubs": json.dumps(contact.get("previous_clubs", []) if contact.get("previous_clubs") else [])
+                # Agent 6.5: Background
+                "tenure_years": contact.get("background", {}).get("tenure_years"),
+                "previous_clubs": json.dumps(contact.get("background", {}).get("previous_clubs", []))
             })
 
             # Test-only fields (these columns don't exist in production)
@@ -228,10 +220,12 @@ async def write_to_supabase(
                     "email_confidence": contact.get("email_confidence"),
                     "email_method": contact.get("email_method"),
                     "linkedin_method": contact.get("linkedin_method"),
-                    "linkedin_confidence": contact.get("linkedin_confidence"),
                     "phone_method": contact.get("method"),
-                    "tenure_source": "agent4_search_description",  # From Agent 4 Firecrawl search
-                    "agent4_enriched_at": datetime.utcnow().isoformat()
+                    "tenure_confidence": contact.get("background", {}).get("tenure_confidence"),
+                    "industry_experience_years": contact.get("background", {}).get("industry_experience_years"),
+                    "responsibilities": json.dumps(contact.get("background", {}).get("responsibilities", [])),
+                    "career_notes": contact.get("background", {}).get("career_notes"),
+                    "agent65_enriched_at": datetime.utcnow().isoformat()
                 })
             else:
                 # Production-only fields (use actual production column names)

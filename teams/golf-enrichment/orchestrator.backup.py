@@ -1,27 +1,21 @@
 #!/usr/bin/env python3
 """
-⚠️  TEST ORCHESTRATOR - DO NOT USE IN PRODUCTION!
-
-Golf Course Enrichment Pipeline (Agent 4 Tenure Edition)
-
-CHANGES FROM PRODUCTION:
-- Agent 4 extracts tenure from Firecrawl search descriptions (no scraping!)
-- Agent 6.5 REMOVED (tenure now from Agent 4)
-- Total agents: 8 instead of 9
-- Faster, cheaper, more reliable
+Orchestrator: Golf Course Enrichment Pipeline
+Coordinates Agents 1-8 to fully enrich a golf course with all contact data
 
 Sequential Flow:
   Agent 1: Find course URL (Virginia directory)
   Agent 2: Extract course data + staff
-  Agent 7: Count water hazards + get SkyGolf data
-  Agent 6: Course segmentation (uses SkyGolf fees)
+  Agent 7: Count water hazards (once per course)
   FOR EACH CONTACT:
     Agent 3: Find email + LinkedIn
-    Agent 4: Find LinkedIn + TENURE (from search description!)
     Agent 5: Find phone number
-  Agent 8: Write to Supabase
+    Agent 6: Generate business intelligence (uses water hazard count)
+  Agent 8: Write to JSON file
 
-After Docker validation: Sync to production orchestrator.py
+Error Handling: All-or-nothing (if any agent fails, stop + return error)
+Progress Tracking: Uses print statements for real-time updates (no TodoWrite here - orchestrator caller tracks)
+Output: Structured dict with all agent results + JSON file path
 """
 
 import anyio
@@ -30,19 +24,19 @@ from pathlib import Path
 import sys
 import time
 
-# Add project to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# Add agents to path
+sys.path.insert(0, str(Path(__file__).parent))
 
 # Import all agents
-from agents.agent1_url_finder import find_url
-from agents.agent2_data_extractor import extract_contact_data
-from agents.agent6_course_intelligence import enrich_course as enrich_course_intel
-from agents.agent7_water_hazard_counter import count_water_hazards
-from agents.agent3_contact_enricher import enrich_contact
-from agents.agent4_linkedin_finder import find_linkedin
-from agents.agent5_phone_finder import find_phone
-# Agent 6.5 REMOVED - Tenure now from Agent 4!
-from agents.test_agent8_supabase_writer import write_to_supabase  # TEST version reads Agent 4 tenure!
+from agent1_url_finder import find_url
+from agent2_data_extractor import extract_contact_data
+from agent6_course_intelligence import enrich_course as enrich_course_intel
+from agent7_water_hazard_counter import count_water_hazards
+from agent3_contact_enricher import enrich_contact
+from agent4_linkedin_finder import find_linkedin
+from agent5_phone_finder import find_phone
+from agent65_contact_enrichment import enrich_contact_background
+from agent8_supabase_writer import write_to_supabase
 
 
 async def enrich_course(
@@ -184,15 +178,15 @@ async def enrich_course(
         result["agent_results"]["agent7"] = water_data
 
         # ====================================================================
-        # AGENTS 3, 4, 5: Enrich Each Contact (Agent 4 now includes tenure!)
+        # AGENTS 3, 4, 5, 6.5: Enrich Each Contact
         # ====================================================================
-        print(f"👥 [5/8] Enriching {len(staff)} contacts (Agents 3, 4, 5)...\n")
+        print(f"👥 [5/8] Enriching {len(staff)} contacts (Agents 3, 4, 5, 6.5)...\n")
 
         enriched_contacts = []
         total_agent3_cost = 0
         total_agent4_cost = 0
         total_agent5_cost = 0
-        # Agent 6.5 removed - tenure now from Agent 4!
+        total_agent65_cost = 0
 
         for i, staff_member in enumerate(staff, 1):
             name = staff_member.get("name", "Unknown")
@@ -245,46 +239,41 @@ async def enrich_course(
                 contact["_agent3_error"] = str(e)
 
             # ----------------------------------------------------------------
-            # AGENT 4: LinkedIn + Tenure (ALWAYS RUNS!)
+            # AGENT 4: LinkedIn (if not found by Agent 3)
             # ----------------------------------------------------------------
-            # Agent 4 is the LinkedIn specialist - always run for best coverage
-            # Agent 3 is good for email, but Hunter.io LinkedIn is unreliable
-            print(f"      🔗 Agent 4: Finding LinkedIn + Tenure (specialist)...")
-            agent4_start = time.time()
+            # Only run Agent 4 if Agent 3 didn't find LinkedIn
+            if not contact.get("linkedin_url"):
+                print(f"      🔗 Agent 4: Finding LinkedIn (dedicated search)...")
+                agent4_start = time.time()
 
-            try:
-                linkedin_result = await find_linkedin(
-                    contact,
-                    course_data["data"].get("course_name"),
-                    state_code
-                )
+                try:
+                    linkedin_result = await find_linkedin(
+                        contact,
+                        course_data["data"].get("course_name"),
+                        state_code
+                    )
 
-                agent4_duration = time.time() - agent4_start
-                agent4_cost = linkedin_result.get("_agent4_cost", 0)
-                total_agent4_cost += agent4_cost
+                    agent4_duration = time.time() - agent4_start
+                    agent4_cost = linkedin_result.get("_agent4_cost", 0)
+                    total_agent4_cost += agent4_cost
 
-                # Merge LinkedIn + Tenure data (overwrites Agent 3's LinkedIn if both found)
-                contact.update(linkedin_result)
+                    # Merge LinkedIn data
+                    contact.update(linkedin_result)
 
-                linkedin = linkedin_result.get("linkedin_url")
-                tenure = linkedin_result.get("tenure_years")
-                start_date = linkedin_result.get("start_date")
-
-                if linkedin:
-                    print(f"         ✅ LinkedIn: {linkedin}")
-                    if tenure:
-                        print(f"         ✅ Tenure: {tenure} years (since {start_date})")
+                    linkedin = linkedin_result.get("linkedin_url")
+                    if linkedin:
+                        print(f"         ✅ LinkedIn: {linkedin}")
+                        print(f"         Method: {linkedin_result.get('linkedin_method')}")
                     else:
-                        print(f"         ⚠️  Tenure: Not in search description")
-                    print(f"         Method: {linkedin_result.get('linkedin_method')}")
-                else:
-                    print(f"         ⚠️  LinkedIn: Not found (tried all methods)")
+                        print(f"         ⚠️  LinkedIn: Not found (tried Firecrawl + fallbacks)")
 
-                print(f"         💰 ${agent4_cost:.4f} | ⏱️  {agent4_duration:.1f}s")
+                    print(f"         💰 ${agent4_cost:.4f} | ⏱️  {agent4_duration:.1f}s")
 
-            except Exception as e:
-                print(f"         ❌ Error: {e}")
-                contact["_agent4_error"] = str(e)
+                except Exception as e:
+                    print(f"         ❌ Error: {e}")
+                    contact["_agent4_error"] = str(e)
+            else:
+                print(f"      🔗 Agent 4: Skipped (LinkedIn found by Agent 3)")
 
             # ----------------------------------------------------------------
             # AGENT 5: Phone Number
@@ -315,10 +304,39 @@ async def enrich_course(
                 contact["_agent5_error"] = str(e)
 
             # ----------------------------------------------------------------
-            # AGENT 6.5 REMOVED
+            # AGENT 6.5: Contact Background (tenure, previous clubs)
             # ----------------------------------------------------------------
-            # Tenure is now extracted by Agent 4 from Firecrawl search descriptions!
-            # No separate scraping needed - faster, cheaper, more reliable
+            print(f"      📋 Agent 6.5: Enriching contact background...")
+            agent65_start = time.time()
+
+            try:
+                bg_result = await enrich_contact_background(contact)
+
+                agent65_duration = time.time() - agent65_start
+                agent65_cost = bg_result.get("_agent65_cost", 0)
+                total_agent65_cost += agent65_cost
+
+                # Merge background data
+                contact.update(bg_result)
+
+                tenure = bg_result.get("_agent65_tenure")
+                prev_clubs = bg_result.get("_agent65_previous_clubs", 0)
+
+                if tenure:
+                    print(f"         ✅ Tenure: {tenure} years")
+                else:
+                    print(f"         ⚠️  Tenure: Unknown")
+
+                if prev_clubs > 0:
+                    print(f"         ✅ Previous Clubs: {prev_clubs} found")
+                else:
+                    print(f"         ⚠️  Previous Clubs: None found")
+
+                print(f"         💰 ${agent65_cost:.4f} | ⏱️  {agent65_duration:.1f}s")
+
+            except Exception as e:
+                print(f"         ❌ Error: {e}")
+                contact["_agent65_error"] = str(e)
 
             enriched_contacts.append(contact)
             print()  # Blank line between contacts
@@ -332,8 +350,8 @@ async def enrich_course(
             water_data.get("cost", 0) +
             total_agent3_cost +
             total_agent4_cost +
-            total_agent5_cost,
-            # Agent 6.5 removed - tenure now in Agent 4!
+            total_agent5_cost +
+            total_agent65_cost,
             4
         )
 
@@ -384,8 +402,8 @@ async def enrich_course(
                 "agent6": round(course_intel.get("cost", 0), 4),
                 "agent7": water_data.get("cost", 0),
                 "agent3": round(total_agent3_cost, 4),
-                "agent4": round(total_agent4_cost, 4),  # Now includes tenure!
                 "agent5": round(total_agent5_cost, 4),
+                "agent65": round(total_agent65_cost, 4),
                 "agent8": 0
             }
         }
