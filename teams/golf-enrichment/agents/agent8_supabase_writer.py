@@ -121,7 +121,7 @@ async def write_to_supabase(
 
         # Add production-only fields (test tables don't have these columns)
         if not use_test_tables:
-            course_record["enhancement_status"] = "complete"
+            course_record["enrichment_status"] = "completed"
             course_record["enrichment_completed_at"] = datetime.utcnow().isoformat()
 
         # ====================================================================

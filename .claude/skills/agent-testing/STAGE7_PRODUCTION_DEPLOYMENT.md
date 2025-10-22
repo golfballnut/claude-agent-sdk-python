@@ -99,6 +99,43 @@ Before syncing to production, confirm:
 
 ---
 
+## ⚠️ STOP! Have You Completed Stage 6? ⭐
+
+**Before proceeding to production deployment:**
+
+**Stage 6 Checklist:**
+```
+□ Docker build succeeded
+□ Tested with representative data (not just happy path!)
+□ Docker logs show ALL agents running
+□ Docker logs show ALL code paths executed
+□ Comprehensive data validated in test database
+□ No agents failing silently
+□ Environment variables validated
+```
+
+**❌ DO NOT DEPLOY IF:**
+- Haven't run Docker test
+- Docker logs missing any agent
+- Any agent returns null/error without logging why
+- Comprehensive fields not extracted
+- Only tested happy path data
+
+**✅ Stage 6 exists to catch:**
+- Orchestrator integration issues
+- Missing environment variables
+- Silent agent failures
+- Incomplete data extraction
+- Path coverage gaps
+
+**Real example (Oct 21):**
+- Deployed without Stage 6 ✗
+- Agent 4 failed silently in production (missing env var)
+- No LinkedIn/tenure data for 3 courses
+- Could have been caught in Docker!
+
+---
+
 ## Prerequisites
 
 Before starting Stage 7, ensure:

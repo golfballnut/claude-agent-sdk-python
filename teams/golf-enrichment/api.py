@@ -14,6 +14,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 import sys
+import os
 from pathlib import Path
 from datetime import datetime
 import logging
@@ -49,29 +50,40 @@ except ImportError as e:
 # Webhook to Supabase Edge Function
 async def send_enrichment_webhook(course_id: int, result: dict) -> None:
     """
-    Send enrichment results to Supabase edge function
+    Send enrichment webhook to trigger ClickUp sync
 
-    This triggers database insertion and ClickUp task creation
+    NOTE: Agent 8 already wrote all data to database.
+    This webhook ONLY triggers ClickUp task creation.
+    Edge function reads fresh data from database.
 
     Args:
-        course_id: ID from golf_courses table
-        result: Full orchestrator result dict
+        course_id: ID from golf_courses table (written by Agent 8)
+        result: Orchestrator result (only need success flag + identifiers)
     """
     webhook_url = "https://oadmysogtfopkbmrulmq.supabase.co/functions/v1/receive-agent-enrichment"
 
+    # Minimal payload - edge function reads from database
     payload = {
         'course_id': course_id,
         'success': result.get('success', False),
         'course_name': result.get('course_name'),
-        'state_code': result.get('state_code'),
-        'summary': result.get('summary'),
-        'agent_results': result.get('agent_results'),
-        'contacts': result.get('enriched_contacts', [])
+        'state_code': result.get('state_code')
+    }
+
+    # Get Supabase anon key for authorization
+    supabase_anon_key = os.getenv("SUPABASE_ANON_KEY")
+    if not supabase_anon_key:
+        logger.error("❌ SUPABASE_ANON_KEY not set - webhook will fail")
+        return
+
+    headers = {
+        "Authorization": f"Bearer {supabase_anon_key}",
+        "Content-Type": "application/json"
     }
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.post(webhook_url, json=payload)
+            response = await client.post(webhook_url, json=payload, headers=headers)
             response.raise_for_status()
             logger.info(f"✅ Webhook sent successfully for course_id={course_id}")
     except httpx.HTTPError as e:
