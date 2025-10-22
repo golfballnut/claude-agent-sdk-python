@@ -44,6 +44,78 @@ from agents.agent5_phone_finder import find_phone
 from agents.agent8_supabase_writer import write_to_supabase
 
 
+async def update_enrichment_status(
+    status: str,
+    course_name: str,
+    state_code: str = "VA",
+    course_id: int | None = None,
+    error_message: str | None = None,
+    use_test_tables: bool = True
+) -> None:
+    """
+    Update enrichment_status in database (for tracking workflow progress)
+
+    Args:
+        status: New status ('processing', 'completed', 'error')
+        course_name: Name of the course
+        state_code: State code
+        course_id: Optional course ID (if known)
+        error_message: Error message (only for 'error' status)
+        use_test_tables: Whether to use test tables
+    """
+    try:
+        # Import here to avoid circular dependency
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).parent / "template" / "utils"))
+        from env_loader import load_project_env, get_api_key
+
+        load_project_env()
+        supabase_url = get_api_key("SUPABASE_URL")
+        supabase_key = get_api_key("SUPABASE_SERVICE_ROLE_KEY")
+
+        if not supabase_url or not supabase_key:
+            print(f"   ⚠️  Cannot update status: Supabase credentials not found")
+            return
+
+        from supabase import create_client
+        from datetime import datetime
+
+        supabase = create_client(supabase_url, supabase_key)
+        course_table = "test_golf_courses" if use_test_tables else "golf_courses"
+
+        # Prepare update record
+        update_record = {
+            "enrichment_status": status
+        }
+
+        if status == "error" and error_message:
+            update_record["enrichment_error"] = error_message
+
+        # Find course by ID or name
+        if course_id:
+            supabase.table(course_table)\
+                .update(update_record)\
+                .eq("id", course_id)\
+                .execute()
+        else:
+            # Lookup by name
+            existing = supabase.table(course_table)\
+                .select("id")\
+                .eq("course_name", course_name)\
+                .maybe_single()\
+                .execute()
+
+            if existing and existing.data:
+                supabase.table(course_table)\
+                    .update(update_record)\
+                    .eq("id", existing.data["id"])\
+                    .execute()
+
+    except Exception as e:
+        print(f"   ⚠️  Failed to update status: {e}")
+
+
 async def enrich_course(
     course_name: str,
     state_code: str = "VA",
@@ -73,6 +145,15 @@ async def enrich_course(
     print(f"\n{'='*70}")
     print(f"🏌️ ENRICHING: {course_name}")
     print(f"{'='*70}\n")
+
+    # Set status to "processing" at start
+    await update_enrichment_status(
+        status="processing",
+        course_name=course_name,
+        state_code=state_code,
+        course_id=course_id,
+        use_test_tables=use_test_tables
+    )
 
     result = {
         "success": False,
@@ -419,6 +500,16 @@ async def enrich_course(
         print(f"Error: {e}")
         print(f"⏱️  Duration: {total_duration:.1f}s")
         print(f"{'='*70}\n")
+
+        # Set status to "error" with error message
+        await update_enrichment_status(
+            status="error",
+            course_name=course_name,
+            state_code=state_code,
+            course_id=course_id,
+            error_message=str(e),
+            use_test_tables=use_test_tables
+        )
 
         result["error"] = str(e)
         result["summary"]["total_duration_seconds"] = round(total_duration, 1)
