@@ -1,0 +1,81 @@
+{
+  "course_id": 142,
+  "success": true,
+  "course_name": "Country Club of Fairfax",
+  "state_code": "VA",
+  "summary": {
+    "total_cost_usd": 0.1829,
+    "total_duration_seconds": 271,
+    "contacts_enriched": 3
+  },
+  "agent_results": {
+    "agent6": {
+      "segmentation": {
+        "primary_target": "unknown",
+        "confidence": 0,
+        "signals": ["No green fee data found"]
+      },
+      "range_intel": {
+        "segment": "unknown",
+        "weekend_fee": null,
+        "weekday_fee": null
+      },
+      "opportunities": {
+        "ball_retrieval": 5,
+        "ball_lease": 5,
+        "primary_pitch": "Custom ball program consultation"
+      }
+    },
+    "agent7": {
+      "water_hazard_count": null,
+      "water_hazard_rating": "scarce",
+      "confidence": "low"
+    }
+  },
+  "contacts": [
+    {
+      "name": "Brandon Sage",
+      "title": "Director of Golf",
+      "email": "brandons@ccfairfax.org",
+      "phone": "(703) 273-3100",
+      "linkedin": null,
+      "tenure_years": null,
+      "tenure_start_date": null,
+      "previous_clubs": [],
+      "email_confidence": 97,
+      "email_method": "hunter_io",
+      "phone_source": "perplexity_ai"
+    },
+    {
+      "name": "Linda Gaudi",
+      "title": "Director of Instruction",
+      "email": "lindag@ccfairfax.org",
+      "phone": "703-273-3100",
+      "linkedin": "https://www.linkedin.com/in/linda-gaudi-85257a26",
+      "tenure_years": 31.6,
+      "tenure_start_date": "Apr 1994",
+      "previous_clubs": [],
+      "email_confidence": 97,
+      "email_method": "hunter_io",
+      "phone_source": "perplexity_ai"
+    },
+    {
+      "name": "Mike Owens",
+      "title": "Superintendent",
+      "email": "mikeo@ccfairfax.org",
+      "phone": "703-273-3100",
+      "linkedin": null,
+      "tenure_years": null,
+      "tenure_start_date": null,
+      "previous_clubs": [],
+      "email_confidence": 97,
+      "email_method": "hunter_io",
+      "phone_source": null
+    }
+  ],
+  "course_data": {
+    "website": "https://ccfairfax.org/",
+    "phone": "(703) 273-3445",
+    "city": "Fairfax"
+  }
+}

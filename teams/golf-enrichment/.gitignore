@@ -1,0 +1,11 @@
+
+# Supabase CLI generated files
+supabase/.temp/
+supabase/supabase/
+
+# Backup files
+*.backup
+*.backup.py
+
+# Ad-hoc test scripts
+test_*.py
