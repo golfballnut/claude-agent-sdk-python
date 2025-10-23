@@ -79,16 +79,7 @@ async def write_to_supabase(
 
         table_type = "TEST" if use_test_tables else "PRODUCTION"
         print(f"   🔌 Connecting to Supabase ({table_type} tables)...")
-
-        # Create client with 60-second timeout (default 5s is too short for production)
-        supabase: Client = create_client(
-            supabase_url,
-            supabase_key,
-            options={
-                "postgrest_client_timeout": 60,  # 60 seconds for database operations
-                "storage_client_timeout": 60
-            }
-        )
+        supabase: Client = create_client(supabase_url, supabase_key)
 
         # ====================================================================
         # STEP 1: Prepare Course Data
