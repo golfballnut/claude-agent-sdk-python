@@ -348,14 +348,19 @@ Enriched: ${contact.enriched_at ? new Date(contact.enriched_at).toISOString().sp
             // Email
             { id: '592c3d27-07af-42ce-a6c0-beb158305f9d', value: contact.contact_email },
             // Phone - REMOVED (causes validation error, keep in description only)
-            // LinkedIn URL
-            { id: 'f94bff39-d2de-4b6f-a010-cdafce7f2621', value: contact.linkedin_url },
+            // LinkedIn URL (only if valid URL - skip "Not found" strings)
+            ...(contact.linkedin_url &&
+                contact.linkedin_url !== 'Not found' &&
+                contact.linkedin_url !== 'not_found' &&
+                contact.linkedin_url.startsWith('http') ?
+              [{ id: 'f94bff39-d2de-4b6f-a010-cdafce7f2621', value: contact.linkedin_url }]
+              : []),
             // Tenure Years
             { id: '2bf67cf7-d7b1-4bbd-a353-5d3de9d032d1', value: contact.tenure_years ? parseFloat(String(contact.tenure_years)) : null },
             // Previous Clubs
             { id: 'f41625fc-e195-4044-a30b-86d5ea36a523', value: contact.previous_clubs ? JSON.stringify(contact.previous_clubs) : null },
-            // Course relationship
-            { id: 'b31efd5f-cae0-4920-aeb9-17542badffe3', value: results.course_task?.taskId ? [results.course_task.taskId] : [] },
+            // Course relationship (use add/rem format for bidirectional linking)
+            { id: 'b31efd5f-cae0-4920-aeb9-17542badffe3', value: results.course_task?.taskId ? { add: [results.course_task.taskId], rem: [] } : null },
             // Enriched By Agents
             { id: '5a5521a2-7502-481f-b7c4-f6d54b5e4f67', value: true },
             // Is Active
@@ -401,29 +406,56 @@ Enriched: ${contact.enriched_at ? new Date(contact.enriched_at).toISOString().sp
     console.log(`\n📞 [3/3] Processing Outreach Activity task...`)
 
     try {
-      // PROTECTION: Check if course has existing outreach with ClickUp task
-      const { data: outreachDb } = await supabase
+      // Check if course has existing outreach with ClickUp task
+      let { data: outreachDb } = await supabase
         .from('outreach_activities')
         .select('activity_id, clickup_task_id, status')
         .eq('golf_course_id', payload.course_id)
         .maybeSingle()
 
       if (outreachDb && outreachDb.clickup_task_id) {
-        console.log(`⚠️  PROTECTION ACTIVATED!`)
-        console.log(`    Course ${payload.course_id} (${payload.course_name})`)
-        console.log(`    Has existing outreach task: ${outreachDb.clickup_task_id}`)
-        console.log(`    Status: ${outreachDb.status}`)
-        console.log(`    SKIPPING outreach creation to protect active sales workflow`)
+        // Verify task still exists in ClickUp (handle deleted tasks)
+        console.log(`🔍 Verifying outreach task ${outreachDb.clickup_task_id} exists in ClickUp...`)
 
-        results.outreach_task = {
-          taskId: outreachDb.clickup_task_id,
-          action: 'protected'
+        const verifyResponse = await fetch(
+          `https://api.clickup.com/api/v2/task/${outreachDb.clickup_task_id}`,
+          {
+            headers: { 'Authorization': clickupApiKey }
+          }
+        )
+
+        if (verifyResponse.status === 404) {
+          console.log(`⚠️  Outreach task ${outreachDb.clickup_task_id} was DELETED in ClickUp`)
+          console.log(`   Clearing deleted task ID from database`)
+
+          // Clear the deleted task ID from database
+          await supabase
+            .from('outreach_activities')
+            .update({
+              clickup_task_id: null,
+              clickup_synced_at: null,
+              clickup_sync_status: 'pending'
+            })
+            .eq('activity_id', outreachDb.activity_id)
+
+          // Clear the variable to match database state
+          outreachDb = { ...outreachDb, clickup_task_id: null }
+
+          console.log(`✅ Task was deleted - will create new one`)
+
+        } else if (verifyResponse.ok) {
+          console.log(`✅ Task exists - will update it with latest enrichment data`)
+          // Proceed to update the task
+
+        } else {
+          // Other error - log but proceed
+          console.log(`⚠️  Could not verify task ${outreachDb.clickup_task_id}: ${verifyResponse.status}`)
+          console.log(`   Proceeding anyway (will update or create as needed)`)
         }
+      }
 
-        console.log(`✅ Course + Contact tasks processed, Outreach protected`)
-
-      } else {
-        console.log(`✅ No existing outreach - safe to create/update`)
+      // Create or update outreach task
+      console.log(`📝 ${outreachDb?.clickup_task_id ? 'Updating' : 'Creating'} outreach task...`)
 
         // Build rich description with ALL contacts
         const contactsSection = contactsData.map((contact, index) => {
@@ -494,10 +526,10 @@ ${oppText}
           // Don't set status - let ClickUp use list default
           priority: topOpps[0]?.[1] >= 8 ? 2 : 3,
           custom_fields: [
-            // Related Course
-            { id: '62ec1220-a35b-4023-8bdd-8af74ad3bb1d', value: results.course_task?.taskId ? [results.course_task.taskId] : [] },
-            // Related Contacts
-            { id: 'caa160a9-487d-406d-aacd-ea2dcb421ef0', value: contactTaskIds },
+            // Related Course (use add/rem format for bidirectional linking)
+            { id: '62ec1220-a35b-4023-8bdd-8af74ad3bb1d', value: results.course_task?.taskId ? { add: [results.course_task.taskId], rem: [] } : null },
+            // Related Contacts (use add/rem format for bidirectional linking)
+            { id: 'caa160a9-487d-406d-aacd-ea2dcb421ef0', value: { add: contactTaskIds, rem: [] } },
             // Target Segment - use option index (note: different options than Golf Courses)
             { id: 'c52d0d6d-5f3e-4c5e-aa1f-256c27a1a212', value: TARGET_SEGMENT_OPTION_INDEX[courseData.segment?.toLowerCase() || 'unknown'] || null },
             // Top Opportunity #1
@@ -509,7 +541,9 @@ ${oppText}
             // Top Opportunity #2 Score
             { id: '9c1a8615-5953-4826-9492-a77f74e9aa37', value: topOpps[1]?.[1] || null },
             // State - use option index
-            { id: '81bc2505-28a7-4290-a557-50e49e410732', value: STATE_OPTION_INDEX[payload.state_code] }
+            { id: '81bc2505-28a7-4290-a557-50e49e410732', value: STATE_OPTION_INDEX[payload.state_code] },
+            // Region - text field
+            { id: '85a5144d-ff3e-4425-acb0-6173b40679ce', value: courseData.region || null }
           ],
           tags: ['agent-enriched', payload.state_code.toLowerCase()]
         }
@@ -528,31 +562,164 @@ ${oppText}
           clickup_synced_at: new Date().toISOString(),
           clickup_sync_status: 'synced',
           clickup_sync_error: null,
-          outreach_type: topOpps[0]?.[0] || 'general',
+          outreach_type: 'email',  // Default to email (matches DB constraint)
           status: 'scheduled',
           region: courseData.region,
           state_code: payload.state_code
         }
 
-        if (outreachDb?.activity_id) {
-          await supabase
+        // Re-fetch current state (handles case where we cleared deleted task ID earlier)
+        console.log(`📝 Re-fetching outreach record for course ${payload.course_id}...`)
+        const { data: currentOutreach, error: fetchError } = await supabase
+          .from('outreach_activities')
+          .select('activity_id, clickup_task_id')
+          .eq('golf_course_id', payload.course_id)
+          .maybeSingle()
+
+        if (fetchError) {
+          console.error(`❌ Failed to fetch outreach record: ${fetchError.message}`)
+          throw new Error(`Cannot proceed - fetch failed: ${fetchError.message}`)
+        }
+
+        console.log(`📝 Current outreach state: ${currentOutreach ? `activity_id=${currentOutreach.activity_id}, clickup_task_id=${currentOutreach.clickup_task_id}` : 'NOT FOUND'}`)
+
+        if (currentOutreach?.activity_id) {
+          console.log(`📝 Updating existing outreach_activities record ${currentOutreach.activity_id}`)
+          console.log(`📝 Setting clickup_task_id to: ${outreachResult.taskId}`)
+
+          const { data: updateData, error: updateError } = await supabase
             .from('outreach_activities')
             .update(outreachRecord)
-            .eq('activity_id', outreachDb.activity_id)
+            .eq('activity_id', currentOutreach.activity_id)
+            .select()
+
+          if (updateError) {
+            console.error(`❌ CRITICAL: Database update FAILED: ${updateError.message}`)
+            console.error(`❌ Error details: ${JSON.stringify(updateError)}`)
+            throw updateError  // Fatal - don't continue
+          }
+
+          console.log(`✅ Database updated successfully: ${JSON.stringify(updateData)}`)
+          console.log(`✅ Outreach record synced with task ${outreachResult.taskId}`)
         } else {
-          await supabase
+          console.log(`📝 No existing record found - inserting new outreach_activities record`)
+
+          const { data: insertData, error: insertError } = await supabase
             .from('outreach_activities')
             .insert(outreachRecord)
+            .select()
+
+          if (insertError) {
+            console.error(`❌ CRITICAL: Database insert FAILED: ${insertError.message}`)
+            console.error(`❌ Error details: ${JSON.stringify(insertError)}`)
+            throw insertError  // Fatal - don't continue
+          }
+
+          console.log(`✅ Database inserted successfully: ${JSON.stringify(insertData)}`)
+          console.log(`✅ New outreach record created with task ${outreachResult.taskId}`)
         }
 
         results.outreach_task = outreachResult
         console.log(`✅ Outreach task ${outreachResult.action}: ${outreachResult.taskId}`)
-      }
 
     } catch (error) {
       const errorMsg = `Outreach Activity task failed: ${error.message}`
       console.error(`❌ ${errorMsg}`)
       results.errors.push(errorMsg)
+    }
+
+    // ========================================================================
+    // STEP 4: Update Course Task Relationships (Clear & Replace)
+    // Note: Bidirectional only works on CREATE, not UPDATE
+    // Must explicitly set relationships on Course task
+    // Strategy: Fetch existing relationships → Remove ALL → Add current (database = truth)
+    // ========================================================================
+
+    if (results.course_task && (contactTaskIds.length > 0 || results.outreach_task)) {
+      console.log(`\n🔗 Updating Course task relationships (Clear & Replace)...`)
+
+      try {
+        // Fetch current course task to get existing relationships
+        console.log(`📝 Fetching current course task to get existing relationships...`)
+        const getCourseResponse = await fetch(
+          `https://api.clickup.com/api/v2/task/${results.course_task.taskId}`,
+          {
+            headers: { 'Authorization': clickupApiKey }
+          }
+        )
+
+        if (!getCourseResponse.ok) {
+          throw new Error(`Failed to fetch course task: ${getCourseResponse.status}`)
+        }
+
+        const courseTaskData = await getCourseResponse.json()
+
+        // Extract existing relationship IDs
+        const contactsField = courseTaskData.custom_fields?.find((f: any) => f.id === 'b31efd5f-cae0-4920-aeb9-17542badffe3')
+        const existingContactIds = contactsField?.value?.map((v: any) => v.id) || []
+
+        const outreachField = courseTaskData.custom_fields?.find((f: any) => f.id === '62ec1220-a35b-4023-8bdd-8af74ad3bb1d')
+        const existingOutreachIds = outreachField?.value?.map((v: any) => v.id) || []
+
+        console.log(`📝 Existing contacts: ${existingContactIds.length} (will remove all)`)
+        console.log(`📝 Existing outreach: ${existingOutreachIds.length} (will remove all)`)
+        console.log(`📝 New contacts: ${contactTaskIds.length}`)
+        console.log(`📝 New outreach: ${results.outreach_task ? 1 : 0}`)
+
+        // Build Clear & Replace update
+        const relationshipUpdates: any = { custom_fields: [] }
+
+        // Contacts: Remove ALL old, Add current from database
+        relationshipUpdates.custom_fields.push({
+          id: 'b31efd5f-cae0-4920-aeb9-17542badffe3',
+          value: {
+            add: contactTaskIds,
+            rem: existingContactIds  // Clear ALL existing
+          }
+        })
+
+        // Outreach: Remove ALL old, Add current (if not protected)
+        const outreachToAdd = (results.outreach_task && results.outreach_task.action !== 'protected')
+          ? [results.outreach_task.taskId]
+          : []
+
+        relationshipUpdates.custom_fields.push({
+          id: '62ec1220-a35b-4023-8bdd-8af74ad3bb1d',
+          value: {
+            add: outreachToAdd,
+            rem: existingOutreachIds  // Clear ALL existing
+          }
+        })
+
+        // Update course task
+        const updateResponse = await fetch(
+          `https://api.clickup.com/api/v2/task/${results.course_task.taskId}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Authorization': clickupApiKey,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(relationshipUpdates)
+          }
+        )
+
+        if (!updateResponse.ok) {
+          const errorText = await updateResponse.text()
+          console.error(`❌ Course relationship update failed: ${updateResponse.status}`)
+          console.error(`   Response: ${errorText}`)
+          throw new Error(`Failed to update course relationships: ${updateResponse.status}`)
+        }
+
+        console.log(`✅ Course relationships replaced: ${contactTaskIds.length} contacts, ${outreachToAdd.length} outreach`)
+        console.log(`   Removed: ${existingContactIds.length} old contacts, ${existingOutreachIds.length} old outreach`)
+
+      } catch (error) {
+        const errorMsg = `Course relationship update failed: ${error.message}`
+        console.error(`❌ ${errorMsg}`)
+        results.errors.push(errorMsg)
+        // Non-fatal - relationships work one-way
+      }
     }
 
     // ========================================================================
@@ -567,6 +734,7 @@ ${oppText}
     console.log(`Course Task: ${results.course_task ? results.course_task.action : 'FAILED'}`)
     console.log(`Contact Tasks: ${results.contact_tasks.length}/${contactsData.length} ${results.contact_tasks[0]?.action || 'N/A'}`)
     console.log(`Outreach Task: ${results.outreach_task ? results.outreach_task.action : 'FAILED'}`)
+    console.log(`Bidirectional Links: ${contactTaskIds.length} contacts ↔ course${results.outreach_task?.action !== 'protected' ? ', outreach ↔ course' : ' (outreach protected)'}`)
     if (results.errors.length > 0) {
       console.log(`Errors: ${results.errors.length}`)
       results.errors.forEach(err => console.log(`  - ${err}`))
