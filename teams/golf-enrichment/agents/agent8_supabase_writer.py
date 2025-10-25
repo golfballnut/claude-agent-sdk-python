@@ -119,10 +119,9 @@ async def write_to_supabase(
             "contacts_page_found_at": datetime.utcnow().isoformat() if contacts_page_url else None
         }
 
-        # Add production-only fields (test tables don't have these columns)
-        if not use_test_tables:
-            course_record["enrichment_status"] = "completed"
-            course_record["enrichment_completed_at"] = datetime.utcnow().isoformat()
+        # Set enrichment status (both test and production tables have these fields since migration 009)
+        course_record["enrichment_status"] = "completed"
+        course_record["enrichment_completed_at"] = datetime.utcnow().isoformat()
 
         # ====================================================================
         # STEP 2: Upsert Course
