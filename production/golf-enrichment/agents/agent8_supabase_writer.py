@@ -212,7 +212,10 @@ async def write_to_supabase(
                 # Agent 4: Tenure (from LinkedIn search description - NEW!)
                 "tenure_years": contact.get("tenure_years"),  # Top-level from Agent 4!
                 "tenure_start_date": contact.get("start_date"),  # From Agent 4
-                "previous_clubs": json.dumps(contact.get("previous_clubs", []) if contact.get("previous_clubs") else [])
+                "previous_clubs": json.dumps(contact.get("previous_clubs", []) if contact.get("previous_clubs") else []),
+
+                # Agent 2: PGA Membership Type (from PGA directory)
+                "pga_membership_type": contact.get("pga_membership")  # "PGA MEMBER" or "ASSOCIATE"
             })
 
             # Test-only fields (these columns don't exist in production)

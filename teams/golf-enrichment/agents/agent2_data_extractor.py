@@ -57,36 +57,42 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
         from dotenv import load_dotenv
         load_dotenv(env_path)
 
-    # Detect PGA directory URLs (JavaScript SPA - needs Firecrawl)
+    # Detect PGA directory URLs (JavaScript SPA - needs special scraping)
     is_pga_url = "directory.pga.org" in url
 
     # Choose appropriate tool and MCP config based on URL type
     if is_pga_url:
-        # Configure Firecrawl as hosted HTTP MCP (like Agent 4 does with BrightData)
-        firecrawl_api_key = os.getenv('FIRECRAWL_API_KEY', '')
-        firecrawl_mcp = {
+        # Configure BrightData hosted HTTP MCP (proven working in Agent 4)
+        brightdata_token = os.getenv('BRIGHTDATA_API_TOKEN', '')
+        brightdata_mcp = {
             "type": "http",
-            "url": f"https://mcp.firecrawl.dev?apiKey={firecrawl_api_key}"
+            "url": f"https://mcp.brightdata.com/mcp?token={brightdata_token}"
         }
 
-        allowed_tools = ["mcp__firecrawl__firecrawl_scrape"]
-        mcp_servers = {"firecrawl": firecrawl_mcp}
+        allowed_tools = ["mcp__brightdata__scrape_as_markdown"]
+        mcp_servers = {"brightdata": brightdata_mcp}
+        disallowed_tools = ["Task", "TodoWrite", "Bash", "Grep", "Glob", "WebSearch", "WebFetch"]
         system_prompt = (
-            "Use mcp__firecrawl__firecrawl_scrape to scrape the page (it handles JavaScript). "
-            "The page shows PGA Professionals section with staff names and titles. "
-            "Extract: course name, website, phone, and ALL staff members from 'PGA Professionals' section. "
-            "Return as JSON in this exact format:\n"
+            "Use mcp__brightdata__scrape_as_markdown to scrape the page (it handles JavaScript). "
+            "The page shows 'PGA Professionals' section with staff cards. "
+            "Each card has: membership badge (PGA MEMBER or ASSOCIATE), name, title, location. "
+            "Extract: course name, website, phone from top, and ALL staff from PGA Professionals section. "
+            "Return as JSON in this EXACT format:\n"
             "{\n"
             '  "course_name": "...",\n'
             '  "website": "...",\n'
             '  "phone": "...",\n'
-            '  "staff": [{"name": "...", "title": "..."}]\n'
+            '  "staff": [\n'
+            '    {"name": "...", "title": "...", "pga_membership": "PGA MEMBER"},\n'
+            '    {"name": "...", "title": "...", "pga_membership": "ASSOCIATE"}\n'
+            '  ]\n'
             "}"
         )
     else:
         # VSGA and other static HTML sites
         allowed_tools = ["WebFetch"]
         mcp_servers = None
+        disallowed_tools = ["Task", "TodoWrite"]
         system_prompt = (
             "Use WebFetch to get the page content. "
             "Extract: course name, website, phone, and all staff members (name + title). "
@@ -100,8 +106,9 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
         )
 
     options = ClaudeAgentOptions(
-        mcp_servers=mcp_servers if mcp_servers else None,
+        mcp_servers=mcp_servers,
         allowed_tools=allowed_tools,
+        disallowed_tools=disallowed_tools,
         permission_mode="bypassPermissions",
         max_turns=4,
         model="claude-haiku-4-5",
