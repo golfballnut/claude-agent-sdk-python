@@ -40,6 +40,9 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
     """
     Extract contact data from a golf course URL
 
+    Supports both static HTML (VSGA) and JavaScript SPAs (PGA directory).
+    For PGA URLs, uses Firecrawl to handle dynamic content.
+
     Args:
         url: Golf course listing URL
 
@@ -47,12 +50,28 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
         Dict with: course_name, website, phone, staff[]
     """
 
-    options = ClaudeAgentOptions(
-        allowed_tools=["WebFetch"],
-        permission_mode="bypassPermissions",
-        max_turns=4,
-        model="claude-haiku-4-5",
-        system_prompt=(
+    # Detect PGA directory URLs (JavaScript SPA - needs Firecrawl)
+    is_pga_url = "directory.pga.org" in url
+
+    # Choose appropriate tool based on URL type
+    if is_pga_url:
+        allowed_tools = ["mcp__firecrawl__firecrawl_scrape"]
+        tool_name = "mcp__firecrawl__firecrawl_scrape"
+        system_prompt = (
+            f"Use {tool_name} to scrape the page (it handles JavaScript). "
+            "Extract: course name, website, phone, and all staff members (name + title). "
+            "Return as JSON in this exact format:\n"
+            "{\n"
+            '  "course_name": "...",\n'
+            '  "website": "...",\n'
+            '  "phone": "...",\n'
+            '  "staff": [{"name": "...", "title": "..."}]\n'
+            "}"
+        )
+    else:
+        # VSGA and other static HTML sites
+        allowed_tools = ["WebFetch"]
+        system_prompt = (
             "Use WebFetch to get the page content. "
             "Extract: course name, website, phone, and all staff members (name + title). "
             "Return as JSON in this exact format:\n"
@@ -62,7 +81,14 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
             '  "phone": "...",\n'
             '  "staff": [{"name": "...", "title": "..."}]\n'
             "}"
-        ),
+        )
+
+    options = ClaudeAgentOptions(
+        allowed_tools=allowed_tools,
+        permission_mode="bypassPermissions",
+        max_turns=4,
+        model="claude-haiku-4-5",
+        system_prompt=system_prompt,
     )
 
     extracted_data = None
