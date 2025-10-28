@@ -17,6 +17,7 @@ Pattern:
 
 import anyio
 import json
+import os
 from typing import Any, Dict
 from pathlib import Path
 import sys
@@ -41,7 +42,7 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
     Extract contact data from a golf course URL
 
     Supports both static HTML (VSGA) and JavaScript SPAs (PGA directory).
-    For PGA URLs, uses Firecrawl to handle dynamic content.
+    For PGA URLs, uses Firecrawl hosted MCP to handle dynamic content.
 
     Args:
         url: Golf course listing URL
@@ -50,16 +51,30 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
         Dict with: course_name, website, phone, staff[]
     """
 
+    # Load env for API keys
+    env_path = Path(__file__).parent.parent / ".env"
+    if env_path.exists():
+        from dotenv import load_dotenv
+        load_dotenv(env_path)
+
     # Detect PGA directory URLs (JavaScript SPA - needs Firecrawl)
     is_pga_url = "directory.pga.org" in url
 
-    # Choose appropriate tool based on URL type
+    # Choose appropriate tool and MCP config based on URL type
     if is_pga_url:
+        # Configure Firecrawl as hosted HTTP MCP (like Agent 4 does with BrightData)
+        firecrawl_api_key = os.getenv('FIRECRAWL_API_KEY', '')
+        firecrawl_mcp = {
+            "type": "http",
+            "url": f"https://mcp.firecrawl.dev?apiKey={firecrawl_api_key}"
+        }
+
         allowed_tools = ["mcp__firecrawl__firecrawl_scrape"]
-        tool_name = "mcp__firecrawl__firecrawl_scrape"
+        mcp_servers = {"firecrawl": firecrawl_mcp}
         system_prompt = (
-            f"Use {tool_name} to scrape the page (it handles JavaScript). "
-            "Extract: course name, website, phone, and all staff members (name + title). "
+            "Use mcp__firecrawl__firecrawl_scrape to scrape the page (it handles JavaScript). "
+            "The page shows PGA Professionals section with staff names and titles. "
+            "Extract: course name, website, phone, and ALL staff members from 'PGA Professionals' section. "
             "Return as JSON in this exact format:\n"
             "{\n"
             '  "course_name": "...",\n'
@@ -71,6 +86,7 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
     else:
         # VSGA and other static HTML sites
         allowed_tools = ["WebFetch"]
+        mcp_servers = None
         system_prompt = (
             "Use WebFetch to get the page content. "
             "Extract: course name, website, phone, and all staff members (name + title). "
@@ -84,6 +100,7 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
         )
 
     options = ClaudeAgentOptions(
+        mcp_servers=mcp_servers if mcp_servers else None,
         allowed_tools=allowed_tools,
         permission_mode="bypassPermissions",
         max_turns=4,
