@@ -116,6 +116,48 @@ async def update_enrichment_status(
         print(f"   ⚠️  Failed to update status: {e}")
 
 
+async def get_contacts_page_url_from_db(
+    course_id: int | None,
+    use_test_tables: bool
+) -> str | None:
+    """
+    Get contacts_page_url from database if available
+
+    For NC/SC and future states, this URL is pre-populated with PGA facility URLs.
+    If found, Agent 1 can be bypassed entirely.
+
+    Args:
+        course_id: Course ID to lookup
+        use_test_tables: Whether to use test tables
+
+    Returns:
+        contacts_page_url from database, or None if not found
+    """
+    if not course_id:
+        return None
+
+    try:
+        from pathlib import Path
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent / "template" / "utils"))
+        from env_loader import load_project_env, get_api_key
+        from supabase import create_client
+
+        load_project_env()
+        supabase = create_client(
+            get_api_key("SUPABASE_URL"),
+            get_api_key("SUPABASE_SERVICE_ROLE_KEY")
+        )
+
+        table = "test_golf_courses" if use_test_tables else "golf_courses"
+        result = supabase.table(table).select("contacts_page_url").eq("id", course_id).single().execute()
+
+        return result.data.get("contacts_page_url") if result.data else None
+    except Exception as e:
+        print(f"   ⚠️  Could not fetch contacts_page_url from database: {e}")
+        return None
+
+
 async def enrich_course(
     course_name: str,
     state_code: str = "VA",
@@ -167,12 +209,26 @@ async def enrich_course(
 
     try:
         # ====================================================================
-        # AGENT 1: Find Course URL
+        # AGENT 1: Find Course URL (or use pre-populated URL from database)
         # ====================================================================
         print("🔍 [1/8] Agent 1: Finding course URL...")
         agent1_start = time.time()
 
-        url_result = await find_url(course_name, state_code)
+        # Check if URL already in database (for NC/SC and future states)
+        db_url = await get_contacts_page_url_from_db(course_id, use_test_tables)
+
+        if db_url:
+            print(f"   ✅ Using URL from database (Agent 1 bypassed)")
+            print(f"   📋 URL: {db_url}")
+            url_result = {
+                "url": db_url,
+                "cost": 0.0,
+                "turns": 0,
+                "source": "database"
+            }
+        else:
+            print(f"   🔍 No URL in database, searching with Agent 1...")
+            url_result = await find_url(course_name, state_code)
 
         agent1_duration = time.time() - agent1_start
 
