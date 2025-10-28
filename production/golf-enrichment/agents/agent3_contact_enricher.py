@@ -101,7 +101,8 @@ async def enrich_contact_tool(args: dict[str, Any]) -> dict[str, Any]:
                     confidence = data["data"].get("score", 0)
                     linkedin_url = data["data"].get("linkedin_url")  # BONUS!
 
-                    if confidence >= 70:
+                    # Only use emails with 90%+ confidence (user requirement)
+                    if confidence >= 90:
                         results["email"] = email
                         results["email_method"] = "hunter_io"
                         results["email_confidence"] = confidence
@@ -122,59 +123,66 @@ async def enrich_contact_tool(args: dict[str, Any]) -> dict[str, Any]:
         except Exception:
             pass  # Continue to next step
 
-    # STEP 2: Web Search via Jina
-    if not results["email"]:
-        results["steps_attempted"].append("web_search")
-        try:
-            query = f'"{name}" "{company}" {title} email'
-            search_url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
+    # STEP 2 & 3: Web Search - DISABLED (only 60-70% confidence, below 90% threshold)
+    # User requirement: Only use emails with 90%+ confidence
+    # Hunter.io provides reliable confidence scores (90-98%)
+    # Web scraping methods cannot guarantee 90%+ accuracy
+    #
+    # Keeping code for reference but skipping execution:
+    if False:  # Disabled - doesn't meet 90% confidence requirement
+        # STEP 2: Web Search via Jina (70% confidence)
+        if not results["email"]:
+            results["steps_attempted"].append("web_search")
+            try:
+                query = f'"{name}" "{company}" {title} email'
+                search_url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
 
-            async with httpx.AsyncClient(timeout=30.0) as client:
-                r = await client.get(f"https://r.jina.ai/{search_url}")
-                content = r.text[:8000]
+                async with httpx.AsyncClient(timeout=30.0) as client:
+                    r = await client.get(f"https://r.jina.ai/{search_url}")
+                    content = r.text[:8000]
 
-                email_pattern = r'\b[A-Za-z0-9._%+-]+@' + re.escape(domain) + r'\b'
-                emails = re.findall(email_pattern, content, re.IGNORECASE)
+                    email_pattern = r'\b[A-Za-z0-9._%+-]+@' + re.escape(domain) + r'\b'
+                    emails = re.findall(email_pattern, content, re.IGNORECASE)
 
-                if emails:
-                    results["email"] = emails[0]
-                    results["email_method"] = "web_search"
-                    results["email_confidence"] = 70
-                    return {
-                        "content": [{
-                            "type": "text",
-                            "text": json.dumps(results)
-                        }]
-                    }
-        except Exception:
-            pass
+                    if emails:
+                        results["email"] = emails[0]
+                        results["email_method"] = "web_search"
+                        results["email_confidence"] = 70
+                        return {
+                            "content": [{
+                                "type": "text",
+                                "text": json.dumps(results)
+                            }]
+                        }
+            except Exception:
+                pass
 
-    # STEP 3: Focused search
-    if not results["email"]:
-        results["steps_attempted"].append("focused_search")
-        try:
-            query = f'{name} {company} contact email'
-            search_url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
+        # STEP 3: Focused search (60% confidence)
+        if not results["email"]:
+            results["steps_attempted"].append("focused_search")
+            try:
+                query = f'{name} {company} contact email'
+                search_url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
 
-            async with httpx.AsyncClient(timeout=30.0) as client:
-                r = await client.get(f"https://r.jina.ai/{search_url}")
-                content = r.text[:8000]
+                async with httpx.AsyncClient(timeout=30.0) as client:
+                    r = await client.get(f"https://r.jina.ai/{search_url}")
+                    content = r.text[:8000]
 
-                email_pattern = r'\b[A-Za-z0-9._%+-]+@' + re.escape(domain) + r'\b'
-                emails = re.findall(email_pattern, content, re.IGNORECASE)
+                    email_pattern = r'\b[A-Za-z0-9._%+-]+@' + re.escape(domain) + r'\b'
+                    emails = re.findall(email_pattern, content, re.IGNORECASE)
 
-                if emails:
-                    results["email"] = emails[0]
-                    results["email_method"] = "focused_search"
-                    results["email_confidence"] = 60
-                    return {
-                        "content": [{
-                            "type": "text",
-                            "text": json.dumps(results)
-                        }]
-                    }
-        except Exception:
-            pass
+                    if emails:
+                        results["email"] = emails[0]
+                        results["email_method"] = "focused_search"
+                        results["email_confidence"] = 60
+                        return {
+                            "content": [{
+                                "type": "text",
+                                "text": json.dumps(results)
+                            }]
+                        }
+            except Exception:
+                pass
 
     # STEP 4: Not Found (NO GUESSING - return nulls)
     results["steps_attempted"].append("not_found")
