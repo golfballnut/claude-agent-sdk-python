@@ -18,6 +18,7 @@ Pattern:
 import anyio
 import json
 import os
+import httpx
 from typing import Any, Dict
 from pathlib import Path
 import sys
@@ -30,11 +31,50 @@ from json_parser import extract_json_from_text
 from claude_agent_sdk import (
     ClaudeSDKClient,
     ClaudeAgentOptions,
+    tool,
+    create_sdk_mcp_server,
     AssistantMessage,
     ResultMessage,
     TextBlock,
     ToolUseBlock,
 )
+
+
+@tool("scrape_pga", "Scrape PGA directory page with Firecrawl", {"url": str})
+async def scrape_pga(args: dict[str, Any]) -> dict[str, Any]:
+    """
+    Custom SDK tool: Scrape PGA page via Firecrawl API
+
+    Calls Firecrawl /v1/scrape endpoint directly (no hosted MCP needed)
+    Handles JavaScript rendering and cookie walls
+    """
+    api_key = os.getenv("FIRECRAWL_API_KEY", "")
+    if not api_key:
+        raise ValueError("FIRECRAWL_API_KEY environment variable not set")
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        response = await client.post(
+            "https://api.firecrawl.dev/v1/scrape",
+            json={
+                "url": args["url"],
+                "formats": ["markdown"]
+            },
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+        )
+
+        if response.status_code != 200:
+            error_text = response.text
+            raise ValueError(f"Firecrawl API error {response.status_code}: {error_text}")
+
+        data = response.json()
+        markdown = data.get("data", {}).get("markdown", "")
+
+        print(f"   ✓ Scraped {len(markdown)} chars from Firecrawl")
+
+        return {"content": [{"type": "text", "text": markdown}]}
 
 
 async def extract_contact_data(url: str) -> Dict[str, Any]:
@@ -57,34 +97,30 @@ async def extract_contact_data(url: str) -> Dict[str, Any]:
         from dotenv import load_dotenv
         load_dotenv(env_path)
 
-    # Detect PGA directory URLs (JavaScript SPA - needs special scraping)
+    # Detect PGA directory URLs (JavaScript SPA - needs Firecrawl)
     is_pga_url = "directory.pga.org" in url
 
     # Choose appropriate tool and MCP config based on URL type
     if is_pga_url:
-        # Configure BrightData hosted HTTP MCP (proven working in Agent 4)
-        brightdata_token = os.getenv('BRIGHTDATA_API_TOKEN', '')
-        brightdata_mcp = {
-            "type": "http",
-            "url": f"https://mcp.brightdata.com/mcp?token={brightdata_token}"
-        }
+        # Create custom SDK server with Firecrawl tool (pattern from Agent 3)
+        firecrawl_server = create_sdk_mcp_server("fc", tools=[scrape_pga])
 
-        allowed_tools = ["mcp__brightdata__scrape_as_markdown"]
-        mcp_servers = {"brightdata": brightdata_mcp}
+        allowed_tools = ["mcp__fc__scrape_pga"]
+        mcp_servers = {"fc": firecrawl_server}
         disallowed_tools = ["Task", "TodoWrite", "Bash", "Grep", "Glob", "WebSearch", "WebFetch"]
         system_prompt = (
-            "Use mcp__brightdata__scrape_as_markdown to scrape the page (it handles JavaScript). "
+            "Use mcp__fc__scrape_pga to scrape the PGA directory page. "
             "The page shows 'PGA Professionals' section with staff cards. "
-            "Each card has: membership badge (PGA MEMBER or ASSOCIATE), name, title, location. "
-            "Extract: course name, website, phone from top, and ALL staff from PGA Professionals section. "
+            "Each card has: membership badge (PGA MEMBER or ASSOCIATE), name, title, city. "
+            "Also extract: course name, website, phone from top of page. "
             "Return as JSON in this EXACT format:\n"
             "{\n"
             '  "course_name": "...",\n'
             '  "website": "...",\n'
             '  "phone": "...",\n'
             '  "staff": [\n'
-            '    {"name": "...", "title": "...", "pga_membership": "PGA MEMBER"},\n'
-            '    {"name": "...", "title": "...", "pga_membership": "ASSOCIATE"}\n'
+            '    {"name": "Philip J Shepherd", "title": "General Manager", "pga_membership": "PGA MEMBER"},\n'
+            '    {"name": "Wrenn M Johnson", "title": "Assistant Professional", "pga_membership": "ASSOCIATE"}\n'
             '  ]\n'
             "}"
         )
