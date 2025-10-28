@@ -1,8 +1,8 @@
 # Golf Course Enrichment Team - START HERE
 
 **Team:** Golf Course Enrichment & Outreach Automation
-**Status:** 🚀 Production Deployed + Database Automation Ready (Oct 18, 2024)
-**Progress:** 85% Complete (Agents ✅, Database ✅, ClickUp ✅, Edge Functions ✅, Testing Next)
+**Status:** 🚀 Production Deployed + Contact Waterfall LIVE (Oct 28, 2025)
+**Progress:** 90% Complete (Agents ✅, Waterfall ✅, Database ✅, ClickUp ✅)
 
 ---
 
@@ -23,21 +23,36 @@ Automates golf course prospecting for range ball reconditioning business:
 
 ## ✅ **What's Already Built (Celebrate This!)**
 
-### **8 Intelligent Agents (Production):**
+### **10 Intelligent Agents (Production):**
 - Agent 1: URL Finder
-- Agent 2: Data Extractor
+- Agent 2: Data Extractor (PGA.org)
+- **Agent 2.1: LinkedIn Company** ⭐ NEW (Oct 28, 2025)
+- **Agent 2.2: Perplexity Research** ⭐ NEW (Oct 28, 2025)
 - Agent 3: Email/LinkedIn Enricher
+- Agent 4: LinkedIn Tenure Specialist
 - Agent 5: Phone Finder
 - Agent 6: Course Intelligence (segmentation)
-- Agent 6.5: Contact Background
 - Agent 7: Water Hazard Counter
 - Agent 8: Supabase Writer
 
+### **Contact Discovery Waterfall:** ⭐ NEW
+**Problem Solved:** PGA.org has <50% contact coverage
+**Solution:** 3-level fallback cascade
+- Primary: Agent 2 (PGA.org)
+- Fallback 1: Agent 2.1 (LinkedIn Company via BrightData)
+- Fallback 2: Agent 2.2 (Perplexity AI - aggregates 10+ sources)
+
+**Docker Test Results (Oct 28):**
+- 3/5 failed courses recovered ✅
+- Perplexity success: 100% when triggered
+- Cost: $0.09 avg (55% under budget)
+- Notable find: 44-year tenure contact!
+
 ### **Orchestrator:**
-- Coordinates all 8 agents
-- Handles errors gracefully
-- Tracks costs
-- Performance: 4-7 min/course
+- Coordinates all 10 agents
+- Handles waterfall fallbacks automatically
+- Tracks costs and contact sources
+- Performance: 2-4 min/course (varies by data availability)
 
 ### **Production Deployment:**
 - URL: https://agent7-water-hazards.onrender.com
@@ -59,45 +74,38 @@ Automates golf course prospecting for range ball reconditioning business:
 
 ---
 
-## 📋 **What's Next (15% Remaining)**
+## 📋 **What's Next (10% Remaining)**
 
-### **Phase 4: Final Integration (2-3 hours)** ⭐ START HERE
+### **Recent Completion: Contact Waterfall (Oct 28, 2025)** ✅
 
-**What's Done:**
-- ✅ Supabase migrations applied (004, 005)
-- ✅ Edge functions deployed (3 functions)
-- ✅ Database triggers active
-- ✅ ClickUp fields configured
+**Completed:**
+- ✅ Agent 2.1 (LinkedIn Company) - BrightData MCP integration
+- ✅ Agent 2.2 (Perplexity AI) - Multi-source aggregation
+- ✅ Waterfall cascade - Docker tested (3/5 failed courses recovered)
+- ✅ Production deployment - Live on Render
+- ✅ Cost validated - $0.09 avg (under $0.20 budget)
+
+### **Phase 5: Monitoring & Optimization (1-2 hours)** ⭐ START HERE
 
 **What's Left:**
 
-1. **Set Supabase Environment Variables (5 min)**
-   - Add RENDER_API_URL
-   - Add CLICKUP_API_KEY
-   - See: `supabase/DEPLOYMENT_GUIDE.md`
+1. **Monitor Production Waterfall (30 min)**
+   - Watch Render logs for waterfall triggers
+   - Verify contact_source tracking in database
+   - Check Perplexity fallback success rate
+   - URL: https://agent7-water-hazards.onrender.com
 
-2. **Update Agent 8 for Production Tables (30 min)**
-   - Current: Writes to test tables
-   - Needed: Write to production tables (golf_courses, golf_course_contacts)
-   - Location: `agents/agent8_supabase_writer.py`
-   - Note: Field names differ (contact_name vs name, contact_email vs email)
+2. **Fix Agent 2 Error Handling (30 min)** - Optional
+   - Issue: Parse errors block fallbacks (Scotfield CC failed)
+   - Fix: Catch parse errors → trigger fallbacks anyway
+   - Location: `agents/agent2_data_extractor.py`
 
-3. **Update Render API to Send Webhook (30 min)**
-   - After orchestrator completes, POST to receive-agent-enrichment
-   - Location: `production/golf-enrichment/api.py`
-   - Webhook URL: https://oadmysogtfopkbmrulmq.supabase.co/functions/v1/receive-agent-enrichment
+3. **Run Production Test on Remaining Failed Courses (30 min)**
+   - Test IDs: 1040, 1041, 1043 (already succeeded in Docker)
+   - Verify: Database writes, contact_source = perplexity_research
+   - Document: Real production success rate
 
-4. **Test Locally with Docker (1 hour)**
-   - Run: `docker-compose up --build`
-   - Trigger: enrichment_status = 'pending'
-   - Verify: Course updated, contacts inserted, ClickUp task created
-
-5. **Deploy & Test Production (30 min)**
-   - Sync to production: `python ../../production/scripts/sync_to_production.py golf-enrichment`
-   - Git push from production folder
-   - Test with 1 real course
-
-**Total Time: 2-3 hours → Full automation working!**
+**Total Time: 1-2 hours → Full waterfall validated in production!**
 
 ---
 
