@@ -261,8 +261,72 @@ async def enrich_course(
 
         result["agent_results"]["agent2"] = course_data
 
-        if not staff or len(staff) == 0:
-            raise Exception("Agent 2: No staff contacts found")
+        # ====================================================================
+        # CONTACT FALLBACK CASCADE: Ensure we have 2+ contacts
+        # ====================================================================
+        contact_source = course_data["data"].get("source", "pga_directory")  # Default source
+
+        if staff and len(staff) >= 2:
+            print(f"   ✅ Agent 2 met threshold: {len(staff)} contacts found")
+            course_data["data"]["contact_source"] = contact_source
+        else:
+            print(f"   ⚠️  Agent 2 below threshold: {len(staff)} contact(s), triggering fallbacks...")
+            fallback_attempts = []
+
+            # FALLBACK 1: LinkedIn Company Page
+            print("   🔗 [Fallback 1/2] Agent 2.1: LinkedIn Company Search...")
+            fallback_attempts.append("linkedin_company")
+
+            try:
+                from agents.agent2_1_linkedin_company import find_linkedin_company_staff
+
+                linkedin_staff = await find_linkedin_company_staff(
+                    course_data["data"].get("course_name"),
+                    state_code
+                )
+
+                if linkedin_staff and len(linkedin_staff) >= 2:
+                    print(f"   ✅ Agent 2.1 SUCCESS: {len(linkedin_staff)} contacts from LinkedIn")
+                    staff = linkedin_staff
+                    course_data["data"]["staff"] = staff
+                    course_data["data"]["contact_source"] = "linkedin_company"
+                    course_data["data"]["fallback_sources_attempted"] = fallback_attempts
+                else:
+                    print(f"   ⚠️  Agent 2.1 below threshold: {len(linkedin_staff)} contacts")
+
+                    # FALLBACK 2: Perplexity AI Research
+                    print("   🤖 [Fallback 2/2] Agent 2.2: Perplexity AI Research...")
+                    fallback_attempts.append("perplexity_research")
+
+                    from agents.agent2_2_perplexity_research import research_course_contacts
+
+                    # Get city (may need to parse from location or other field)
+                    city = course_data["data"].get("city", course_name.split()[0])  # Fallback to first word
+
+                    perplexity_staff = await research_course_contacts(
+                        course_data["data"].get("course_name"),
+                        city,
+                        state_code
+                    )
+
+                    if perplexity_staff and len(perplexity_staff) >= 1:
+                        print(f"   ✅ Agent 2.2 SUCCESS: {len(perplexity_staff)} contacts from Perplexity")
+                        staff = perplexity_staff
+                        course_data["data"]["staff"] = staff
+                        course_data["data"]["contact_source"] = "perplexity_research"
+                        course_data["data"]["fallback_sources_attempted"] = fallback_attempts
+                    else:
+                        # All sources exhausted
+                        print("   ❌ All sources exhausted (Agent 2, 2.1, 2.2) - NO CONTACTS FOUND")
+                        course_data["data"]["fallback_sources_attempted"] = fallback_attempts
+                        raise Exception("No contacts available from any source (PGA, LinkedIn, Perplexity)")
+
+            except ImportError as e:
+                print(f"   ⚠️  Fallback agents not available: {e}")
+                raise Exception("Agent 2: No staff contacts found and fallbacks unavailable")
+
+        # At this point, we have staff from SOME source (Agent 2, 2.1, or 2.2)
+        print(f"   ▶️  Proceeding with {len(staff)} contacts from source: {course_data['data'].get('contact_source')}\n")
 
         # ====================================================================
         # AGENT 6: Course-Level Business Intelligence (ONCE per course)
