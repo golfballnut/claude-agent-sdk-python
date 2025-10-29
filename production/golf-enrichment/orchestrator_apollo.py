@@ -286,6 +286,11 @@ async def enrich_course(
             print(f"   💰 Cost: $0.00 | ⏱️  {agent8_duration:.1f}s\n")
 
             result["agent_results"]["agent8"] = write_result
+
+            # Extract course_id from Agent 8's result for webhook triggering
+            if write_result.get("course_id"):
+                result["course_id"] = write_result["course_id"]
+
             result["success"] = True
         else:
             raise Exception(f"Agent 8 write failed: {write_result.get('error')}")
