@@ -39,12 +39,19 @@ except ImportError as e:
     raise
 
 # Import Orchestrator (full pipeline)
+# NEW: Using Apollo orchestrator (5 agents vs 8)
 try:
-    from orchestrator import enrich_course as orchestrator_enrich_course
-    logger.info("Successfully imported Orchestrator")
+    from orchestrator_apollo import enrich_course as orchestrator_enrich_course
+    logger.info("Successfully imported Apollo Orchestrator")
 except ImportError as e:
-    logger.error(f"Failed to import Orchestrator: {e}")
-    raise
+    logger.error(f"Failed to import Apollo Orchestrator: {e}")
+    # Fallback to old orchestrator if Apollo not available
+    try:
+        from orchestrator import enrich_course as orchestrator_enrich_course
+        logger.info("Fallback: Using old orchestrator (8 agents)")
+    except ImportError as e2:
+        logger.error(f"Failed to import any orchestrator: {e2}")
+        raise
 
 
 # Webhook to Supabase Edge Function
@@ -126,10 +133,11 @@ class CourseRequest(BaseModel):
 
 # Orchestrator (Full Pipeline) Models
 class EnrichCourseRequest(BaseModel):
-    """Request body for full course enrichment (Agents 1-8)"""
+    """Request body for full course enrichment (Apollo workflow: Agents 1, 2-Apollo, 6, 7, 8)"""
     course_name: str = Field(..., description="Name of the golf course")
-    state_code: str = Field(default="VA", description="State code (e.g., 'VA', 'DC', 'MD')")
-    course_id: int | None = Field(None, description="Optional: Course ID to update (ensures correct course is enriched, avoids name mismatch issues)")
+    state_code: str = Field(default="VA", description="State code (e.g., 'VA', 'NC', 'SC')")
+    course_id: int | None = Field(None, description="Optional: Course ID to update (ensures correct course is enriched)")
+    domain: str = Field(default="", description="Optional: Course domain (for NC courses to bypass Agent 1)")
     use_test_tables: bool = Field(default=True, description="Use test Supabase tables (true) or production (false)")
 
     model_config = {
@@ -426,12 +434,13 @@ async def enrich_course(request: EnrichCourseRequest):
     logger.info(f"🏌️ Full enrichment requested for: {request.course_name}, {request.state_code}")
 
     try:
-        # Call Orchestrator
+        # Call Orchestrator (Apollo version supports domain parameter)
         result = await orchestrator_enrich_course(
             course_name=request.course_name,
             state_code=request.state_code,
             course_id=request.course_id,
-            use_test_tables=request.use_test_tables
+            use_test_tables=request.use_test_tables,
+            domain=request.domain  # Pass domain for Apollo search
         )
 
         logger.info(
