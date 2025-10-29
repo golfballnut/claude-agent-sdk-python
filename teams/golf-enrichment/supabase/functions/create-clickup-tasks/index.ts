@@ -622,6 +622,37 @@ ${oppText}
         results.outreach_task = outreachResult
         console.log(`✅ Outreach task ${outreachResult.action}: ${outreachResult.taskId}`)
 
+        // Create 2 subtasks for outreach workflow
+        console.log(`📋 Creating 2 subtasks for outreach task...`)
+
+        const subtasks = [
+          { name: "📞 Upload call summary" },
+          { name: "📧 Email decision maker" }
+        ]
+
+        for (const subtask of subtasks) {
+          try {
+            const subtaskData: ClickUpTaskData = {
+              name: subtask.name,
+              status: outreachTaskData.status || '⏰ scheduled'  // Match parent status
+            }
+
+            const subtaskTask = await createClickUpTask(
+              '901413111587',  // Same list as parent
+              {
+                ...subtaskData,
+                parent: outreachResult.taskId  // Link to parent outreach task
+              },
+              clickupApiKey
+            )
+
+            console.log(`   ✅ Subtask created: ${subtask.name} (${subtaskTask.id})`)
+          } catch (subtaskError) {
+            console.error(`   ⚠️  Subtask creation failed (non-blocking): ${subtaskError.message}`)
+            // Non-fatal - outreach task still succeeds
+          }
+        }
+
     } catch (error) {
       const errorMsg = `Outreach Activity task failed: ${error.message}`
       console.error(`❌ ${errorMsg}`)

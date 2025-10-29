@@ -246,18 +246,49 @@ async def enrich_course(
         print("📄 [2/8] Agent 2: Extracting course data...")
         agent2_start = time.time()
 
-        course_data = await extract_contact_data(url_result["url"])
+        # NEW: Wrap Agent 2 in try/except to allow waterfall fallback on errors
+        try:
+            course_data = await extract_contact_data(url_result["url"])
+            agent2_duration = time.time() - agent2_start
 
-        agent2_duration = time.time() - agent2_start
+            if not course_data or not course_data.get("data"):
+                print(f"   ⚠️  Agent 2: No data returned, triggering fallbacks...")
+                # Create minimal course_data to allow waterfall
+                course_data = {
+                    "data": {
+                        "course_name": course_name,
+                        "staff": [],
+                        "phone": None,
+                        "source": "pga_directory_error"
+                    },
+                    "cost": 0.0
+                }
+                staff = []
+            else:
+                staff = course_data["data"].get("staff", [])
+                print(f"   ✅ Course: {course_data['data'].get('course_name')}")
+                print(f"   📞 Phone: {course_data['data'].get('phone', 'Not found')}")
+                print(f"   👥 Staff: {len(staff)} contacts found")
+                print(f"   💰 Cost: ${course_data.get('cost', 0):.4f} | ⏱️  {agent2_duration:.1f}s\n")
 
-        if not course_data or not course_data.get("data"):
-            raise Exception("Agent 2 failed: Could not extract course data")
+        except Exception as agent2_error:
+            # Agent 2 threw error (API 529/500, parse error, etc.)
+            # Create minimal course_data to allow waterfall fallback
+            print(f"   ⚠️  Agent 2 error: {agent2_error}")
+            print(f"   🔁 Continuing to fallback agents...\n")
+            agent2_duration = time.time() - agent2_start
 
-        staff = course_data["data"].get("staff", [])
-        print(f"   ✅ Course: {course_data['data'].get('course_name')}")
-        print(f"   📞 Phone: {course_data['data'].get('phone', 'Not found')}")
-        print(f"   👥 Staff: {len(staff)} contacts found")
-        print(f"   💰 Cost: ${course_data.get('cost', 0):.4f} | ⏱️  {agent2_duration:.1f}s\n")
+            course_data = {
+                "data": {
+                    "course_name": course_name,
+                    "staff": [],
+                    "phone": None,
+                    "source": "pga_directory_error"
+                },
+                "cost": 0.0,
+                "error": str(agent2_error)
+            }
+            staff = []
 
         result["agent_results"]["agent2"] = course_data
 
