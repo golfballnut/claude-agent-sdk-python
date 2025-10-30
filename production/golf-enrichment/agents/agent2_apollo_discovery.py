@@ -115,14 +115,25 @@ async def find_contacts_apollo_tool(args: dict[str, Any]) -> dict[str, Any]:
         # STEP 1: Search for each position
         for position in target_positions:
             try:
-                # Search Apollo
+                # Search Apollo - Domain-first strategy (more reliable)
                 search_url = "https://api.apollo.io/api/v1/people/search"
-                search_payload = {
-                    "q_organization_name": course_name,
-                    "person_titles": [position],
-                    "page": 1,
-                    "per_page": 3  # Top 3 matches
-                }
+
+                # Use domain if available (more accurate than name matching)
+                if domain and domain.strip():
+                    search_payload = {
+                        "organization_domain": domain.strip(),
+                        "person_titles": [position],
+                        "page": 1,
+                        "per_page": 3  # Top 3 matches
+                    }
+                else:
+                    # Fallback to name search if no domain
+                    search_payload = {
+                        "q_organization_name": course_name,
+                        "person_titles": [position],
+                        "page": 1,
+                        "per_page": 3  # Top 3 matches
+                    }
 
                 search_r = await client.post(search_url, headers=headers, json=search_payload)
 
@@ -236,6 +247,88 @@ async def find_contacts_apollo_tool(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+async def hunter_domain_search_fallback(domain: str) -> List[Dict[str, Any]]:
+    """
+    Hunter.io Domain-Search fallback when Apollo returns 0 results
+
+    Uses Hunter.io MCP tool to find contacts at a domain.
+    Filters for 90%+ confidence and relevant golf course titles.
+
+    Args:
+        domain: Course domain (e.g., "ballantyne.com")
+
+    Returns:
+        List of contacts with email, name, title, confidence
+    """
+    if not domain:
+        return []
+
+    # Load .env
+    env_path = Path(__file__).parent.parent / ".env"
+    if env_path.exists():
+        from dotenv import load_dotenv
+        load_dotenv(env_path)
+
+    api_key = os.getenv("HUNTER_API_KEY")
+    if not api_key:
+        print("   ⚠️  HUNTER_API_KEY not found - skipping Hunter fallback")
+        return []
+
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            url = "https://api.hunter.io/v2/domain-search"
+            params = {
+                "domain": domain,
+                "api_key": api_key,
+                "limit": 10
+            }
+
+            r = await client.get(url, params=params)
+            data = r.json()
+
+            if not data.get("data") or not data["data"].get("emails"):
+                return []
+
+            emails = data["data"]["emails"]
+
+            # Filter: Only verified emails (90%+ confidence) with relevant titles
+            relevant_titles = [
+                "general manager", "gm", "director", "manager",
+                "professional", "superintendent", "president",
+                "head professional", "golf", "club manager"
+            ]
+
+            contacts = []
+            for email_data in emails:
+                confidence = email_data.get("confidence", 0)
+                position = (email_data.get("position") or "").lower()
+
+                # Check if title is relevant
+                is_relevant = any(title in position for title in relevant_titles)
+
+                if confidence >= 90 and is_relevant:
+                    contact = {
+                        "name": f"{email_data.get('first_name', '')} {email_data.get('last_name', '')}".strip(),
+                        "title": email_data.get("position"),
+                        "email": email_data.get("value"),
+                        "email_confidence": confidence,
+                        "email_method": "hunter_verified",
+                        "linkedin_url": None,  # Hunter doesn't provide LinkedIn
+                        "linkedin_method": None,
+                        "tenure_years": None,  # Hunter doesn't provide tenure
+                        "tenure_start_date": None,
+                        "previous_clubs": [],
+                        "source": "hunter_fallback"
+                    }
+                    contacts.append(contact)
+
+            return contacts
+
+    except Exception as e:
+        print(f"   ⚠️  Hunter fallback error: {e}")
+        return []
+
+
 async def discover_contacts(course_name: str, domain: str = "") -> Dict[str, Any]:
     """
     Discover and enrich golf course contacts using Apollo.io
@@ -294,6 +387,34 @@ async def discover_contacts(course_name: str, domain: str = "") -> Dict[str, Any
         enrichment["total_cost_usd"] = apollo_cost + sdk_cost
         enrichment["sdk_cost_usd"] = sdk_cost
         enrichment["apollo_cost_usd"] = apollo_cost
+
+    # Hunter.io fallback: If Apollo returned 0 contacts and we have a domain, try Hunter
+    if enrichment and len(enrichment.get("contacts", [])) == 0 and domain:
+        print("   🔄 Apollo found 0 contacts - triggering Hunter.io fallback...")
+        hunter_contacts = await hunter_domain_search_fallback(domain)
+
+        if hunter_contacts:
+            print(f"   ✅ Hunter fallback SUCCESS: {len(hunter_contacts)} contacts found")
+
+            # Calculate Hunter cost
+            hunter_cost = 0.049  # $49/month ÷ 1,000 requests
+            apollo_cost = enrichment.get("apollo_cost_usd", 0)
+            sdk_cost = enrichment.get("sdk_cost_usd", 0)
+
+            # Return Hunter results
+            return {
+                "contacts": hunter_contacts,
+                "credits_used": 0,  # Hunter doesn't use Apollo credits
+                "cost_usd": hunter_cost,
+                "apollo_cost_usd": apollo_cost,
+                "sdk_cost_usd": sdk_cost,
+                "hunter_cost_usd": hunter_cost,
+                "total_cost_usd": apollo_cost + sdk_cost + hunter_cost,
+                "source": "hunter_fallback",
+                "email_coverage": f"{len(hunter_contacts)}/{len(hunter_contacts)}"
+            }
+        else:
+            print("   ❌ Hunter fallback also failed - no contacts found")
 
     return enrichment or {
         "contacts": [],

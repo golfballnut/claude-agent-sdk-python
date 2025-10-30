@@ -293,18 +293,15 @@ async def enrich_course(
         result["agent_results"]["agent2"] = course_data
 
         # ====================================================================
-        # CONTACT FALLBACK CASCADE: Accumulate contacts from multiple sources
+        # CONTACT FALLBACK CASCADE: Ensure we have 2+ contacts
         # ====================================================================
         contact_source = course_data["data"].get("source", "pga_directory")  # Default source
-        all_sources = ["pga_directory"]  # Track all sources used
 
-        if len(staff) >= 1:
-            print(f"   ✅ Agent 2 found {len(staff)} contact(s) - checking for additional contacts...")
+        if staff and len(staff) >= 2:
+            print(f"   ✅ Agent 2 met threshold: {len(staff)} contacts found")
+            course_data["data"]["contact_source"] = contact_source
         else:
-            print(f"   ⚠️  Agent 2 found 0 contacts - triggering fallbacks...")
-
-        # ALWAYS try fallbacks to maximize contact count (unless we already have 3+)
-        if len(staff) < 3:
+            print(f"   ⚠️  Agent 2 below threshold: {len(staff)} contact(s), triggering fallbacks...")
             fallback_attempts = []
 
             # FALLBACK 1: LinkedIn Company Page
@@ -319,20 +316,16 @@ async def enrich_course(
                     state_code
                 )
 
-                if linkedin_staff and len(linkedin_staff) > 0:
-                    print(f"   ✅ Agent 2.1 found {len(linkedin_staff)} contact(s) from LinkedIn")
-                    # MERGE contacts (avoid duplicates by name)
-                    existing_names = {c.get("name", "").lower() for c in staff}
-                    new_contacts = [c for c in linkedin_staff if c.get("name", "").lower() not in existing_names]
-                    staff.extend(new_contacts)
+                if linkedin_staff and len(linkedin_staff) >= 2:
+                    print(f"   ✅ Agent 2.1 SUCCESS: {len(linkedin_staff)} contacts from LinkedIn")
+                    staff = linkedin_staff
                     course_data["data"]["staff"] = staff
-                    all_sources.append("linkedin_company")
-                    print(f"   📊 Total contacts now: {len(staff)}")
+                    course_data["data"]["contact_source"] = "linkedin_company"
+                    course_data["data"]["fallback_sources_attempted"] = fallback_attempts
                 else:
-                    print(f"   ⚠️  Agent 2.1 found 0 contacts")
+                    print(f"   ⚠️  Agent 2.1 below threshold: {len(linkedin_staff)} contacts")
 
-                # FALLBACK 2: Perplexity AI Research (try even if LinkedIn succeeded)
-                if len(staff) < 3:
+                    # FALLBACK 2: Perplexity AI Research
                     print("   🤖 [Fallback 2/2] Agent 2.2: Perplexity AI Research...")
                     fallback_attempts.append("perplexity_research")
 
@@ -347,33 +340,21 @@ async def enrich_course(
                         state_code
                     )
 
-                    if perplexity_staff and len(perplexity_staff) > 0:
-                        print(f"   ✅ Agent 2.2 found {len(perplexity_staff)} contact(s) from Perplexity")
-                        # MERGE contacts (avoid duplicates by name)
-                        existing_names = {c.get("name", "").lower() for c in staff}
-                        new_contacts = [c for c in perplexity_staff if c.get("name", "").lower() not in existing_names]
-                        staff.extend(new_contacts)
+                    if perplexity_staff and len(perplexity_staff) >= 1:
+                        print(f"   ✅ Agent 2.2 SUCCESS: {len(perplexity_staff)} contacts from Perplexity")
+                        staff = perplexity_staff
                         course_data["data"]["staff"] = staff
-                        all_sources.append("perplexity_research")
-                        print(f"   📊 Total contacts now: {len(staff)}")
+                        course_data["data"]["contact_source"] = "perplexity_research"
+                        course_data["data"]["fallback_sources_attempted"] = fallback_attempts
                     else:
-                        print(f"   ❌ Perplexity found no staff for {course_data['data'].get('course_name')}")
-
-                # Set primary contact source (prioritize based on most contacts)
-                if len(staff) > 0:
-                    course_data["data"]["contact_source"] = all_sources[-1] if len(all_sources) > 1 else "pga_directory"
-                    course_data["data"]["fallback_sources_attempted"] = fallback_attempts
-                    course_data["data"]["all_sources"] = all_sources
-                else:
-                    # All sources exhausted with 0 contacts
-                    print("   ❌ All sources exhausted (Agent 2, 2.1, 2.2) - NO CONTACTS FOUND")
-                    course_data["data"]["fallback_sources_attempted"] = fallback_attempts
-                    raise Exception("No contacts available from any source (PGA, LinkedIn, Perplexity)")
+                        # All sources exhausted
+                        print("   ❌ All sources exhausted (Agent 2, 2.1, 2.2) - NO CONTACTS FOUND")
+                        course_data["data"]["fallback_sources_attempted"] = fallback_attempts
+                        raise Exception("No contacts available from any source (PGA, LinkedIn, Perplexity)")
 
             except ImportError as e:
                 print(f"   ⚠️  Fallback agents not available: {e}")
-                if len(staff) == 0:
-                    raise Exception("Agent 2: No staff contacts found and fallbacks unavailable")
+                raise Exception("Agent 2: No staff contacts found and fallbacks unavailable")
 
         # At this point, we have staff from SOME source (Agent 2, 2.1, or 2.2)
         print(f"   ▶️  Proceeding with {len(staff)} contacts from source: {course_data['data'].get('contact_source')}\n")
@@ -629,7 +610,7 @@ async def enrich_course(
             "total_duration_seconds": round(total_duration, 1),
             "contacts_enriched": len(enriched_contacts),
             "agent_costs": {
-                "agent1": url_result.get("cost", 0),  # Fixed: was reading from wrong variable
+                "agent1": course_data.get("cost", 0),
                 "agent2": course_data.get("cost", 0),
                 "agent6": round(course_intel.get("cost", 0), 4),
                 "agent7": water_data.get("cost", 0),
@@ -682,7 +663,6 @@ async def enrich_course(
         )
 
         result["error"] = str(e)
-        result["course_id"] = course_id  # Include course_id so webhook can fire on failures
         result["summary"]["total_duration_seconds"] = round(total_duration, 1)
 
         return result

@@ -38,20 +38,28 @@ except ImportError as e:
     logger.error(f"Failed to import Agent 7: {e}")
     raise
 
-# Import Orchestrator (full pipeline)
-# NEW: Using Apollo orchestrator (5 agents vs 8)
+# Import Both Orchestrators (full pipeline)
 try:
-    from orchestrator_apollo import enrich_course as orchestrator_enrich_course
+    from orchestrator import enrich_course as old_enrich_course
+    logger.info("Successfully imported Standard Orchestrator (8-agent flow)")
+except ImportError as e:
+    logger.error(f"Failed to import Standard Orchestrator: {e}")
+    raise
+
+try:
+    from orchestrator_apollo import enrich_course as apollo_enrich_course
     logger.info("Successfully imported Apollo Orchestrator")
 except ImportError as e:
     logger.error(f"Failed to import Apollo Orchestrator: {e}")
-    # Fallback to old orchestrator if Apollo not available
-    try:
-        from orchestrator import enrich_course as orchestrator_enrich_course
-        logger.info("Fallback: Using old orchestrator (8 agents)")
-    except ImportError as e2:
-        logger.error(f"Failed to import any orchestrator: {e2}")
-        raise
+    raise
+
+# Orchestrator Selection: USE_APOLLO environment variable
+USE_APOLLO = os.getenv("USE_APOLLO", "false").lower() == "true"
+orchestrator_enrich_course = apollo_enrich_course if USE_APOLLO else old_enrich_course
+
+logger.info("="*70)
+logger.info(f"🎯 Active orchestrator: {'APOLLO (domain-first + Hunter fallback)' if USE_APOLLO else 'STANDARD (8-agent flow)'}")
+logger.info("="*70)
 
 
 # Webhook to Supabase Edge Function
@@ -133,11 +141,11 @@ class CourseRequest(BaseModel):
 
 # Orchestrator (Full Pipeline) Models
 class EnrichCourseRequest(BaseModel):
-    """Request body for full course enrichment (Apollo workflow: Agents 1, 2-Apollo, 6, 7, 8)"""
+    """Request body for full course enrichment (Agents 1-8 or Apollo)"""
     course_name: str = Field(..., description="Name of the golf course")
-    state_code: str = Field(default="VA", description="State code (e.g., 'VA', 'NC', 'SC')")
-    course_id: int | None = Field(None, description="Optional: Course ID to update (ensures correct course is enriched)")
-    domain: str = Field(default="", description="Optional: Course domain (for NC courses to bypass Agent 1)")
+    state_code: str = Field(default="VA", description="State code (e.g., 'VA', 'DC', 'MD')")
+    domain: str | None = Field(None, description="Optional: Course domain (e.g., 'ballantyne.com'). If not provided, Agent 1 will find it.")
+    course_id: int | None = Field(None, description="Optional: Course ID to update (ensures correct course is enriched, avoids name mismatch issues)")
     use_test_tables: bool = Field(default=True, description="Use test Supabase tables (true) or production (false)")
 
     model_config = {
@@ -213,9 +221,10 @@ async def root():
         "status": "running",
         "endpoints": {
             "health": "GET /health",
+            "orchestrator_info": "GET /orchestrator-info (Check active orchestrator)",
             "count_hazards": "POST /count-hazards (Agent 7 only)",
             "test_agent8": "POST /test-agent8 (Test Agent 8 in isolation)",
-            "enrich_course": "POST /enrich-course (Full pipeline: Agents 1-8)",
+            "enrich_course": "POST /enrich-course (Full pipeline)",
             "docs": "GET /docs",
             "redoc": "GET /redoc"
         },
@@ -245,13 +254,40 @@ async def health_check():
     """
     return {
         "status": "healthy",
-        "service": "agent7-water-hazards",
+        "service": "golf-enrichment-api",
         "timestamp": datetime.utcnow().isoformat(),
-        "agent": "Agent 7",
+        "active_orchestrator": "apollo" if USE_APOLLO else "standard",
         "dependencies": {
             "claude_cli": "installed",  # Verified during container build
-            "perplexity_api": "configured"
+            "perplexity_api": "configured",
+            "apollo_api": "configured" if os.getenv("APOLLO_API_KEY") else "missing",
+            "hunter_api": "configured" if os.getenv("HUNTER_API_KEY") else "missing"
         }
+    }
+
+
+@app.get("/orchestrator-info")
+async def orchestrator_info():
+    """
+    Return which orchestrator is currently active
+
+    This endpoint helps verify the correct orchestrator is loaded
+    when using USE_APOLLO environment variable switching.
+
+    Returns:
+        dict: Orchestrator configuration details
+    """
+    return {
+        "active_orchestrator": "apollo" if USE_APOLLO else "standard",
+        "use_apollo_env": os.getenv("USE_APOLLO", "false"),
+        "description": "Apollo orchestrator: domain-first search + Hunter fallback" if USE_APOLLO else "Standard orchestrator: 8-agent flow",
+        "version": "1.0.0",
+        "features": {
+            "domain_first_search": USE_APOLLO,
+            "hunter_fallback": USE_APOLLO,
+            "apollo_enrichment": USE_APOLLO
+        },
+        "timestamp": datetime.utcnow().isoformat()
     }
 
 
@@ -434,13 +470,13 @@ async def enrich_course(request: EnrichCourseRequest):
     logger.info(f"🏌️ Full enrichment requested for: {request.course_name}, {request.state_code}")
 
     try:
-        # Call Orchestrator (Apollo version supports domain parameter)
+        # Call Orchestrator
         result = await orchestrator_enrich_course(
             course_name=request.course_name,
             state_code=request.state_code,
+            domain=request.domain,
             course_id=request.course_id,
-            use_test_tables=request.use_test_tables,
-            domain=request.domain  # Pass domain for Apollo search
+            use_test_tables=request.use_test_tables
         )
 
         logger.info(
