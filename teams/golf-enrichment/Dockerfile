@@ -35,8 +35,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 # Copy agents directory (contains all agents)
 COPY agents/ ./agents/
-# Copy orchestrator (workflow coordinator)
+# Copy orchestrators (workflow coordinators)
 COPY orchestrator.py .
+COPY orchestrator_apollo.py .
 # Copy template directory (contains utils like env_loader)
 COPY template/ ./template/
 # Copy API wrapper

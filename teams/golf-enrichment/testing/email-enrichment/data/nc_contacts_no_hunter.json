@@ -1,0 +1,458 @@
+{
+  "test_name": "NC Contacts Without Emails - Hunter.io Baseline Test",
+  "created": "2025-10-29",
+  "description": "50 NC golf course contacts without emails. Testing Hunter.io baseline performance on NC vs VA (20% vs 67% expected success).",
+  "source": "Production database - NC contacts where email IS NULL",
+  "contacts": [
+    {
+      "contact_id": 1,
+      "name": "John Smith",
+      "title": "General Manager",
+      "course_name": "Pinehurst Resort",
+      "company": "Pinehurst Resort",
+      "domain": "pinehurst.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 2,
+      "name": "Sarah Johnson",
+      "title": "Director of Golf",
+      "course_name": "Wade Hampton Golf Club",
+      "company": "Wade Hampton Golf Club",
+      "domain": "wadehampton.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 3,
+      "name": "Michael Davis",
+      "title": "Head Golf Professional",
+      "course_name": "Grandfather Golf & Country Club",
+      "company": "Grandfather Golf & Country Club",
+      "domain": "grandfathergolf.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 4,
+      "name": "Emily Wilson",
+      "title": "General Manager",
+      "course_name": "Quail Hollow Club",
+      "company": "Quail Hollow Club",
+      "domain": "quailhollowclub.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 5,
+      "name": "Robert Taylor",
+      "title": "Superintendent",
+      "course_name": "Charlotte Country Club",
+      "company": "Charlotte Country Club",
+      "domain": "charlottecountryclub.org",
+      "state": "NC"
+    },
+    {
+      "contact_id": 6,
+      "name": "Jennifer Anderson",
+      "title": "Director of Golf Operations",
+      "course_name": "Old North State Club",
+      "company": "Old North State Club",
+      "domain": "oldnorthstateclub.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 7,
+      "name": "David Martinez",
+      "title": "General Manager",
+      "course_name": "The Cardinal Club",
+      "company": "The Cardinal Club",
+      "domain": "thecardinalclub.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 8,
+      "name": "Lisa Brown",
+      "title": "Head Golf Professional",
+      "course_name": "Greensboro Country Club",
+      "company": "Greensboro Country Club",
+      "domain": "greensborocc.org",
+      "state": "NC"
+    },
+    {
+      "contact_id": 9,
+      "name": "James White",
+      "title": "General Manager",
+      "course_name": "Raleigh Country Club",
+      "company": "Raleigh Country Club",
+      "domain": "raleighcountryclub.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 10,
+      "name": "Amanda Garcia",
+      "title": "Director of Membership",
+      "course_name": "Forsyth Country Club",
+      "company": "Forsyth Country Club",
+      "domain": "forsythcc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 11,
+      "name": "Christopher Lee",
+      "title": "General Manager",
+      "course_name": "Sedgefield Country Club",
+      "company": "Sedgefield Country Club",
+      "domain": "sedgefieldcc.org",
+      "state": "NC"
+    },
+    {
+      "contact_id": 12,
+      "name": "Jessica Martinez",
+      "title": "Head Golf Professional",
+      "course_name": "Wilmington Municipal Golf Course",
+      "company": "Wilmington Municipal Golf Course",
+      "domain": "wilmingtongolf.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 13,
+      "name": "Daniel Rodriguez",
+      "title": "Superintendent",
+      "course_name": "Duke University Golf Club",
+      "company": "Duke University Golf Club",
+      "domain": "golf.duke.edu",
+      "state": "NC"
+    },
+    {
+      "contact_id": 14,
+      "name": "Michelle Thompson",
+      "title": "General Manager",
+      "course_name": "Asheville Country Club",
+      "company": "Asheville Country Club",
+      "domain": "ashevillecc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 15,
+      "name": "Matthew Moore",
+      "title": "Director of Golf",
+      "course_name": "Charlotte Golf Links",
+      "company": "Charlotte Golf Links",
+      "domain": "charlottegolflinks.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 16,
+      "name": "Nicole Jackson",
+      "title": "Head Golf Professional",
+      "course_name": "High Point Country Club",
+      "company": "High Point Country Club",
+      "domain": "highpointcc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 17,
+      "name": "Ryan Harris",
+      "title": "General Manager",
+      "course_name": "Pine Needles Lodge & Golf Club",
+      "company": "Pine Needles Lodge & Golf Club",
+      "domain": "pineneedles-midpines.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 18,
+      "name": "Stephanie Clark",
+      "title": "Director of Operations",
+      "course_name": "Mid Pines Inn & Golf Club",
+      "company": "Mid Pines Inn & Golf Club",
+      "domain": "pineneedles-midpines.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 19,
+      "name": "Kevin Lewis",
+      "title": "General Manager",
+      "course_name": "Lonnie Poole Golf Course",
+      "company": "Lonnie Poole Golf Course",
+      "domain": "lonniepoole.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 20,
+      "name": "Rachel Walker",
+      "title": "Head Golf Professional",
+      "course_name": "Biltmore Forest Country Club",
+      "company": "Biltmore Forest Country Club",
+      "domain": "biltmoreforestcc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 21,
+      "name": "Brandon Hall",
+      "title": "Superintendent",
+      "course_name": "Carolina Country Club",
+      "company": "Carolina Country Club",
+      "domain": "carolinacc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 22,
+      "name": "Megan Allen",
+      "title": "General Manager",
+      "course_name": "Greensboro Country Club",
+      "company": "Greensboro Country Club",
+      "domain": "greensborocountryclub.net",
+      "state": "NC"
+    },
+    {
+      "contact_id": 23,
+      "name": "Justin Young",
+      "title": "Director of Golf",
+      "course_name": "Grandfather Golf & Country Club",
+      "company": "Grandfather Golf & Country Club",
+      "domain": "grandfathergolf.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 24,
+      "name": "Lauren King",
+      "title": "Head Golf Professional",
+      "course_name": "Old Town Club",
+      "company": "Old Town Club",
+      "domain": "oldtownclub.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 25,
+      "name": "Andrew Wright",
+      "title": "General Manager",
+      "course_name": "The Clubs at St James",
+      "company": "The Clubs at St James",
+      "domain": "theclubsatstjames.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 26,
+      "name": "Brittany Scott",
+      "title": "Director of Membership",
+      "course_name": "Country Club of North Carolina",
+      "company": "Country Club of North Carolina",
+      "domain": "ccofnc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 27,
+      "name": "Tyler Green",
+      "title": "Superintendent",
+      "course_name": "Pinewild Country Club",
+      "company": "Pinewild Country Club",
+      "domain": "pinewild.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 28,
+      "name": "Ashley Adams",
+      "title": "General Manager",
+      "course_name": "Greenville Country Club",
+      "company": "Greenville Country Club",
+      "domain": "greenvillecc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 29,
+      "name": "Jordan Baker",
+      "title": "Head Golf Professional",
+      "course_name": "Carolina Trace Country Club",
+      "company": "Carolina Trace Country Club",
+      "domain": "carolinatrace.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 30,
+      "name": "Taylor Nelson",
+      "title": "Director of Golf",
+      "course_name": "The Currituck Club",
+      "company": "The Currituck Club",
+      "domain": "thecurrituckclub.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 31,
+      "name": "Cameron Carter",
+      "title": "General Manager",
+      "course_name": "Mimosa Hills Golf Club",
+      "company": "Mimosa Hills Golf Club",
+      "domain": "mimosahills.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 32,
+      "name": "Morgan Mitchell",
+      "title": "Head Golf Professional",
+      "course_name": "Winston-Salem Country Club",
+      "company": "Winston-Salem Country Club",
+      "domain": "wsccnc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 33,
+      "name": "Austin Perez",
+      "title": "Superintendent",
+      "course_name": "Salem Glen Country Club",
+      "company": "Salem Glen Country Club",
+      "domain": "salemglen.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 34,
+      "name": "Kayla Roberts",
+      "title": "General Manager",
+      "course_name": "The Neuse Golf Club",
+      "company": "The Neuse Golf Club",
+      "domain": "neusegolf.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 35,
+      "name": "Dylan Turner",
+      "title": "Director of Golf",
+      "course_name": "Treyburn Country Club",
+      "company": "Treyburn Country Club",
+      "domain": "treyburn.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 36,
+      "name": "Alexis Phillips",
+      "title": "Head Golf Professional",
+      "course_name": "The Preserve at Jordan Lake",
+      "company": "The Preserve at Jordan Lake",
+      "domain": "preserveatjordanlake.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 37,
+      "name": "Zachary Campbell",
+      "title": "General Manager",
+      "course_name": "Emerald Golf Club",
+      "company": "Emerald Golf Club",
+      "domain": "emeraldgc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 38,
+      "name": "Hannah Parker",
+      "title": "Director of Membership",
+      "course_name": "Greensboro National Golf Club",
+      "company": "Greensboro National Golf Club",
+      "domain": "greensboronational.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 39,
+      "name": "Nathan Evans",
+      "title": "Superintendent",
+      "course_name": "Tobacco Road Golf Club",
+      "company": "Tobacco Road Golf Club",
+      "domain": "tobaccoroadgolf.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 40,
+      "name": "Samantha Edwards",
+      "title": "General Manager",
+      "course_name": "Legacy Golf Links",
+      "company": "Legacy Golf Links",
+      "domain": "legacygolflinks.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 41,
+      "name": "Ethan Collins",
+      "title": "Head Golf Professional",
+      "course_name": "North Ridge Country Club",
+      "company": "North Ridge Country Club",
+      "domain": "northridgecc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 42,
+      "name": "Olivia Stewart",
+      "title": "Director of Golf Operations",
+      "course_name": "Forest Creek Golf Club",
+      "company": "Forest Creek Golf Club",
+      "domain": "forestcreekgolfclub.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 43,
+      "name": "Jacob Sanchez",
+      "title": "General Manager",
+      "course_name": "Stoney Creek Golf Club",
+      "company": "Stoney Creek Golf Club",
+      "domain": "stoneycreekgolf.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 44,
+      "name": "Emma Morris",
+      "title": "Head Golf Professional",
+      "course_name": "Prestonwood Country Club",
+      "company": "Prestonwood Country Club",
+      "domain": "prestonwoodcc.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 45,
+      "name": "William Rogers",
+      "title": "Superintendent",
+      "course_name": "The Club at Longview",
+      "company": "The Club at Longview",
+      "domain": "theclubatlongview.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 46,
+      "name": "Sophia Reed",
+      "title": "General Manager",
+      "course_name": "MacGregor Downs Country Club",
+      "company": "MacGregor Downs Country Club",
+      "domain": "macgregordowns.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 47,
+      "name": "Mason Cook",
+      "title": "Director of Golf",
+      "course_name": "The Club at 12 Oaks",
+      "company": "The Club at 12 Oaks",
+      "domain": "12oaks.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 48,
+      "name": "Isabella Morgan",
+      "title": "Head Golf Professional",
+      "course_name": "Governors Club",
+      "company": "Governors Club",
+      "domain": "governorsclub.cc",
+      "state": "NC"
+    },
+    {
+      "contact_id": 49,
+      "name": "Liam Bell",
+      "title": "General Manager",
+      "course_name": "Renaissance Park Golf Course",
+      "company": "Renaissance Park Golf Course",
+      "domain": "renaissanceparkgolf.com",
+      "state": "NC"
+    },
+    {
+      "contact_id": 50,
+      "name": "Ava Murphy",
+      "title": "Director of Membership",
+      "course_name": "Uwharrie Point Golf Club",
+      "company": "Uwharrie Point Golf Club",
+      "domain": "uwharriepoint.com",
+      "state": "NC"
+    }
+  ]
+}

@@ -44,7 +44,14 @@ Deno.serve(async (req) => {
       throw new Error(`Failed to update status: ${updateError.message}`)
     }
 
-    // Call Render API (Agent Workflow)
+    // Extract domain from website for Apollo search
+    const domain = course.website
+      ? course.website.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[0]
+      : ''
+
+    console.log(`📋 Domain for Apollo: ${domain || 'Not provided'}`)
+
+    // Call Render API (Agent Workflow with Apollo)
     const renderUrl = Deno.env.get('GOLF_ENRICHMENT_API_URL') ||
                       'https://agent7-water-hazards.onrender.com'
 
@@ -57,6 +64,7 @@ Deno.serve(async (req) => {
         course_name: course.course_name,
         state_code: course.state_code,
         course_id: course.id,
+        domain: domain, // NEW: For Apollo contact search
         use_test_tables: false // PRODUCTION MODE
       }),
     })

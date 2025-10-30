@@ -1,0 +1,135 @@
+{
+  "test_name": "Real NC Contacts from Production - Hunter vs Apollo Comparison",
+  "created": "2025-10-29",
+  "description": "Real NC golf course contacts from production database. All currently have email=null. Testing to see if Hunter.io or Apollo.io can find emails.",
+  "source": "golf-course-outreach Supabase - golf_course_contacts table",
+  "contacts": [
+    {
+      "contact_id": "9e69fc3d-f7bf-44bd-b0c9-44b0efdef79d",
+      "name": "Philip J Shepherd",
+      "title": "General Manager",
+      "company": "Mountain Aire Golf Club",
+      "domain": "mountainaire.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "c628125a-4b34-416a-9dc4-e2c4af6ed779",
+      "name": "Wrenn M Johnson",
+      "title": "Assistant Professional",
+      "company": "Mountain Aire Golf Club",
+      "domain": "mountainaire.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "2dedf13e-4b28-49fc-ae2e-d2a0b595ddd0",
+      "name": "Jason A. York",
+      "title": "Director of Instruction",
+      "company": "Star Hill Golf Club",
+      "domain": "starhillgolf.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "aa3f846b-e720-4172-8ccd-9c1f5a52ca95",
+      "name": "Wm. Carl Beaman, Jr., PGA",
+      "title": "General Manager",
+      "company": "Star Hill Golf Club",
+      "domain": "starhillgolf.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "35c1a051-133f-4ec7-9cc3-d4ce801d9216",
+      "name": "Ben Ponko",
+      "title": "Assistant Professional",
+      "company": "Alamance Country Club",
+      "domain": "alamancecountryclub.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "66cde47a-3362-4724-a0d0-ebebadc551c1",
+      "name": "Drake Woodside, PGA",
+      "title": "Director of Golf",
+      "company": "Alamance Country Club",
+      "domain": "alamancecountryclub.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "fb4d69dc-fffd-44eb-94b1-591a08571bad",
+      "name": "Heather A. Hauk, PGA",
+      "title": "Golf Instructor",
+      "company": "Alamance Country Club",
+      "domain": "alamancecountryclub.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "7e13967b-26b1-458d-b606-6ee79c44c242",
+      "name": "Spencer J. Wood",
+      "title": "Assistant Professional",
+      "company": "Alamance Country Club",
+      "domain": "alamancecountryclub.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "992459b0-a9e0-44c0-a063-53a5accee424",
+      "name": "Jason Lambert",
+      "title": "Controller",
+      "company": "Roanoke Country Club",
+      "domain": "roanokecountryclub.net",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "84e52757-a661-44b0-af76-2c9e74bb610a",
+      "name": "Golfpro Reese",
+      "title": "Head Golf Professional",
+      "company": "Green Meadows Golf Course",
+      "domain": "greenmeadowsgolfsite.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "04ac707b-42d6-4f14-850f-e57228a791d6",
+      "name": "Heather Carney",
+      "title": "General Manager",
+      "company": "Green Meadows Golf Course",
+      "domain": "greenmeadowsgolfsite.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    },
+    {
+      "contact_id": "aae89c7a-14a3-41dc-b3fb-8b6c8049ff37",
+      "name": "Allen Reese",
+      "title": "General Manager",
+      "company": "Green Meadows Golf Course",
+      "domain": "greenmeadowsgolfsite.com",
+      "state": "NC",
+      "current_email": null,
+      "current_confidence": null
+    }
+  ],
+  "notes": [
+    "Excluded contacts with Facebook URLs as domain (not useful for email finding)",
+    "Excluded contacts with 'Not found' or 'Not provided' domains",
+    "Cleaned domains: removed www., https://, trailing slashes",
+    "All contacts currently have email=null in production",
+    "Testing to see if Hunter.io or Apollo.io can find these emails"
+  ]
+}
