@@ -130,11 +130,24 @@ Systematic approach to debugging agent failures in production. Transform product
 - [ ] **Output:** Docker test results
 
 ### Phase 5: Production Deploy ✅
-- [ ] Sync fixes to production/ folder
-- [ ] Deploy to cloud platform
-- [ ] Monitor first 5-10 cases
-- [ ] Validate improvement
-- [ ] **Output:** Production metrics
+
+Deploy Docker-validated fixes to production with verification that production environment exactly mirrors testing environment.
+
+**See:** [PRODUCTION_DEPLOYMENT.md](PRODUCTION_DEPLOYMENT.md) for complete deployment guide.
+
+**Critical Principle:** Production must be byte-for-byte identical to Docker testing.
+
+**Steps:**
+- [ ] Sync code: `teams/` → `production/` (using sync script)
+- [ ] Verify with MD5 checksums (catch partial syncs)
+- [ ] Configure environment variables (feature flags, API keys)
+- [ ] Update Dockerfile if needed (ensure all files copied)
+- [ ] Deploy to cloud platform (git push triggers build)
+- [ ] Validate: production mirrors Docker (orchestrator, test case, logs)
+- [ ] Monitor first 5-10 cases (confirm success rate, costs)
+- [ ] **Output:** Production metrics matching Docker predictions
+
+**Example:** Apollo deployment (Oct 29, 2025) - orchestrator_apollo.py sync issue caught by MD5 verification, fixed, deployed successfully
 
 ---
 

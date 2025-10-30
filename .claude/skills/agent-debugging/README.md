@@ -37,6 +37,7 @@
 | **TEST_FIXTURE_CREATION.md** | Test data from failures | Phase 2 - creating test data |
 | **FIX_IMPLEMENTATION.md** | Fix patterns & local testing | Phase 3 - implementing fixes |
 | **DOCKER_VALIDATION.md** | Docker testing workflow | Phase 4 - validating in Docker |
+| **PRODUCTION_DEPLOYMENT.md** | Production deployment guide | Phase 5 - deploying to production |
 | **EXAMPLES.md** | Complete case study | Reference - real example |
 
 ---

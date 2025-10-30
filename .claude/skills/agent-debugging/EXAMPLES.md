@@ -725,6 +725,150 @@ Cardinal Country Club:
 
 ---
 
+## Phase 6: Production Deployment (Oct 29 Evening)
+
+**Context:** Deploy Docker-validated Apollo fixes to production Render environment.
+
+**Critical requirement:** Production must exactly mirror Docker testing environment.
+
+### Code Sync Attempt #1
+
+**Action:**
+```bash
+python production/scripts/sync_to_production.py golf-enrichment
+git add production/golf-enrichment/
+git commit -m "feat: Deploy Apollo fixes"
+git push origin main
+```
+
+**Files synced:**
+- ✅ agent2_apollo_discovery.py (16K)
+- ✅ api.py (17K)
+- ✅ orchestrator.py (standard)
+
+### Issue Discovered: Partial Sync
+
+**Problem:** orchestrator_apollo.py was outdated in production
+
+**Detection (MD5 verification):**
+```bash
+md5 teams/golf-enrichment/orchestrator_apollo.py
+# Output: 0e77271335d99aa403ac5edfeb71d4c6
+
+md5 production/golf-enrichment/orchestrator_apollo.py
+# Output: f8b3e1c9d... (DIFFERENT!)
+```
+
+**Root cause:**
+- orchestrator_apollo.py synced in first deployment (Oct 29 14:58)
+- Fixed in teams/ during Docker testing (Oct 29 19:39)
+- Second sync missed this file → production had old version
+
+**Impact:** Production had buggy Agent 1 logic (Docker tested fixed version)
+
+### Fix: Re-sync orchestrator_apollo.py
+
+**Action:**
+```bash
+cp teams/golf-enrichment/orchestrator_apollo.py \
+   production/golf-enrichment/orchestrator_apollo.py
+
+# Verify
+md5 teams/golf-enrichment/orchestrator_apollo.py
+md5 production/golf-enrichment/orchestrator_apollo.py
+# Both: 0e77271335d99aa403ac5edfeb71d4c6 ✓
+
+# Deploy
+git add production/golf-enrichment/orchestrator_apollo.py
+git commit -m "fix: Sync orchestrator_apollo.py with Docker-tested version"
+git push origin main
+```
+
+### Environment Variables Configuration
+
+**Added on Render Dashboard:**
+```
+USE_APOLLO = true
+APOLLO_API_KEY = DPyR74ac7h9w2y9DMAE90g
+```
+
+**Why critical:** Without `USE_APOLLO=true`, Apollo orchestrator is deployed but not active (defaults to Standard orchestrator).
+
+### Production Validation
+
+**1. Code verification:**
+```bash
+md5 teams/golf-enrichment/orchestrator_apollo.py
+md5 production/golf-enrichment/orchestrator_apollo.py
+md5 teams/golf-enrichment/agents/agent2_apollo_discovery.py
+md5 production/golf-enrichment/agents/agent2_apollo_discovery.py
+md5 teams/golf-enrichment/api.py
+md5 production/golf-enrichment/api.py
+# All checksums identical ✓
+```
+
+**2. Orchestrator check:**
+```bash
+curl https://agent7-water-hazards.onrender.com/orchestrator-info
+# Response: "active_orchestrator": "apollo" ✓
+```
+
+**3. Test same course as Docker:**
+
+Cardinal Country Club (succeeded in Docker with 4 contacts, 100% emails):
+- Expected in production: Same results
+- Production mirrors Docker: Code identical, env vars set
+
+### Deployment Success Criteria Met
+
+- ✅ All files byte-for-byte identical (MD5 verified)
+- ✅ Environment variables configured
+- ✅ Dockerfile includes orchestrator_apollo.py
+- ✅ Health endpoint responding
+- ✅ Apollo orchestrator active (not Standard)
+- ✅ Ready for production testing
+
+### Lessons Learned
+
+**1. Always verify sync with MD5 checksums**
+- Partial syncs are common
+- One missing file breaks everything
+- Don't assume sync script worked perfectly
+
+**2. Environment variables are critical**
+- Code can be deployed but inactive
+- Feature flags control behavior
+- Validate env vars after deployment
+
+**3. Production must mirror Docker exactly**
+- Same code (verified with checksums)
+- Same configuration (USE_APOLLO=true)
+- Same expected results (60% success, $0.19/course)
+
+**4. Deployment validation checklist needed**
+- Code verification (MD5)
+- Configuration verification (env vars)
+- Runtime verification (orchestrator-info)
+- Test case verification (same course as Docker)
+
+### Time Investment
+
+- Initial sync: 5 minutes
+- Issue detection: 10 minutes (MD5 verification)
+- Fix and redeploy: 15 minutes
+- Environment variables: 5 minutes
+- Production validation: 10 minutes
+- **Total: 45 minutes** (with partial sync issue)
+
+### Artifacts Created
+
+- PRODUCTION_DEPLOYMENT.md (complete Phase 5 guide)
+- MD5 verification workflow
+- Deployment validation checklist
+- Environment variable configuration process
+
+---
+
 ## Recommendations Generated
 
 ### To Reach 90% Success
