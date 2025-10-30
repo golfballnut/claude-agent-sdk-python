@@ -1,10 +1,61 @@
 # Testing Progress Tracker
 
-**Last Updated:** October 29, 2025
+**Last Updated:** October 30, 2025
 
 ---
 
-## Apollo.io Integration (✅ DEPLOYED, DEBUGGED & IMPROVED)
+## 🚨 Oct 30, 2025 - Critical Data Integrity Bug Fixed
+
+### Production Data Corruption Crisis
+
+**Issue Discovered:**
+- **98 NC golf courses** enriched with **382 duplicate/wrong contacts**
+- Same 4-5 people appearing on EVERY course regardless of actual organization
+- Email domains proved contacts were wrong (ed@glenella.com for deepspringscc.com courses)
+
+**Root Cause:**
+- Apollo API parameter name was WRONG
+- Used: `"organization_domain": domain` (parameter doesn't exist!)
+- Correct: `"q_organization_domains_list": [domain]` (from official docs)
+- Apollo silently ignored invalid parameter, searched entire 1.4M+ database
+- Returned random golf professionals instead of course-specific contacts
+
+**Fixes Implemented:**
+- ✅ Corrected Apollo API parameter (1-line fix, massive impact)
+- ✅ Email domain validation (rejects mismatched domains)
+- ✅ Duplicate person ID detection (blocks known bad IDs)
+- ✅ Apollo name search fallback (for courses not in domain DB)
+- ✅ Hunter.io fallback re-added (proven +20% coverage)
+- ✅ 27 unit tests created and passing
+- ✅ Docker test infrastructure built
+
+**Current Status:**
+- Docker Tests: 40% success (2/5 passing)
+- Data Quality: 100% validated (zero bad data enters database)
+- Deployment: PAUSED (need 80-90% success first)
+- Path Forward: Add BrightData/Jina/Firecrawl fallbacks for 90% coverage
+
+**Impact:**
+- Prevented: 382+ more bad contact records
+- Validated: All contacts now checked before database write
+- Identified: Need multi-source cascade (Apollo alone = 20% for small NC courses)
+
+**Testing:**
+- Local: 27/27 unit tests passing ✅
+- Docker: 2/5 courses passing (40%) with 100% data quality ✅
+- Production: NOT deployed yet (holding for 90% target)
+
+**Files Modified:**
+- teams/golf-enrichment/agents/agent2_apollo_discovery.py
+- Created 6 new test/validation files
+- Updated agent-debugging skill with Case Study 2
+- Updated this document
+
+**Next Session:** Continue implementing fallback cascade (BrightData → Jina → Firecrawl → LinkedIn) to reach 90% validated success rate
+
+---
+
+## Apollo.io Integration (✅ DEPLOYED Oct 29, ⚠️ PAUSED Oct 30 for Validation)
 
 **Last Updated:** October 29, 2025 (Evening - Debugging Session)
 **Status:** ✅ Fixes Docker-Validated, Ready for Production Deployment

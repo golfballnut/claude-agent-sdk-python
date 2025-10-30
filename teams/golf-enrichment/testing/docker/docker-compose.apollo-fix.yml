@@ -1,0 +1,18 @@
+services:
+  golf-enrichment-apollo-fix:
+    build:
+      context: ../..
+      dockerfile: testing/docker/Dockerfile.apollo-fix
+    env_file:
+      - ../../.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../../../../results/docker:/app/results
+    command: python test_apollo_fixes_direct.py
+    networks:
+      - golf-enrichment-network
+
+networks:
+  golf-enrichment-network:
+    driver: bridge
