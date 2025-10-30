@@ -137,7 +137,8 @@ async def enrich_course(
         else:
             domain_lookup = domain
 
-        if state_code == "VA" and not domain:
+        # Run Agent 1 if domain is missing (for any state)
+        if not domain or not domain.strip():
             print("🔍 [1/5] Agent 1: Finding course URL...")
             agent1_start = time.time()
 
@@ -150,12 +151,10 @@ async def enrich_course(
                 print(f"   ✅ Found: {url}")
                 print(f"   💰 Cost: ${url_result.get('cost', 0):.4f} | ⏱️  {agent1_duration:.1f}s\n")
             else:
-                print(f"   ⚠️  URL not found")
+                print(f"   ⚠️  URL not found - will try Apollo name search")
+                domain_lookup = ""  # Agent 2 will fall back to name search
 
             result["agent_results"]["agent1"] = url_result
-        elif not domain:  # NC without domain provided
-            print(f"🔍 [1/5] Agent 1: SKIPPED (NC course - using provided domain)")
-            result["agent_results"]["agent1"] = {"url": None, "cost": 0, "skipped": True}
         else:  # Domain was provided
             print(f"🔍 [1/5] Agent 1: SKIPPED (domain provided: {domain_lookup})\n")
             result["agent_results"]["agent1"] = {"url": None, "cost": 0, "skipped": True}
