@@ -162,7 +162,8 @@ async def enrich_course(
     course_name: str,
     state_code: str = "VA",
     course_id: int | None = None,
-    use_test_tables: bool = True  # Default to test tables for safety
+    use_test_tables: bool = True,  # Default to test tables for safety
+    domain: str = ""  # For compatibility with Apollo orchestrator (not used by standard)
 ) -> Dict[str, Any]:
     """
     Fully enrich a golf course with all agents
