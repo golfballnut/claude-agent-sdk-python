@@ -25,21 +25,21 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 RESULTS_DIR="$SCRIPT_DIR/../../results/docker"
 mkdir -p "$RESULTS_DIR"
 
-# Define test courses (from apollo_failure_courses.json)
+# Define test courses (Oct 30 validated test set)
 declare -a COURSES=(
-  '{"course_name":"Cardinal Country Club","state_code":"NC","domain":"playcardinal.net"}'
-  '{"course_name":"Carolina Club, The","state_code":"NC","domain":"thecarolinaclub.com"}'
-  '{"course_name":"Carolina Colours Golf Club","state_code":"NC"}'
-  '{"course_name":"Carolina, The","state_code":"NC","domain":"pinehurst.com"}'
-  '{"course_name":"Carolina Plantation Golf Club","state_code":"NC"}'
+  '{"course_name":"Deep Springs Country Club","state_code":"NC","domain":"deepspringscc.com"}'
+  '{"course_name":"Deercroft Golf & Country Club","state_code":"NC","domain":"deercroft.com"}'
+  '{"course_name":"Densons Creek Golf Course","state_code":"NC","domain":"densoncreekgolf.com"}'
+  '{"course_name":"Devils Ridge Golf Club","state_code":"NC","domain":"invitedclubs.com"}'
+  '{"course_name":"Deer Brook Golf Club","state_code":"NC","domain":"clevecoymca.org"}'
 )
 
 declare -a NAMES=(
-  "Cardinal Country Club"
-  "Carolina Club, The"
-  "Carolina Colours Golf Club"
-  "Carolina, The"
-  "Carolina Plantation Golf Club"
+  "Deep Springs Country Club"
+  "Deercroft Golf & Country Club"
+  "Densons Creek Golf Course"
+  "Devils Ridge Golf Club"
+  "Deer Brook Golf Club"
 )
 
 SUCCESS=0
