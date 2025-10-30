@@ -1,0 +1,69 @@
+# TEST Dockerfile for Agent 4 Tenure Testing
+# Uses test_orchestrator.py and test_agent8.py instead of production versions
+
+FROM python:3.11-slim
+
+# Install system dependencies and Node.js
+RUN apt-get update && apt-get install -y \
+    curl \
+    ca-certificates \
+    gnupg \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Verify installations
+RUN node --version && npm --version && python --version
+
+# Install Claude Code CLI globally
+RUN npm install -g @anthropic-ai/claude-code
+
+# Verify Claude CLI installation
+RUN which claude && claude --version
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+# Copy agents directory
+COPY agents/ ./agents/
+
+# ⚠️ TEST VERSION: Use test_orchestrator.py AS orchestrator.py
+COPY test_orchestrator.py ./orchestrator.py
+
+# ⚠️ TEST VERSION: Use test_agent8 AS agent8
+COPY agents/test_agent8_supabase_writer.py ./agents/agent8_supabase_writer.py
+
+# Copy template directory (utils)
+COPY template/ ./template/
+
+# Copy API wrapper
+COPY api.py .
+
+# Create results directory
+RUN mkdir -p /app/results
+
+# Create non-root user
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER appuser
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
+
+# Run FastAPI server
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "info"]

@@ -67,3 +67,11 @@ transcripts/
 # Test results (deployment testing)
 examples/poc-workflow/deployment/test_results/*.json
 !examples/poc-workflow/deployment/test_results/README.md
+
+# Agent testing results
+agenttesting/**/results/
+!agenttesting/**/results/.gitkeep
+results/
+
+# Old teams archive (excluded from git)
+archive/teams-old/

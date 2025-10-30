@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  golf-enrichment-apollo:
+    build:
+      context: ../golf-enrichment
+      dockerfile: ../docker/Dockerfile
+    container_name: golf-enrichment-apollo
+    ports:
+      - "8001:8000"  # Use port 8001 to avoid conflict with standard compose
+    environment:
+      # Orchestrator selection
+      - USE_APOLLO=true
+
+      # Apollo.io API
+      - APOLLO_API_KEY=${APOLLO_API_KEY}
+
+      # Hunter.io (fallback)
+      - HUNTER_API_KEY=${HUNTER_API_KEY}
+
+      # Supabase (database)
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+
+      # Anthropic (Claude Code CLI)
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+
+      # Perplexity (Agents 5, 6, 6.5, 7)
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+
+      # Optional: Web scraping
+      - FIRECRAWL_API_KEY=${FIRECRAWL_API_KEY}
+      - JINA_API_KEY=${JINA_API_KEY}
+      - BRIGHTDATA_API_TOKEN=${BRIGHTDATA_API_TOKEN}
+
+      # Configuration
+      - ENVIRONMENT=test
+      - LOG_LEVEL=INFO
+
+    volumes:
+      # Mount results directory for test output
+      - ../golf-enrichment/results:/app/results
+      # Mount .env for local development
+      - ../.env:/app/.env:ro
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    restart: unless-stopped
+
+    networks:
+      - golf-enrichment-network
+
+networks:
+  golf-enrichment-network:
+    driver: bridge
