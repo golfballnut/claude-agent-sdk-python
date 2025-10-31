@@ -1,0 +1,524 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Golf Course Research Response Schema v1",
+  "description": "Optimized schema for LLM output quality - captures all 8 sections with inline citations",
+  "type": "object",
+  "required": [
+    "course_name",
+    "city",
+    "state",
+    "research_date",
+    "section_1_classification",
+    "section_4_decision_makers"
+  ],
+  "properties": {
+    "course_name": {
+      "type": "string",
+      "description": "Full name of the golf course"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string",
+      "maxLength": 2
+    },
+    "research_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "section_1_classification": {
+      "type": "object",
+      "required": ["classification", "confidence"],
+      "properties": {
+        "classification": {
+          "type": "string",
+          "enum": ["BOTH", "BUY", "SELL", "INSUFFICIENT_DATA"]
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["high", "medium", "low"]
+        },
+        "buy_signals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["signal", "source"],
+            "properties": {
+              "signal": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "sell_signals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["signal", "source"],
+            "properties": {
+              "signal": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "recommended_strategy": {
+          "type": "string",
+          "enum": ["buy_first", "sell_first", "approach_both", "insufficient_data"]
+        },
+        "reasoning": {
+          "type": "string"
+        }
+      }
+    },
+    "section_2_water_hazards": {
+      "type": "object",
+      "properties": {
+        "water_hazards": {
+          "type": "object",
+          "properties": {
+            "total_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "details": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["source"],
+                "properties": {
+                  "location": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["pond", "lake", "stream", "other"]
+                  },
+                  "notes": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            },
+            "ball_accumulation_estimate": {
+              "type": "string",
+              "enum": ["high", "medium", "low", "unknown"]
+            },
+            "current_retrieval_service": {
+              "type": ["string", "null"]
+            },
+            "source": {
+              "type": ["string", "null"],
+              "format": "uri"
+            }
+          }
+        }
+      }
+    },
+    "section_3_practice_facilities": {
+      "type": "object",
+      "properties": {
+        "practice_facilities": {
+          "type": "object",
+          "properties": {
+            "range": {
+              "type": "object",
+              "required": ["source"],
+              "properties": {
+                "stations": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["grass", "mat", "both", "unknown"]
+                },
+                "size_description": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            },
+            "current_supplier": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": ["string", "null"]
+                },
+                "source": {
+                  "type": ["string", "null"],
+                  "format": "uri"
+                }
+              }
+            },
+            "quality_mentions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["mention", "sentiment", "source"],
+                "properties": {
+                  "mention": {
+                    "type": "string"
+                  },
+                  "sentiment": {
+                    "type": "string",
+                    "enum": ["positive", "negative", "neutral"]
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            },
+            "recent_renovations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["project", "source"],
+                "properties": {
+                  "project": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "section_4_decision_makers": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["name", "title", "priority"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "email": {
+            "type": ["string", "null"],
+            "format": "email"
+          },
+          "email_source": {
+            "type": ["string", "null"],
+            "format": "uri"
+          },
+          "phone": {
+            "type": ["string", "null"]
+          },
+          "phone_source": {
+            "type": ["string", "null"],
+            "format": "uri"
+          },
+          "linkedin": {
+            "type": ["string", "null"],
+            "format": "uri"
+          },
+          "employment_verified": {
+            "type": "boolean"
+          },
+          "verification_source": {
+            "type": ["string", "null"],
+            "format": "uri"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "section_5_course_tier": {
+      "type": "object",
+      "properties": {
+        "course_tier": {
+          "type": "object",
+          "required": ["classification", "confidence"],
+          "properties": {
+            "classification": {
+              "type": "string",
+              "enum": ["premium", "medium", "budget"]
+            },
+            "confidence": {
+              "type": "string",
+              "enum": ["high", "medium", "low"]
+            },
+            "pricing": {
+              "type": "object",
+              "properties": {
+                "green_fee_range": {
+                  "type": ["string", "null"]
+                },
+                "membership_fee": {
+                  "type": ["string", "null"]
+                },
+                "source": {
+                  "type": ["string", "null"],
+                  "format": "uri"
+                }
+              }
+            },
+            "course_type": {
+              "type": "string",
+              "enum": ["private", "semi-private", "public", "municipal", "resort"]
+            },
+            "volume_indicators": {
+              "type": "object",
+              "properties": {
+                "estimated_annual_rounds": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": ["string", "null"],
+                  "format": "uri"
+                }
+              }
+            },
+            "quality_indicators": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["indicator", "source"],
+                "properties": {
+                  "indicator": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "section_6_buying_signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["signal", "category", "urgency", "source"],
+        "properties": {
+          "signal": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "cost_pain",
+              "quality_pain",
+              "operational_pain",
+              "change_opportunity",
+              "active_search"
+            ]
+          },
+          "urgency": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          },
+          "source": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "section_7_course_intelligence": {
+      "type": "object",
+      "properties": {
+        "course_intelligence": {
+          "type": "object",
+          "properties": {
+            "ownership": {
+              "type": "object",
+              "properties": {
+                "structure": {
+                  "type": "string",
+                  "enum": ["independent", "management_company", "member_owned", "municipal"]
+                },
+                "details": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": ["string", "null"],
+                  "format": "uri"
+                }
+              }
+            },
+            "recent_projects": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["project", "source"],
+                "properties": {
+                  "project": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "integer"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            },
+            "vendors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["category", "source"],
+                "properties": {
+                  "category": {
+                    "type": "string"
+                  },
+                  "vendor_name": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            },
+            "awards": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["award", "source"],
+                "properties": {
+                  "award": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "integer"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            },
+            "challenges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["challenge", "source"],
+                "properties": {
+                  "challenge": {
+                    "type": "string"
+                  },
+                  "impact": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "section_8_event_program": {
+      "type": "object",
+      "properties": {
+        "event_program": {
+          "type": "object",
+          "required": ["has_program"],
+          "properties": {
+            "has_program": {
+              "type": "boolean"
+            },
+            "details": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["type", "source"],
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "frequency": {
+                    "type": "string"
+                  },
+                  "typical_package": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            },
+            "event_coordinator": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": ["string", "null"]
+                },
+                "email": {
+                  "type": ["string", "null"],
+                  "format": "email"
+                },
+                "phone": {
+                  "type": ["string", "null"]
+                },
+                "source": {
+                  "type": ["string", "null"],
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "research_notes": {
+      "type": "string",
+      "description": "Any challenges, data quality notes, or recommendations"
+    }
+  }
+}

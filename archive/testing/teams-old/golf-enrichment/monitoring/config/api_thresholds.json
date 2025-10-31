@@ -1,0 +1,39 @@
+{
+  "hunter_io": {
+    "searches": {
+      "warning": 100,
+      "critical": 50,
+      "urgent": 20
+    },
+    "verifications": {
+      "warning": 100,
+      "critical": 50,
+      "urgent": 20
+    }
+  },
+  "firecrawl": {
+    "credits": {
+      "warning": 1000,
+      "critical": 500,
+      "urgent": 100
+    }
+  },
+  "perplexity": {
+    "balance_usd": {
+      "warning": 5.00,
+      "critical": 2.00,
+      "urgent": 1.00
+    },
+    "monitoring_method": "manual_dashboard_check",
+    "auto_topup_enabled": true,
+    "auto_topup_threshold": 2.00
+  },
+  "brightdata": {
+    "note": "Thresholds to be configured after endpoint discovery",
+    "credits": {
+      "warning": null,
+      "critical": null,
+      "urgent": null
+    }
+  }
+}

@@ -1,0 +1,375 @@
+{
+  "test_name": "10 Enriched NC Courses - Database Baseline",
+  "created": "2025-10-29",
+  "baseline_credits": 52,
+  "description": "Our current database contacts for 10 NC courses. Will compare to Apollo.io to measure data accuracy and email coverage.",
+  "courses": [
+    {
+      "course_id": 1189,
+      "course_name": "Broadmoor Golf Links",
+      "domain": "broadmoorgolflinks.com",
+      "state": "NC",
+      "enrichment_completed": "2025-10-29 01:57:27",
+      "contacts": [
+        {
+          "name": "Trevor Kennedy",
+          "title": "Assistant Professional",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": null,
+          "phone": "(828) 687-1500"
+        },
+        {
+          "name": "Bruce Andrews",
+          "title": "Assistant Professional",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": null,
+          "phone": "(828) 687-1500"
+        },
+        {
+          "name": "John D Wyatt III",
+          "title": "Head Professional at a Golf Course/Club",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": null,
+          "phone": "(828) 687-1500"
+        }
+      ]
+    },
+    {
+      "course_id": 1207,
+      "course_name": "Black Mountain Golf Course",
+      "domain": "blackmountaingolf.org",
+      "state": "NC",
+      "enrichment_completed": "2025-10-29 01:17:49",
+      "contacts": [
+        {
+          "name": "Brent Miller",
+          "title": "Golf Course Manager",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/brent-miller-94064958",
+          "phone": "828-419-9300 ext. 711"
+        },
+        {
+          "name": "David Ballard",
+          "title": "Golf Professional",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": null,
+          "phone": "(828) 669-2710"
+        }
+      ]
+    },
+    {
+      "course_id": 1233,
+      "course_name": "Brook Valley Country Club",
+      "domain": "brookvalleycc.com",
+      "state": "NC",
+      "enrichment_completed": "2025-10-29 01:48:41",
+      "contacts": [
+        {
+          "name": "Kyle A. Hope",
+          "title": "Assistant Professional",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": null,
+          "phone": "(252) 751-1960"
+        },
+        {
+          "name": "Dalton J Rich",
+          "title": "Director of Golf",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": null,
+          "phone": "(252) 751-1965"
+        },
+        {
+          "name": "Sean Branagan, PGA",
+          "title": "Head Professional at a Golf Course/Club",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/sean-branagan-pga-5a4a20a",
+          "phone": "(252) 751-1960"
+        }
+      ]
+    },
+    {
+      "course_id": 1256,
+      "course_name": "Ballantyne Country Club",
+      "domain": "ballantyneclub.com",
+      "state": "NC",
+      "enrichment_completed": "2025-10-28 23:55:14",
+      "contacts": [
+        {
+          "name": "Christopher R. White",
+          "title": "Assistant Professional",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/christopher-white-77baa4b",
+          "phone": "704-544-1404"
+        },
+        {
+          "name": "Dan Cordaro",
+          "title": "Director of Golf",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/dan-cordaro-pga-13b89872",
+          "phone": "704-544-1404"
+        },
+        {
+          "name": "Randy D. Joyner",
+          "title": "Director of Instruction",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/randy-joyner",
+          "phone": "(704) 791-2379"
+        },
+        {
+          "name": "Matthew H. Saggio",
+          "title": "General Manager",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/matthew-saggio-34202374",
+          "phone": "704-544-1404"
+        },
+        {
+          "name": "Ross A McCullough",
+          "title": "Professional Development Program Requirements Deficit",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/ross-mccullough-pga-realtor",
+          "phone": "704-544-1404"
+        }
+      ]
+    },
+    {
+      "course_id": 1275,
+      "course_name": "Baywood Golf Club",
+      "domain": "baywoodgc.com",
+      "state": "NC",
+      "enrichment_completed": "2025-10-29 00:05:29",
+      "contacts": [
+        {
+          "name": "Dylan Peyton",
+          "title": "Business Owner",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/dylan-peyton-898868151",
+          "phone": "(910) 483-4330"
+        },
+        {
+          "name": "Stephen Strickland",
+          "title": "Golf Course Superintendent",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/stephen-strickland-97510240",
+          "phone": "(910) 483-4330"
+        }
+      ]
+    },
+    {
+      "course_id": 1368,
+      "course_name": "Balsam Mountain Preserve",
+      "domain": "balsammountainpreserve.com",
+      "state": "NC",
+      "enrichment_completed": "2025-10-28 23:59:33",
+      "contacts": [
+        {
+          "name": "Allison Macke",
+          "title": "Assistant Professional",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "",
+          "phone": "(828) 631-1042"
+        },
+        {
+          "name": "Chad D. Lauze",
+          "title": "Assistant Professional",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/chad-lauze-pga-988a16170",
+          "phone": "(828) 631-1042"
+        },
+        {
+          "name": "Travis P. Wilson",
+          "title": "Director of Golf",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/travispwilson",
+          "phone": "(828) 631-1040"
+        }
+      ]
+    },
+    {
+      "course_id": 1521,
+      "course_name": "Bright's Creek Golf Club",
+      "domain": "brightscreek.com",
+      "state": "NC",
+      "enrichment_completed": "2025-10-29 01:54:19",
+      "contacts": [
+        {
+          "name": "Quinton D. Metz",
+          "title": "Assistant Professional",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/quinton-metz-b010521bb",
+          "phone": "(828) 694-4510"
+        },
+        {
+          "name": "William L. Bower, PGA",
+          "title": "General Manager",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/bill-bower-74058b10",
+          "phone": "(828) 694-4500"
+        },
+        {
+          "name": "Beau Burgess",
+          "title": "Head Professional at a Golf Course/Club",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/beau-burgess-pga-745579173",
+          "phone": "(828) 694-4510"
+        }
+      ]
+    },
+    {
+      "course_id": 1568,
+      "course_name": "Bermuda Run Country Club West Course",
+      "domain": "bermudaruncc.com",
+      "state": "NC",
+      "enrichment_completed": "2025-10-29 01:08:02",
+      "contacts": [
+        {
+          "name": "Brian Meeks",
+          "title": "General Manager",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": null,
+          "phone": "336-551-2714"
+        },
+        {
+          "name": "Paul Stephens",
+          "title": "Membership Director",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/paulthomasstephens",
+          "phone": "336-551-2736"
+        }
+      ]
+    },
+    {
+      "course_id": 1578,
+      "course_name": "Birkdale Golf Club",
+      "domain": "birkdale.com",
+      "state": "NC",
+      "enrichment_completed": "2025-10-29 01:24:58",
+      "contacts": [
+        {
+          "name": "Jeffrey S. Thomas",
+          "title": "Director of Golf",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/jeff-thomas-4762a23b",
+          "phone": "(704) 895-8038"
+        },
+        {
+          "name": "Jeff Thomas",
+          "title": "General Manager; Birkdale Golf Club",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/jeff-thomas-838a2460",
+          "phone": "(704) 895-8038 ext. 3"
+        },
+        {
+          "name": "Benjamin Albrecht",
+          "title": "Golf Course Superintendent",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/ben-albrecht-640976a9",
+          "phone": null
+        }
+      ]
+    },
+    {
+      "course_id": 1320,
+      "course_name": "Brier Creek Golf Course",
+      "domain": "Not found in scraped content",
+      "state": "NC",
+      "enrichment_completed": "2025-10-29 01:54:03",
+      "note": "SKIP - No valid domain",
+      "contacts": [
+        {
+          "name": "Robby Peters",
+          "title": "General Manager",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": null,
+          "phone": "919-206-4664"
+        },
+        {
+          "name": "Cole Stiles",
+          "title": "Director of Golf",
+          "email": null,
+          "email_source": null,
+          "email_confidence": null,
+          "linkedin_url": "https://www.linkedin.com/in/cole-stiles-675a7588",
+          "phone": "(919) 206-4600"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_courses": 10,
+    "valid_courses": 9,
+    "total_contacts": 31,
+    "emails_found": 0,
+    "email_coverage": "0%",
+    "linkedin_found": 16,
+    "linkedin_coverage": "51.6%",
+    "phones_found": 29,
+    "phone_coverage": "93.5%"
+  },
+  "test_plan": {
+    "baseline_credits": 52,
+    "positions_to_test": [
+      "General Manager",
+      "Director of Golf",
+      "Head Golf Professional",
+      "Superintendent"
+    ],
+    "searches_per_course": 4,
+    "total_searches": 36,
+    "estimated_enrichments": 18,
+    "estimated_total_credits": 54
+  }
+}
