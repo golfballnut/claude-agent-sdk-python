@@ -7,52 +7,137 @@
 
 ## Priority 1: Critical Data (Deal Breakers)
 
-### Water Hazards ⭐ **HIGHEST PRIORITY**
+### Range Ball Opportunity Classification ⭐ **HIGHEST PRIORITY**
 
 **Why Critical:**
-- Retrieval service = entry point + raw materials
-- Quantifies opportunity size ($X per hazard)
-- Differentiates high-value vs low-value courses
+- BUY and SELL opportunities require completely different outreach
+- BOTH opportunities = highest value (full circle relationship)
+- Wrong classification = wrong message = lost opportunity
+- Determines entry strategy and campaign routing
 
-**What to Collect:**
+**What to Classify:**
+- **BUY OPPORTUNITY:** They have waste balls to sell us
+- **SELL OPPORTUNITY:** They need to purchase balls from us
+- **BOTH:** Full circle opportunity (waste + need = maximum value)
+- **UNKNOWN:** Insufficient data to classify
+
+**Buy Signals (They have waste to sell us):**
 ```json
 {
-  "water_hazards": {
-    "total_count": 8,
-    "high_traffic_hazards": [
-      "Hole 3 - Island green",
-      "Hole 17 - Lakeside par 3"
-    ],
-    "ball_accumulation_estimate": "high" | "medium" | "low",
-    "hazard_types": ["ponds", "lakes", "creeks"],
-    "current_retrieval": "in-house" | "vendor" | "none"
+  "buy_signals": [
+    "Throwing away old/worn range balls",
+    "Storage full of old balls",
+    "Just renovated range (old inventory to clear)",
+    "Disposing of practice balls",
+    "Worn out ball inventory",
+    "Getting rid of balls",
+    "No market for our used balls"
+  ],
+  "buy_characteristics": {
+    "large_range": "50+ stations (high volume waste)",
+    "premium_club": "Tier 1-2 (quality waste materials)",
+    "established": "10+ years (accumulation)",
+    "recent_renovation": "Old inventory exists"
   }
+}
+```
+
+**Sell Signals (They need to purchase from us):**
+```json
+{
+  "sell_signals": [
+    "Practice ball budget too high",
+    "Looking for ball supplier",
+    "Range balls in poor condition",
+    "Members complaining about ball quality",
+    "Current supplier too expensive",
+    "Need to buy/order range balls",
+    "Budget constraints on range operations"
+  ],
+  "sell_characteristics": {
+    "budget_pain": "Cost complaints, seeking savings",
+    "quality_pain": "Member complaints, quality issues",
+    "switching_trigger": "Vendor change, price increase",
+    "new_operation": "Range expansion, new course"
+  }
+}
+```
+
+**BOTH Signals (Full Circle - HIGHEST VALUE):**
+```json
+{
+  "both_indicators": [
+    "BUY: Disposal mentions + SELL: Budget/quality pain",
+    "Large range + Quality complaints + Discarding old balls",
+    "'Just renovated' + 'Need new supplier'",
+    "Premium club + Budget pressure + Waste inventory"
+  ]
 }
 ```
 
 **LLM Prompt Addition:**
 ```
-CRITICAL: Find the number of ponds, lakes, or water hazards on the course.
-Specifically identify:
-- Total count of water hazards
-- Which holes have island greens or lakeside hazards
-- Any mentions of ball accumulation or retrieval needs
+CRITICAL: Classify this course as BUY, SELL, or BOTH opportunity.
+
+BUY OPPORTUNITY (They have balls we can purchase):
+Look for: "Throwing away", "disposing of", "storage full", "old balls", "worn out inventory"
+Estimate: Waste volume (based on range size) and quality level (based on course tier)
+
+SELL OPPORTUNITY (They need to purchase from us):
+Look for: "Budget too high", "looking for supplier", "poor quality", "member complaints", "need to buy"
+Identify: Pain type (budget vs quality), current supplier, switching triggers
+
+BOTH (HIGHEST PRIORITY - Full Circle):
+Course shows BOTH waste disposal needs AND active purchasing needs
+Example: Large range + quality complaints + mentions discarding balls
+
+Classify as: BUY_OPPORTUNITY | SELL_OPPORTUNITY | BOTH_OPPORTUNITY | INSUFFICIENT_DATA
+```
+
+**Data to Collect:**
+```json
+{
+  "range_ball_classification": {
+    "opportunity_type": "buy" | "sell" | "both" | "unknown",
+
+    "buy_opportunity": {
+      "has_waste_balls": true,
+      "disposal_mentions": ["throwing away old balls"],
+      "volume_estimate": "high" | "medium" | "low",
+      "quality_estimate": "premium" | "standard" | "practice",
+      "buy_signals": ["..."]
+    },
+
+    "sell_opportunity": {
+      "needs_supplier": true,
+      "pain_type": "budget" | "quality" | "both",
+      "current_supplier": "Titleist",
+      "switching_triggers": ["price increase"],
+      "sell_signals": ["..."]
+    },
+
+    "recommended_entry_strategy": "buy_first" | "sell_first" | "buy_then_sell"
+  }
+}
 ```
 
 **Scoring Impact:**
-- 7+ hazards: 10 points (A-tier opportunity)
-- 4-6 hazards: 7 points
-- 1-3 hazards: 3 points
-- 0 hazards: DISQUALIFY (wrong fit)
+- BOTH opportunity: 20 points (highest value, full circle potential)
+- High-pain SELL: 15 points (fast close, ready to buy)
+- Premium BUY: 12 points (easy entry, quality materials, upsell potential)
+- Standard SELL: 10 points (moderate opportunity)
+- BUY only (budget club): 7 points (lower priority)
+- UNKNOWN: Requires discovery before scoring
 
 ---
 
 ### Practice Range Size
 
 **Why Critical:**
-- Range ball sales = primary revenue stream
-- Subscription program fit (50+ stations = ideal)
-- Determines annual volume/revenue potential
+- Range ball sales = primary revenue stream (SELL opportunities)
+- Range ball purchase = primary entry point (BUY opportunities)
+- Determines opportunity volume (stations × balls)
+- Differentiates high-value vs low-value courses
 
 **What to Collect:**
 ```json
@@ -79,10 +164,58 @@ Find information about the practice range:
 ```
 
 **Scoring Impact:**
-- 50+ stations: 10 points (subscription fit)
+- 50+ stations: 10 points (subscription fit, high volume BUY/SELL)
 - 30-49 stations: 7 points (sales opportunity)
 - 15-29 stations: 4 points (small opportunity)
 - No range: 0 points (pro shop only, different offering)
+
+---
+
+### Water Hazards (EXPANSION SERVICE - Not Primary Entry)
+
+**Why Important (But Not Entry Point):**
+- Retrieval service = expansion opportunity after relationship established
+- Raw materials for processing
+- Quantifies future expansion opportunity size
+- Differentiates potential for full service relationship
+
+**Strategic Note:**
+⚠️ Water hazard retrieval should NOT be used as primary entry point due to:
+- High competition ("many companies calling daily")
+- Low perceived value ("not much money for big clubs")
+- Slow sales cycle (4-8 weeks, complex approval)
+- Better used as expansion service after trust established via range balls
+
+**What to Collect:**
+```json
+{
+  "water_hazards": {
+    "total_count": 8,
+    "high_traffic_hazards": [
+      "Hole 3 - Island green",
+      "Hole 17 - Lakeside par 3"
+    ],
+    "ball_accumulation_estimate": "high" | "medium" | "low",
+    "hazard_types": ["ponds", "lakes", "creeks"],
+    "current_retrieval": "in-house" | "vendor" | "none"
+  }
+}
+```
+
+**LLM Prompt Addition:**
+```
+Find the number of ponds, lakes, or water hazards on the course.
+Specifically identify:
+- Total count of water hazards
+- Which holes have island greens or lakeside hazards
+- Any mentions of ball accumulation or retrieval needs
+```
+
+**Scoring Impact (for expansion potential, not entry):**
+- 7+ hazards: 10 points (excellent expansion opportunity)
+- 4-6 hazards: 7 points (good expansion potential)
+- 1-3 hazards: 3 points (limited expansion)
+- 0 hazards: 0 points (no retrieval opportunity)
 
 ---
 

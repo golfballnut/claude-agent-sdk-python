@@ -42,7 +42,56 @@
 Find all current decision makers and intelligence about {course_name} in {city}, {state}.
 
 ═══════════════════════════════════════════════════════
-SECTION 1: WATER HAZARDS (CRITICAL - HIGHEST PRIORITY)
+SECTION 1: RANGE BALL OPPORTUNITY CLASSIFICATION (CRITICAL - HIGHEST PRIORITY)
+═══════════════════════════════════════════════════════
+
+Determine if this course is a BUY opportunity, SELL opportunity, or BOTH:
+
+**BUY FROM COURSE (They have balls we can purchase):**
+Look for:
+- "Throwing away" or "disposing of" old/worn range balls
+- "Storage full of old balls"
+- "Just renovated range" or "replacing all balls"
+- "Worn out practice balls" or "damaged ball inventory"
+- "No market for our used balls"
+- "Getting rid of" practice ball inventory
+
+Estimate:
+- Waste ball volume (based on range size: 50+ stations = high volume)
+- Quality level (premium club Tier 1-2 = higher quality waste)
+
+**SELL TO COURSE (They need to purchase balls):**
+Look for:
+- "Practice ball budget too high" or cost complaints
+- "Looking for ball supplier" or "need new supplier"
+- "Range balls in poor condition" or quality issues
+- "Members complaining" about practice balls
+- "Current supplier too expensive" or price issues
+- "Need to buy/order range balls"
+- Budget constraints on range operations
+
+Identify:
+- Current supplier (if mentioned)
+- Pain level (budget vs quality)
+- Switching triggers (price increase, quality decline, vendor change)
+
+**BOTH (HIGHEST PRIORITY - Full Circle Opportunity):**
+Course shows BOTH waste disposal needs AND purchasing needs
+Examples:
+- Large range + quality complaints + mentions discarding old balls
+- "Just renovated" + "Need new supplier"
+- Premium club + budget pressure + has waste inventory
+
+Classify this course as:
+- BUY_OPPORTUNITY
+- SELL_OPPORTUNITY
+- BOTH_OPPORTUNITY
+- INSUFFICIENT_DATA
+
+For BOTH opportunities, note that buy-first strategy is recommended.
+
+═══════════════════════════════════════════════════════
+SECTION 2: WATER HAZARDS (FOR EXPANSION - NOT PRIMARY ENTRY)
 ═══════════════════════════════════════════════════════
 
 Find detailed information about water hazards on the course:
@@ -62,7 +111,7 @@ Find detailed information about water hazards on the course:
 Estimate ball accumulation level: high | medium | low
 
 ═══════════════════════════════════════════════════════
-SECTION 2: PRACTICE FACILITIES (CRITICAL)
+SECTION 3: PRACTICE FACILITIES (CRITICAL)
 ═══════════════════════════════════════════════════════
 
 Find information about the practice range:
@@ -78,7 +127,7 @@ Find information about the practice range:
 6. Range ball procurement process or timing
 
 ═══════════════════════════════════════════════════════
-SECTION 3: DECISION MAKERS (CRITICAL - EMAILS REQUIRED)
+SECTION 4: DECISION MAKERS (CRITICAL - EMAILS REQUIRED)
 ═══════════════════════════════════════════════════════
 
 Find contacts for these roles (IN PRIORITY ORDER):
@@ -119,7 +168,7 @@ For EACH contact, verify:
 - Source is legitimate (not aggregator sites like ContactOut unless verified elsewhere)
 
 ═══════════════════════════════════════════════════════
-SECTION 4: COURSE POSITIONING (CRITICAL)
+SECTION 5: COURSE POSITIONING (CRITICAL)
 ═══════════════════════════════════════════════════════
 
 Classify the course tier:
@@ -151,7 +200,7 @@ Based on this, classify as:
 - **Budget (Tier 4):** Green fees $20-40, municipal or budget daily-fee
 
 ═══════════════════════════════════════════════════════
-SECTION 5: BUYING SIGNALS (HIGH VALUE)
+SECTION 6: BUYING SIGNALS (HIGH VALUE)
 ═══════════════════════════════════════════════════════
 
 Look for indicators of readiness to buy:
@@ -182,7 +231,7 @@ Look for indicators of readiness to buy:
 - Annual contract renewals
 
 ═══════════════════════════════════════════════════════
-SECTION 6: COURSE INTELLIGENCE (PERSONALIZATION)
+SECTION 7: COURSE INTELLIGENCE (PERSONALIZATION)
 ═══════════════════════════════════════════════════════
 
 Gather details for outreach personalization:
@@ -219,7 +268,7 @@ Gather details for outreach personalization:
 - Competitive pressures
 
 ═══════════════════════════════════════════════════════
-SECTION 7: EVENT PROGRAM (NICE TO HAVE)
+SECTION 8: EVENT PROGRAM (NICE TO HAVE)
 ═══════════════════════════════════════════════════════
 
 If information is available:
@@ -249,6 +298,14 @@ Focus on CURRENT information (2024-2025).
 ```sql
 ALTER TABLE enrichment_queue ADD COLUMN IF NOT EXISTS
 
+  -- Range Ball Opportunity Classification (NEW - HIGHEST PRIORITY)
+  range_ball_opportunity_type VARCHAR(20),  -- 'buy', 'sell', 'both', 'unknown'
+
+  buy_opportunity JSONB,  -- {has_waste: bool, signals: [...], volume_estimate, quality_estimate}
+  sell_opportunity JSONB, -- {needs_supplier: bool, signals: [...], current_supplier, pain_level}
+
+  recommended_entry_strategy VARCHAR(50),  -- 'buy_first', 'sell_first', 'buy_then_sell', 'discovery'
+
   -- Opportunity Sizing
   water_hazard_count INTEGER,
   water_hazard_details JSONB,  -- {high_traffic: [...], total: X}
@@ -267,7 +324,7 @@ ALTER TABLE enrichment_queue ADD COLUMN IF NOT EXISTS
 
   -- Decision Maker Authority
   decision_maker_authority VARCHAR(50),  -- 'contract', 'budget', 'operational'
-  recommended_entry_service VARCHAR(50),  -- 'retrieval', 'range_balls', 'subscription'
+  recommended_entry_service VARCHAR(50),  -- 'ball_purchase', 'range_balls', 'subscription', 'retrieval'
 
   -- Qualification Scoring
   qualification_score NUMERIC(3,1),  -- 0.0-10.0
@@ -394,36 +451,163 @@ async def parse_llm_response_v2(raw_response):
 
 ---
 
-## Service Recommendation Logic
+## Service Recommendation Logic (UPDATED - Buy/Sell First)
 
 ```python
-def determine_entry_service(water_hazards, range_data, course_tier, buying_signals):
+def determine_entry_service(opportunity_classification, range_data, course_tier, buying_signals):
     """
-    Map course characteristics → recommended first service
+    NEW: Classify by buy/sell opportunity FIRST, then recommend service
+
+    Strategic Priority:
+    1. BOTH opportunities (full circle) - highest value
+    2. High-pain SELL opportunities - fast close
+    3. Premium BUY opportunities - easy entry + upsell
+    4. Standard SELL opportunities - standard pipeline
     """
 
-    # High water hazards = retrieval entry
-    if water_hazards["total"] >= 5:
-        return "retrieval_service"
+    # HIGHEST PRIORITY: BOTH opportunities (full circle)
+    if opportunity_classification["type"] == "both":
+        return {
+            "entry_service": "ball_purchase_program",
+            "strategy": "buy_first_then_sell",
+            "rationale": "Build trust by purchasing first, then upsell to supply",
+            "campaign": "full_circle",
+            "urgency": "high",
+            "expected_timeline": "8-12 weeks to full relationship",
+            "phases": {
+                "phase_1": "Purchase their waste balls (weeks 1-2)",
+                "phase_2": "Show processed quality (weeks 3-6)",
+                "phase_3": "Sell them range balls (weeks 7+)",
+                "phase_4": "Full circle relationship (ongoing)"
+            }
+        }
 
-    # Large range + quality complaints = range balls
-    if range_data["stations"] >= 30 and buying_signals["quality"]:
-        return "range_balls"
+    # BUY OPPORTUNITY (they have waste to sell)
+    if opportunity_classification["type"] == "buy":
+        # Check if premium club (higher value materials)
+        if course_tier in ["tier_1", "tier_2"]:
+            priority = "high"
+            note = "Premium waste materials + upsell potential"
+        else:
+            priority = "medium"
+            note = "Standard materials, lower upsell potential"
 
-    # Tier 1-2 + large range = subscription
-    if course_tier in ["tier_1", "tier_2"] and range_data["stations"] >= 50:
-        return "subscription_program"
+        return {
+            "entry_service": "ball_purchase_program",
+            "strategy": "buy_with_upsell_intent",
+            "rationale": "Easy entry (they make money), trust building, prove quality",
+            "campaign": "purchase_program",
+            "urgency": priority,
+            "expected_timeline": "1 week to first purchase, 6+ months to upsell",
+            "pitch": "We'll pay you $X per ball for balls you're discarding",
+            "upsell_path": "Show processed quality → Sell range balls",
+            "note": note
+        }
 
-    # Cost pain + any range = range balls (cost savings pitch)
-    if buying_signals["cost"] and range_data["stations"] > 0:
-        return "range_balls"
+    # SELL OPPORTUNITY (they need to purchase)
+    if opportunity_classification["type"] == "sell":
+        # Check pain level for urgency
+        has_high_pain = (
+            buying_signals.get("quality_complaints") or
+            buying_signals.get("cost_pain") or
+            buying_signals.get("vendor_search")
+        )
 
-    # Event mentions = outing packages
-    if buying_signals.get("event_program"):
-        return "outing_packages"
+        if has_high_pain:
+            return {
+                "entry_service": "range_ball_sales",
+                "strategy": "sell_with_urgency",
+                "rationale": "Active pain point, ready to buy now",
+                "campaign": "sales_urgent",
+                "urgency": "high",
+                "expected_timeline": "1-2 weeks to first order",
+                "pitch": "Save 50% on premium range balls (currently spending $X, save $Y)",
+                "pain_type": identify_pain_type(buying_signals)
+            }
+        else:
+            return {
+                "entry_service": "range_ball_sales",
+                "strategy": "sell_standard",
+                "rationale": "Standard opportunity, needs nurturing",
+                "campaign": "sales_standard",
+                "urgency": "medium",
+                "expected_timeline": "2-4 weeks to first order",
+                "pitch": "Premium range balls at 50% off new pricing"
+            }
 
-    # Default: range balls (most universal)
-    return "range_balls"
+    # UNKNOWN: Need discovery
+    if opportunity_classification["type"] == "unknown":
+        return {
+            "entry_service": "discovery_call",
+            "strategy": "qualify_opportunity",
+            "rationale": "Insufficient data to classify as BUY or SELL",
+            "campaign": "discovery",
+            "urgency": "low",
+            "expected_timeline": "1-2 weeks to classify, then route to appropriate campaign",
+            "discovery_questions": [
+                "Do you currently purchase or dispose of practice balls?",
+                "What's your biggest challenge with range balls?",
+                "Are you happy with your current supplier?"
+            ]
+        }
+
+    # Fallback (should rarely hit this)
+    return {
+        "entry_service": "range_ball_sales",
+        "strategy": "default",
+        "rationale": "Default to most universal service",
+        "campaign": "sales_standard",
+        "urgency": "medium"
+    }
+
+
+def identify_pain_type(buying_signals):
+    """Helper to identify primary pain type for messaging"""
+    if buying_signals.get("cost_pain"):
+        return "budget_pressure"
+    elif buying_signals.get("quality_complaints"):
+        return "quality_issues"
+    elif buying_signals.get("vendor_search"):
+        return "vendor_switching"
+    else:
+        return "general"
+
+
+# EXPANSION SERVICES (not entry points)
+def determine_expansion_opportunities(opportunity_classification, water_hazards, range_data, course_tier):
+    """
+    After initial relationship established (6-12+ months), identify expansion services
+    """
+    expansion_services = []
+
+    # Retrieval as expansion (NOT entry)
+    if water_hazards["total"] >= 3:
+        expansion_services.append({
+            "service": "retrieval_service",
+            "timing": "6-12 months after entry",
+            "rationale": "Trust established, can now offer retrieval",
+            "priority": "medium" if water_hazards["total"] >= 5 else "low"
+        })
+
+    # Protective coating
+    if opportunity_classification["type"] in ["sell", "both"]:
+        expansion_services.append({
+            "service": "protective_coating",
+            "timing": "3-6 months after first range ball order",
+            "rationale": "Extend life of their current inventory",
+            "priority": "medium"
+        })
+
+    # Subscription program
+    if range_data["stations"] >= 50 and course_tier in ["tier_1", "tier_2"]:
+        expansion_services.append({
+            "service": "subscription_program",
+            "timing": "12+ months after relationship established",
+            "rationale": "Lock in recurring revenue, premium clubs only",
+            "priority": "high"
+        })
+
+    return expansion_services
 ```
 
 ---

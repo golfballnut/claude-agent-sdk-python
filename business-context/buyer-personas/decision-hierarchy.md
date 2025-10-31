@@ -109,18 +109,27 @@
 
 ## Priority 2 Decision Makers
 
-### Director of Golf / Golf Professional
+### Director of Golf / Golf Professional ⭐ **PRIMARY ENTRY CONTACT**
+
+**Why Priority #1 for Entry:**
+- Controls BOTH buy and sell opportunities (range ball inventory)
+- Faster decision than GM (1-2 weeks vs 4-8 weeks)
+- Easier to reach (PGA.org directory = 90% success)
+- Budget authority for range operations (<$5K often independent)
+- Less competitive (fewer vendors target Dir of Golf vs GM)
 
 **Authority:**
-- Practice range operations
-- Range ball quality and inventory
+- Practice range operations (PRIMARY)
+- Range ball procurement (BUY decisions - we purchase from them)
+- Range ball purchasing (SELL decisions - they purchase from us)
+- Range ball quality and inventory management
 - Pro shop product selection
 - Outing package assembly
 
 **Relevant Services:**
-- ✅ Range ball procurement (primary decision)
+- ✅ **Ball purchase program** (we buy their waste - BEST ENTRY)
+- ✅ **Range ball sales** (they buy from us - PRIMARY REVENUE)
 - ✅ Protective coating service (range operations)
-- ✅ Practice ball purchase program (range budget)
 - ✅ Outing packages (event support)
 
 **How to Reach:**
@@ -147,8 +156,14 @@
 - Budget constraints (can't afford premium new)
 - Inventory management (ordering, storage)
 - Inconsistent quality from current vendor
+- Waste ball disposal (no recovery plan)
 
-**Outreach Priority:** MEDIUM-HIGH (primary for range balls)
+**Entry Strategy by Opportunity Type:**
+- **BUY opportunity:** "We'll pay $X per ball for balls you're discarding"
+- **SELL opportunity:** "Save 50% on range balls (currently spending $X, save $Y)"
+- **BOTH opportunity:** "We'll buy your old AND supply your new balls"
+
+**Outreach Priority:** HIGHEST (primary entry contact for range ball opportunities)
 
 ---
 

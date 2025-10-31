@@ -32,31 +32,33 @@
 
 ### Must-Have (Deal Breakers if Missing)
 
-**1. Water Hazards**
-- Minimum 3 ponds/lakes on course
-- At least 1 high-traffic hazard (island green, lakeside hole)
-- Estimated 2,000+ balls accumulating annually
-
-**Why Critical:**
-- Retrieval service = entry point + raw materials
-- Demonstrates active golf operation
-- Quantifiable opportunity
-
----
-
-**2. Practice Range**
+**1. Practice Range** ⭐ **HIGHEST PRIORITY**
 - Dedicated driving range (not just net)
 - Minimum 30 stations
 - Currently using practice balls (not members' own balls)
 
 **Why Critical:**
-- Range ball sales = primary revenue stream
-- Size indicates volume opportunity
-- Active practice program = ongoing need
+- Range balls = PRIMARY entry point (buy OR sell)
+- Universal opportunity (every range needs balls)
+- Determines BUY opportunity (waste volume)
+- Determines SELL opportunity (purchasing need)
+- Fast close (1-2 weeks vs 4-8 for retrieval)
 
 ---
 
-**3. Decision Maker Accessibility**
+**2. Range Ball Opportunity Classification**
+- Must be classifiable as BUY, SELL, or BOTH
+- BOTH opportunities = highest priority
+- No range = disqualify (wrong fit)
+
+**Why Critical:**
+- Determines entry strategy and campaign routing
+- BUY/SELL require completely different messaging
+- BOTH = full circle relationship potential
+
+---
+
+**3. Decision Maker Accessibility (Director of Golf Priority)**
 - Can identify General Manager or Superintendent
 - Contact information discoverable (email or phone)
 - Not completely private (some public presence)
@@ -70,7 +72,35 @@
 
 ### High-Value Indicators (Not Required but Ideal)
 
-**1. Active Event Program**
+**1. BOTH Opportunity (Buy + Sell Signals Present)**
+- Shows waste disposal mentions AND purchasing pain
+- Highest value (full circle potential)
+- Priority routing to specialized campaign
+
+**Why Valuable:**
+- Easiest entry (buy first = zero friction)
+- Highest LTV (dual revenue streams)
+- Strongest lock-in (ongoing relationship)
+- 80% conversion rate (buy → full circle)
+
+---
+
+**2. Water Hazards (FOR EXPANSION - Not Entry)**
+- 3+ ponds/lakes on course
+- At least 1 high-traffic hazard
+- Estimated 2,000+ balls accumulating annually
+
+**Why Valuable:**
+- Retrieval service = expansion opportunity (6-12 months after entry)
+- Additional revenue stream after relationship established
+- Raw materials for processing
+
+**Strategic Note:**
+⚠️ Not used as primary entry point due to high competition and slow close
+
+---
+
+**3. Active Event Program**
 - Host 10+ corporate outings annually
 - Member-guest tournaments
 - Charity events
@@ -83,7 +113,7 @@
 
 ---
 
-**2. Quality-Conscious Culture**
+**4. Quality-Conscious Culture**
 - Course rankings/awards mentioned
 - Recent renovation or improvement projects
 - Professional staff (PGA, GCSAA credentials)
@@ -96,7 +126,7 @@
 
 ---
 
-**3. Multiple Decision Makers Identified**
+**5. Multiple Decision Makers Identified**
 - GM + Director of Golf + Superintendent all findable
 - Professional associations (CMAA, PGA, GCSAA)
 - LinkedIn profiles active
@@ -108,7 +138,7 @@
 
 ---
 
-**4. Buying Signals Present**
+**6. Buying Signals Present**
 - Recent complaints about ball quality/cost mentioned
 - "Looking for supplier" language in job posts/minutes
 - Budget discussions visible (municipal courses)

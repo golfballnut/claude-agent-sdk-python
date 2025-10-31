@@ -23,7 +23,50 @@ Price based on customer value received, not just our cost
 
 ## Pricing by Service Type
 
-### Retrieval Services
+### Ball Purchase Programs (We Buy From Courses) ⭐ **ENTRY POINT PRICING**
+
+**Purpose:** Entry point strategy - pay courses for waste balls to build trust before selling
+
+**Strategic Importance:**
+- Zero friction entry (they make money immediately)
+- Trust building before asking for sale
+- Prove quality by processing their balls
+- Natural upsell path to supply relationship
+
+**Pricing Tiers by Ball Quality:**
+- **Premium waste** (Tier 1-2 clubs, minimal damage): $0.15-0.25 per ball
+- **Standard waste** (Tier 3 clubs, moderate wear): $0.10-0.15 per ball
+- **Practice grade waste** (high wear, Tier 4): $0.05-0.10 per ball
+
+**Volume Pricing (Higher volume = higher price per ball):**
+- 1,000-5,000 balls: Base rate
+- 5,000-10,000 balls: +$0.02 premium per ball
+- 10,000+ balls: +$0.05 premium per ball
+- One-time large cleanout: Custom pricing (negotiate)
+
+**Strategic Pricing Rationale:**
+```
+Buy at: $0.15 per ball average
+Processing cost: $0.10 per ball
+Sell back at: $0.50 per ball (50% off $1.00 new)
+Gross margin: $0.25 per ball (50%)
+PLUS: Relationship value (ongoing buy + sell)
+```
+
+**Payment Terms:**
+- Net-7 (pay within one week of pickup)
+- Immediate payment for first transaction (trust building)
+- Monthly billing for ongoing relationships
+
+**Decision Maker:** Director of Golf or Superintendent (inventory manager)
+
+**Close Rate Target:** 60%+ (low friction, they profit)
+
+**Upsell Conversion Target:** 80% (from BUY to BOTH within 6 months)
+
+---
+
+### Retrieval Services (EXPANSION - Not Entry Pricing)
 
 **Pricing Models:**
 

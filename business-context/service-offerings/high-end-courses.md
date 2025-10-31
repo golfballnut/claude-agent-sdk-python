@@ -7,9 +7,17 @@
 
 ---
 
-## Service Menu
+## Service Menu - PRIORITIZED BY ENTRY POINT STRATEGY
 
-### 1. Purchase Practice Balls
+### 1. Purchase Practice Balls ⭐ **BEST ENTRY POINT**
+
+**Why #1 Entry Point:**
+- ✅ Zero friction (we PAY them, not asking them to buy)
+- ✅ 1-week close (simple purchase agreement)
+- ✅ Instant trust (money in their account immediately)
+- ✅ Natural upsell path (prove quality → sell to them)
+- ✅ Less competitive (few companies offer to purchase)
+- ✅ No pain required (they profit even without problems)
 
 **What We Offer:**
 Pay golf courses for practice balls they would normally throw away
@@ -31,9 +39,73 @@ Pay golf courses for practice balls they would normally throw away
 - Immediate revenue (no investment required)
 - Foot in door for additional services
 
+**Full Circle Strategy (BUY → SELL):**
+```
+Phase 1 (Weeks 1-2): Purchase their waste balls
+↓
+Phase 2 (Weeks 3-6): Process to 80% look-new quality
+↓
+Phase 3 (Week 7): Show them the results
+"These are YOUR balls after our process - impressive quality, right?"
+↓
+Phase 4 (Week 8+): Natural upsell
+"Want us to supply your new range balls at this quality for 50% off new pricing?"
+↓
+Result: BOTH - We buy their waste + Supply their new balls = full circle
+```
+
+**Decision Maker:** Director of Golf (manages range ball inventory and disposal)
+
+**Close Rate:** 60%+ for initial purchase, 80% conversion to full circle
+
 ---
 
-### 2. Protective Coating Service
+### 2. Range Ball Sales (50% Off New) ⭐ **PRIMARY REVENUE SERVICE**
+
+**Entry Point Value:**
+- Fast close (1-2 weeks if pain present)
+- Clear ROI (50% savings message)
+- Universal need (every range needs balls)
+
+**When to Lead With This:**
+- Course shows SELL signals (budget pain, quality complaints)
+- No BUY signals (no waste inventory mentions)
+- Urgent need (vendor search, replacing current supplier)
+
+**When to Use as Phase 2:**
+- After purchasing their balls (BOTH opportunity - see service #1)
+- After proving quality via purchase program
+
+**What We Offer:**
+Premium recycled range balls at 50% off new pricing with 80% look-new quality
+
+**Customer Pain Point:**
+- Practice ball budget too high
+- Range balls in poor condition
+- Members complaining about quality
+- Current supplier too expensive
+
+**Our Solution:**
+- Premium recycled balls at half the cost
+- 80% look-new quality (vs competitors' 30-50%)
+- Reliable supply and delivery
+- Proven quality (show samples)
+
+**Value Proposition:**
+```
+New premium balls: $X per dozen
+Links Choice recycled: $X/2 per dozen
+Annual savings: $Y (50% reduction)
+Quality: Equivalent to new
+```
+
+**Pricing:** 50% off new pricing (see pricing-strategy.md)
+
+**Decision Maker:** Director of Golf (range budget authority)
+
+---
+
+### 3. Protective Coating Service - ALTERNATIVE ENTRY
 
 **What We Offer:**
 Apply protective coating to their current practice balls to extend life
@@ -60,7 +132,19 @@ After coating current inventory → Subscription program for ongoing supply
 
 ---
 
-### 3. Ball Retrieval Service
+### 4. Ball Retrieval Service - EXPANSION SERVICE (NOT Entry Point)
+
+**Strategic Note:**
+⚠️ **DO NOT use as primary entry point** due to:
+- High competition ("many companies calling daily about test dives")
+- Low perceived value ("not much money for big clubs")
+- Slow sales cycle (4-8 weeks, complex approval)
+- Multiple stakeholders (Superintendent + GM)
+
+**When to Offer:**
+- ✅ 6-12 months after range ball relationship established
+- ✅ As bundle with subscription program
+- ✅ After trust built via purchase or sales
 
 **What We Offer:**
 Professional water hazard ball retrieval service
@@ -86,12 +170,16 @@ Courses with 5+ water hazards, high traffic holes with island greens
 **Decision Maker:**
 Superintendent (water hazard maintenance) + GM (contract approval)
 
-**Cross-Sell Opportunity:**
+**Expansion Strategy:**
+After we're already supplying range balls:
+"By the way, we also do retrieval - want us to clean your ponds too?"
+
+**Cross-Sell Value:**
 Harvested balls → We buy them → Process → Sell back as range balls
 
 ---
 
-### 4. Maintenance Ball Purchase
+### 5. Maintenance Ball Purchase
 
 **What We Offer:**
 Purchase golf balls collected by grounds crews during course maintenance
@@ -121,7 +209,7 @@ Superintendent (maintenance operations)
 
 ---
 
-### 5. Subscription Practice Program ⭐ **PREMIUM OFFERING**
+### 6. Subscription Practice Program ⭐ **PREMIUM OFFERING** (12+ Month Expansion)
 
 **What We Offer:**
 Course pays monthly fee, we swap out range balls 2x/year for premium quality

@@ -7,9 +7,49 @@
 
 ---
 
-## Service Menu
+## Service Menu - PRIORITIZED BY ENTRY POINT STRATEGY
 
-### 1. Retrieval Services
+### 1. Range Balls (50% Off New Pricing) ⭐ **PRIMARY ENTRY POINT**
+
+**Why #1 Entry Point:**
+- ✅ Universal pain point (budget pressure at ALL low-end courses)
+- ✅ Clear ROI (50% savings is compelling for tight budgets)
+- ✅ Fast close (1-2 weeks, simple decision)
+- ✅ Director of Golf decision (single stakeholder)
+- ✅ Immediate value delivery (first order proves quality)
+
+**What We Offer:**
+Premium recycled range balls at half the cost of new balls
+
+**Customer Pain Point:**
+- Practice ball costs eat into margins
+- Budget constraints limit quality
+- Can't afford premium new balls
+
+**Our Solution:**
+- Links Choice recycled balls (80% look-new quality)
+- 50% price of new practice balls
+- Same quality as premium clubs use
+
+**Value Proposition:**
+```
+New practice balls: $X per dozen
+Links Choice recycled: $X/2 per dozen
+Savings: 50% on annual range ball spend
+Quality: Equivalent to new
+```
+
+**Volume Expectations:**
+Daily-fee course: 5,000-15,000 range balls annually
+
+**Pricing:** TODO - Define tiered pricing by volume
+
+**Decision Maker:**
+GM or Director of Golf (budget + quality standards)
+
+---
+
+### 2. Retrieval Services (FREE or We Pay Them)
 
 **What We Offer:**
 Professional ball retrieval from water hazards
@@ -39,7 +79,7 @@ GM or Head Pro (depending on ownership structure)
 
 ---
 
-### 2. Range Balls (50% Off New Pricing)
+### 3. Trade Programs
 
 **What We Offer:**
 Premium recycled range balls at half the cost of new balls
@@ -109,7 +149,7 @@ GM (needs budget flexibility)
 
 ---
 
-### 4. Resell Counter Balls & Packaged Product
+### 5. Purchase Low-End Range Product for Credit
 
 **What We Offer:**
 Pro shop inventory - counter balls and packaged ball sets for resale
@@ -169,7 +209,7 @@ Director of Golf or GM
 
 ---
 
-### 6. One-Stop Shop (Balls + Accessories)
+### REMOVED - Was previously here as service, now prioritized as #1 above
 
 **What We Offer:**
 Practice balls + Pride/Champ accessories (tees, brushes, club accessories)
