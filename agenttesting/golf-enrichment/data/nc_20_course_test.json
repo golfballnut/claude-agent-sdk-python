@@ -1,0 +1,146 @@
+{
+  "test_name": "NC 20 Course Batch Test - 80-90% Target",
+  "created_at": "2025-10-30",
+  "total_courses": 20,
+  "batches": 4,
+  "target_success_rate": "80-90%",
+
+  "batch_1_tier_a": [
+    {
+      "course_name": "Alamance Country Club",
+      "state_code": "NC",
+      "domain": "alamancecountryclub.com",
+      "city": "Burlington"
+    },
+    {
+      "course_name": "Anderson Creek Golf Club",
+      "state_code": "NC",
+      "domain": "andersoncreekgolf.com",
+      "city": "Spring Lake"
+    },
+    {
+      "course_name": "Asheboro Country Club",
+      "state_code": "NC",
+      "domain": "asheborocc.com",
+      "city": "Asheboro"
+    },
+    {
+      "course_name": "Asheville Municipal Golf Course",
+      "state_code": "NC",
+      "domain": "ashevillegc.com",
+      "city": "Asheville"
+    },
+    {
+      "course_name": "Ayden Golf & Country Club",
+      "state_code": "NC",
+      "domain": "aydengolf.com",
+      "city": "Ayden"
+    }
+  ],
+
+  "batch_2_tier_a": [
+    {
+      "course_name": "Bald Head Island Club",
+      "state_code": "NC",
+      "domain": "bhiclub.net",
+      "city": "Southport"
+    },
+    {
+      "course_name": "Bald Mountain Golf Course At Rumbling Bald Resort",
+      "state_code": "NC",
+      "domain": "rumblingbald.com",
+      "city": "Lake Lure"
+    },
+    {
+      "course_name": "Ballantyne Country Club",
+      "state_code": "NC",
+      "domain": "ballantyneclub.com",
+      "city": "Charlotte"
+    },
+    {
+      "course_name": "Balsam Mountain Preserve",
+      "state_code": "NC",
+      "domain": "balsammountainpreserve.com",
+      "city": "Sylva"
+    },
+    {
+      "course_name": "Baywood Golf Club",
+      "state_code": "NC",
+      "domain": "baywoodgc.com",
+      "city": "Fayetteville"
+    }
+  ],
+
+  "batch_3_tier_b": [
+    {
+      "course_name": "Beacon Ridge Golf & CC",
+      "state_code": "NC",
+      "domain": "beaconridgecc.com",
+      "city": "West End"
+    },
+    {
+      "course_name": "Bear Lake Golf Club",
+      "state_code": "NC",
+      "domain": "bearlakereserve.com",
+      "city": "Tuckasegee"
+    },
+    {
+      "course_name": "Bear Trail Golf Club",
+      "state_code": "NC",
+      "domain": "beartrailgolf.com",
+      "city": "Jacksonville"
+    },
+    {
+      "course_name": "Beechwood Country Club",
+      "state_code": "NC",
+      "domain": "beechwoodcc.com",
+      "city": "Ahoskie"
+    },
+    {
+      "course_name": "Bentwinds Golf & Country Club",
+      "state_code": "NC",
+      "domain": "bentwinds.org",
+      "city": "Fuquay Varina"
+    }
+  ],
+
+  "batch_4_tier_b": [
+    {
+      "course_name": "Bermuda Run Country Club West Course",
+      "state_code": "NC",
+      "domain": "bermudaruncc.com",
+      "city": "Advance"
+    },
+    {
+      "course_name": "Birchwood Country Club",
+      "state_code": "NC",
+      "domain": "birchwoodcc.net",
+      "city": "Nashville"
+    },
+    {
+      "course_name": "Alamance Country Club",
+      "state_code": "NC",
+      "domain": "alamancecountryclub.com",
+      "city": "Burlington"
+    },
+    {
+      "course_name": "Anderson Creek Golf Club",
+      "state_code": "NC",
+      "domain": "andersoncreekgolf.com",
+      "city": "Spring Lake"
+    },
+    {
+      "course_name": "Asheboro Country Club",
+      "state_code": "NC",
+      "domain": "asheborocc.com",
+      "city": "Asheboro"
+    }
+  ],
+
+  "notes": {
+    "tier_a_description": "Batches 1-2: First 10 courses alphabetically",
+    "tier_b_description": "Batches 3-4: Next 10 courses alphabetically",
+    "test_tables": "Uses use_test_tables=true for safety",
+    "batch_size": "5 courses per batch for manageable testing"
+  }
+}

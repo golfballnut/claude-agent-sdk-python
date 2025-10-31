@@ -1925,3 +1925,40 @@ SUCCESS: 80% (4/5 courses)
 **Framework:** Agent Debugging Skill - 5-Phase Methodology
 **Next:** Docker validation → Production deployment
 **Files:** All documentation in `teams/golf-enrichment/testing/`
+
+
+---
+
+## Apollo API Plan Limitations (Oct 30, 2025)
+
+### Organization Enrich Endpoints - Not Available on Basic Plan
+
+**Error Received:**
+```json
+{
+  "error": "api/v1/organizations/enrich is not accessible with this api_key",
+  "error_code": "API_INACCESSIBLE"
+}
+```
+
+**Status Code:** `403 Forbidden`
+
+**Tested Endpoints:**
+- ❌ `GET /api/v1/organizations/enrich` → 403
+- ❌ `POST /api/v1/organizations/bulk_enrich` → 403
+
+**Test Date:** Oct 30, 2025
+
+**Conclusion:** Organization enrichment requires higher-tier Apollo plan
+
+**Impact:**
+- Cannot get organization IDs for more accurate people search
+- Stuck with domain/name string matching (lower accuracy)
+- Small clubs have 0-5% success rate with domain matching
+
+**Workaround:** Use web scraping approach (PGA.org, club websites, vendor sites)
+
+**Reference:** See `golf-enrichment/docs/apollo_org_enrich_api.md` for full API documentation
+
+---
+

@@ -71,6 +71,89 @@ sleep 10
 
 ---
 
+### ⚠️ Common Issue: Environment Variables Not Loading
+
+**Problem:** Health check shows `"apollo_api": "missing"` despite .env file existing in project.
+
+**Root Cause:**
+- docker-compose environment section uses `${VAR}` syntax to reference shell environment variables
+- These variables must exist in the shell environment when docker-compose runs
+- .env file must be **explicitly loaded** if not in the same directory as docker-compose.yml
+- Docker Compose does NOT automatically load .env from parent directories
+
+**Symptoms:**
+```bash
+# Health check shows APIs as "missing"
+curl http://localhost:8001/health | jq '.dependencies'
+# {"apollo_api": "missing", "hunter_api": "missing"}
+
+# Container logs show: "API key not found"
+
+# Python in container can't access vars:
+docker exec container python -c "import os; print(os.getenv('APOLLO_API_KEY'))"
+# None
+```
+
+**Solution:**
+
+```bash
+# ❌ WRONG - .env not loaded from parent directory
+cd docker/
+docker-compose -f docker-compose.apollo.yml up -d
+
+# ✅ CORRECT - explicitly specify .env file path
+cd docker/
+docker-compose --env-file ../.env -f docker-compose.apollo.yml up -d
+
+# Alternative: Load into shell first
+export $(cat ../.env | xargs)
+docker-compose -f docker-compose.apollo.yml up -d
+```
+
+**Verification:**
+
+```bash
+# 1. Check health endpoint shows APIs configured
+curl http://localhost:8001/health | jq '.dependencies'
+
+# Expected (correct):
+{
+  "apollo_api": "configured",
+  "hunter_api": "configured",
+  "perplexity_api": "configured"
+}
+
+# Not (wrong):
+{
+  "apollo_api": "missing",
+  "hunter_api": "missing"
+}
+
+# 2. Test API actually works
+curl -X POST http://localhost:8001/enrich-course \
+  -H "Content-Type: application/json" \
+  -d '{"course_name": "Test Course", "state_code": "NC", "domain": "test.com", "use_test_tables": true}'
+
+# Should return results, not "API key not found" error
+```
+
+**Project Structure Context:**
+```
+project/
+├── .env                          # Main env file
+├── docker/
+│   ├── docker-compose.yml        # Needs --env-file ../.env
+│   ├── docker-compose.apollo.yml # Needs --env-file ../.env
+│   └── Dockerfile
+└── golf-enrichment/
+    ├── agents/
+    └── orchestrators/
+```
+
+**Proven:** Oct 30, 2025 - Fixed 0% success → 100% working in golf enrichment Docker testing
+
+---
+
 ### Phase 3: Health Check (2 min)
 
 ```bash
