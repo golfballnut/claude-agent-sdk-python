@@ -96,6 +96,63 @@ agenttesting/golf-enrichment/
 
 ---
 
+### Session 3 - October 31, 2025 (Evening)
+
+**User Feedback on V1 Prompt:**
+- ✅ V1 comprehensive prompt created successfully
+- ❌ 8-section prompt deemed "too extreme" for current business needs
+- ❌ Complexity creates unnecessary parsing overhead for core targeting use case
+
+**Business Requirements Clarification:**
+User identified the **minimum essential data** needed for automation:
+
+1. **Course Ranking (CRITICAL):** Premium / Mid / Budget classification
+   - Used for automated campaign categorization
+   - Needs pricing evidence + confidence level
+   - Replaces complex 8-section BUY/SELL/BOTH classification
+
+2. **Water Hazards Assessment:** Yes/No + count if present
+   - Are lots of hazards in play?
+   - Simpler than full retrieval service analysis
+
+3. **Volume Indicator:** Estimated annual rounds per year
+   - Key targeting metric
+   - Based on tee times, course type, location research
+
+4. **Reliable Contact Data (CRITICAL):** Names, emails, LinkedIn, phone
+   - Must maintain v1 quality and source citations
+   - General Manager/Owner, Superintendent, Director of Golf
+   - Work emails preferred, employment verification
+
+5. **Basic Course Intelligence:** Ownership, recent changes, vendors, selling points
+   - Simplified from v1's deep intelligence gathering
+   - Focus on actionable targeting insights only
+
+**Decision: Create V2 Simplified Prompt**
+- **Target length:** ~100-150 lines (vs v1's 459 lines)
+- **Sections:** 5 focused sections (vs v1's 8 comprehensive sections)
+- **Output:** Simpler JSON schema optimized for parsing
+- **Maintain:** Source citations (critical for validation), contact discovery quality
+- **Remove:** BUY/SELL classification, deep water hazards analysis, buying signals categorization, event program
+
+**Architecture Decision:**
+- Keep V1 available for future comprehensive enrichment needs
+- V2 becomes primary prompt for current targeting/categorization workflow
+- Both prompts maintained in `/prompts/` directory
+
+**Blockers/Questions:**
+- None currently
+
+**Next Actions:**
+1. Create `prompts/focused_research_v2.md` (simplified prompt)
+2. Create `schemas/focused_response_v2.json` (simplified schema)
+3. Update `test_prompt.py` to support v2 testing
+4. Test v2 on The Neuse Golf Club
+5. Compare v2 results: data quality vs reduced complexity
+6. Document v2 test results and decide on final prompt version
+
+---
+
 ## 📊 Test Results
 
 ### Classification Accuracy Tests
@@ -125,13 +182,16 @@ agenttesting/golf-enrichment/
 - [x] Create tracking docs
 
 ### 🟡 Phase 1: LLM Research Agent (In Progress)
-- [x] Build enhanced LLM prompt with 8 sections
-- [x] Create JSON output schema with inline citations
+- [x] Build enhanced LLM prompt with 8 sections (V1 - comprehensive)
+- [x] Create JSON output schema with inline citations (V1)
 - [x] Build automated test runner with validation
-- [ ] Run Phase 1 test (The Neuse Golf Club)
-- [ ] Validate classification accuracy on test course
-- [ ] Run Phase 2 tests (Pinehurst No. 2, Bethpage Black)
-- [ ] Document results and iterate on prompt
+- [x] Gather user feedback on V1 complexity
+- [ ] Create simplified V2 prompt (5 focused sections)
+- [ ] Create simplified V2 JSON schema
+- [ ] Test V2 on The Neuse Golf Club
+- [ ] Compare V1 vs V2: complexity vs data quality
+- [ ] Select final prompt version for production
+- [ ] Document results and learnings
 
 ### ⚪ Phase 2: Contact Enrichment
 - [ ] Build Apollo agent
@@ -181,6 +241,13 @@ agenttesting/golf-enrichment/
 - LLM should do research, agents should do operations
 - Citations critical for validating contact data
 - Process incomplete data (tag for review) > discard
+
+**Session 3:**
+- Comprehensive != Better - V1's 8 sections were over-engineered for current needs
+- Start with minimum viable data for automation, iterate if needed
+- User feedback on "too extreme" prevented wasted testing effort
+- Business requirements > Technical completeness (Premium/Mid/Budget ranking more valuable than BUY/SELL/BOTH for current workflow)
+- Keep complex prompts archived for future use cases
 
 ---
 
