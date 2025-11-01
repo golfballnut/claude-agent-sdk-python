@@ -40,6 +40,10 @@ COPY orchestrator.py .
 COPY orchestrator_apollo.py .
 # Copy template directory (contains utils like env_loader)
 COPY template/ ./template/
+# Copy V2 validator components (Phase 2.4)
+COPY validator.py .
+COPY parsers/ ./parsers/
+COPY writers/ ./writers/
 # Copy API wrapper
 COPY api.py .
 
