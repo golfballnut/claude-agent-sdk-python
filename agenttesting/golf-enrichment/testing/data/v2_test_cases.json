@@ -1,0 +1,59 @@
+{
+  "test_suite": "Golf Enrichment V2 Validator Tests",
+  "created": "2025-10-31",
+  "description": "Test cases for Render validator service Docker testing",
+  "cases": [
+    {
+      "test_id": "valid_premium_private",
+      "description": "Valid V2 JSON - Premium private course with full data",
+      "expected_result": "success",
+      "course_name": "Cape Fear National",
+      "state_code": "NC",
+      "v2_json": {
+        "section1": {
+          "tier": "Premium",
+          "tier_confidence": 0.95,
+          "pricing_evidence": [
+            {"claim": "Private membership club", "source": "https://heritagegolfgroup.com"},
+            {"claim": "Initiation fee $10k-25k", "source": "https://heritagegolfgroup.com/membership"}
+          ]
+        },
+        "section2": {
+          "has_water_hazards": true,
+          "hazard_count": 18,
+          "hazard_details": "18/18 holes have water in play - nearly every hole features water hazards",
+          "source": "https://heritagegolfgroup.com/cape-fear-national/course"
+        },
+        "section3": {
+          "estimated_annual_rounds": 27000,
+          "volume_range": "22k-32k",
+          "estimation_basis": [
+            {"source": "https://heritagegolfgroup.com", "claim": "Private club with 250-300 members"}
+          ],
+          "confidence": 0.7
+        },
+        "section4": {
+          "contacts": [
+            {
+              "name": "Matthew Wycoff",
+              "title": "General Manager",
+              "work_email": "mwycoff@heritagegolfgroup.com",
+              "linkedin_url": "https://linkedin.com/in/matthew-wycoff",
+              "employment_verified": true,
+              "sources": ["https://linkedin.com/in/matthew-wycoff", "https://heritagegolfgroup.com/staff"]
+            }
+          ]
+        },
+        "section5": {
+          "ownership": {
+            "owner": "Heritage Golf Group",
+            "ownership_type": "Portfolio Management"
+          },
+          "recent_changes": ["2023: Clubhouse renovation"],
+          "known_vendors": ["Toro"],
+          "unique_selling_points": ["Tim Cate design", "Golfweek ranked"]
+        }
+      }
+    }
+  ]
+}

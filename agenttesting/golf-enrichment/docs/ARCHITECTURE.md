@@ -925,5 +925,219 @@ python teams/golf-enrichment/agents/llm_researcher.py --course "Pinehurst No. 2"
 
 ---
 
-**Last Updated:** October 31, 2025
-**Next Review:** After Phase 1 completion
+---
+
+## 🔄 V2 Simplified Architecture (ACTIVE)
+
+**Status:** ✅ Phase 2.0 Complete (Data Flow Validation)
+**Decision:** V2 replaces V1 comprehensive approach based on user feedback (V1 deemed "too extreme")
+
+### Why V2?
+
+**User Feedback on V1:**
+- 8-section comprehensive prompt was over-engineered for current needs
+- BUY/SELL/BOTH classification too complex for core targeting use case
+- Parsing overhead not justified by business value
+
+**V2 Business Requirements:**
+Focus on **minimum essential data** for automated targeting/categorization:
+
+1. **Course Ranking (CRITICAL):** Premium / Mid / Budget classification
+2. **Water Hazards Assessment:** Yes/No + count if present
+3. **Volume Indicator:** Estimated annual rounds per year
+4. **Reliable Contact Data (CRITICAL):** Names, emails, LinkedIn, phone
+5. **Basic Course Intelligence:** Ownership, recent changes, vendors, selling points
+
+### V2 Data Flow (3-Step Validation)
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  STEP 1: Manual V2 JSON Input                                │
+│  User pastes V2 JSON → llm_research_staging table            │
+└──────────────────────────────────────────────────────────────┘
+                          ↓ DATABASE TRIGGER
+┌──────────────────────────────────────────────────────────────┐
+│  STEP 2: Validation & Database Write                         │
+│  1. Database trigger → validate-v2-research edge function    │
+│  2. Edge function → Render Validator API (this service)      │
+│  3. Validator performs:                                       │
+│     - CRITICAL validations (structure, tier, confidence)     │
+│     - QUALITY validations (contact methods, data completeness)│
+│     - Parses 5 sections → structured data                    │
+│     - Writes to golf_courses + golf_course_contacts          │
+│  4. Returns success + validation flags                       │
+└──────────────────────────────────────────────────────────────┘
+                          ↓ DATABASE TRIGGER (on contact insert)
+┌──────────────────────────────────────────────────────────────┐
+│  STEP 3: ClickUp Task Creation (Automatic)                   │
+│  1. Contact insert triggers create-clickup-tasks             │
+│  2. Creates 3 tasks with relationships:                      │
+│     - Golf Course task                                       │
+│     - Contact tasks (one per contact)                        │
+│     - Outreach Activity task                                 │
+│  3. Outreach task includes validation warnings if any        │
+└──────────────────────────────────────────────────────────────┘
+                          ↓ FUTURE: STEP 4
+┌──────────────────────────────────────────────────────────────┐
+│  STEP 4: Contact Enrichment (Phase 2.2 - Not Yet Implemented)│
+│  1. Manual trigger or scheduled job                          │
+│  2. Edge function → Render Enrichment Agent                  │
+│  3. Apollo API (primary) → Hunter.io (fallback)              │
+│  4. Update contacts with emails/LinkedIn                     │
+│  5. Flag ClickUp task if enrichment fails                    │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### V2 JSON Structure (5 Sections)
+
+```json
+{
+  "section1": {
+    "tier": "Premium" | "Mid" | "Budget",
+    "tier_confidence": 0.0-1.0,
+    "pricing_evidence": [{"claim": "...", "source": "..."}]
+  },
+  "section2": {
+    "has_water_hazards": true,
+    "hazard_count": 18,
+    "hazard_details": "18/18 holes...",
+    "source": "https://..."
+  },
+  "section3": {
+    "estimated_annual_rounds": 27000,
+    "volume_range": "22k-32k",
+    "estimation_basis": [{"source": "...", "claim": "..."}],
+    "confidence": 0.7
+  },
+  "section4": {
+    "contacts": [
+      {
+        "name": "John Doe",
+        "title": "General Manager",
+        "work_email": "jdoe@course.com",
+        "linkedin_url": "https://linkedin.com/in/...",
+        "phone": "(555) 123-4567",
+        "employment_verified": true,
+        "sources": ["https://...", "https://..."]
+      }
+    ]
+  },
+  "section5": {
+    "ownership": {"type": "...", "entity_name": "...", "source": "..."},
+    "recent_changes": [...],
+    "current_vendors": [...],
+    "selling_points": [...]
+  }
+}
+```
+
+### V2 Validation Strategy
+
+**CRITICAL Validations (Hard Failures):**
+- All 5 sections present and parseable
+- Tier field exists with valid value (Premium/Mid/Budget)
+- Tier confidence ≥ 0.5
+
+**QUALITY Validations (Soft Warnings → ClickUp Flags):**
+- `LOW_TIER_CONFIDENCE`: tier_confidence < 0.7
+- `NO_CONTACTS_FOUND`: zero contacts discovered (still creates course record)
+- `NO_CONTACT_METHODS`: contacts exist but no emails/LinkedIn
+- `NO_VOLUME_DATA`: volume estimate is None
+
+### V2 Database Schema
+
+**llm_research_staging** (Permanent audit trail):
+```sql
+CREATE TABLE llm_research_staging (
+  id UUID PRIMARY KEY,
+  course_id UUID REFERENCES golf_courses(id),
+  course_name TEXT NOT NULL,
+  state_code TEXT,
+  v2_json JSONB NOT NULL,
+  status TEXT CHECK (status IN ('pending', 'processing', 'validated', 'validation_failed')),
+  validation_error TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  processed_at TIMESTAMPTZ
+);
+```
+
+**golf_courses** (Extended with V2 fields):
+```sql
+ALTER TABLE golf_courses ADD COLUMN v2_research_json JSONB;
+ALTER TABLE golf_courses ADD COLUMN v2_parsed_at TIMESTAMPTZ;
+ALTER TABLE golf_courses ADD COLUMN v2_validation_flags JSONB;
+
+-- Section 1: Course Tier
+ALTER TABLE golf_courses ADD COLUMN course_tier TEXT CHECK (course_tier IN ('Premium', 'Mid', 'Budget'));
+ALTER TABLE golf_courses ADD COLUMN course_tier_confidence NUMERIC;
+ALTER TABLE golf_courses ADD COLUMN course_tier_evidence JSONB;
+
+-- Section 2: Water Hazards (reuse existing fields)
+-- water_hazards, water_hazard_rating, water_hazard_source, water_hazard_confidence
+
+-- Section 3: Volume Indicator
+ALTER TABLE golf_courses ADD COLUMN annual_rounds_estimate INTEGER;
+ALTER TABLE golf_courses ADD COLUMN annual_rounds_range TEXT;
+ALTER TABLE golf_courses ADD COLUMN annual_rounds_confidence NUMERIC;
+
+-- Section 5: Intelligence
+ALTER TABLE golf_courses ADD COLUMN v2_intelligence JSONB;
+```
+
+**golf_course_contacts** (Extended with V2 fields):
+```sql
+ALTER TABLE golf_course_contacts ADD COLUMN contact_sources JSONB;
+ALTER TABLE golf_course_contacts ADD COLUMN employment_verified BOOLEAN;
+ALTER TABLE golf_course_contacts ADD COLUMN needs_enrichment BOOLEAN DEFAULT TRUE;
+```
+
+### V2 Render Validator Service
+
+**Location:** `/agenttesting/golf-enrichment/render/validator/`
+
+**Components:**
+- `api.py` - FastAPI endpoint `/validate-and-write`
+- `validator.py` - Main validation orchestrator
+- `parsers/` - 5 section parsers (tier, hazards, volume, contacts, intel)
+- `writers/supabase_writer.py` - Database writer (mirrors Agent 8 pattern)
+
+**Key Pattern (Mirrors Agent 8):**
+- ✅ **Agent writes to database** (Render validator = Agent 8)
+- ✅ **Webhook only triggers ClickUp** (edge function calls create-clickup-tasks)
+- ✅ **Contact insert triggers ClickUp sync** (automatic via database trigger)
+- ✅ **Non-blocking ClickUp sync** (database write success guaranteed)
+
+### V2 Deployment
+
+**Supabase:**
+1. Migration 013: `llm_research_staging` table + trigger
+2. Migration 014: V2 fields on `golf_courses` + `golf_course_contacts`
+3. Edge function: `validate-v2-research`
+
+**Render:**
+1. Validator service: `golf-v2-validator`
+2. Environment: `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`
+3. Health check: `/health`
+4. Endpoint: `/validate-and-write`
+
+**Environment Variables (Supabase Edge Functions):**
+```
+RENDER_VALIDATOR_URL=https://golf-v2-validator.onrender.com
+```
+
+### V2 Test Results (Manual Testing - Session 3)
+
+| Course | Tier | Water Hazards | Volume Est. | Contacts Found | Contact Quality |
+|--------|------|---------------|-------------|----------------|-----------------|
+| Cape Fear National | Premium | Yes (18/18 holes) | 22k-32k | 4 (Owner entity, GM, Super, Head Pro) | Good (GM email/LinkedIn, Super GCSA-verified, Head Pro email) |
+| The Neuse | Premium | No (1-3 holes) | 35k-45k | 4 (Owner, Super, Head Pro, Ops) | Excellent (Owner direct phone, Head Pro direct email, Super LinkedIn) |
+| Eagle Ridge | Mid | Yes (8-10 holes) | 35k-45k | 3 (Owner family, GM, Head Pro) | Fair (Main line only, recent ownership change limits public data) |
+
+**Accuracy:** 100% tier classification (3/3)
+**Citation Quality:** 100% inline citations
+**Decision:** V2 approved for production
+
+---
+
+**Last Updated:** October 31, 2025 (Phase 2.0 Complete - V2 Data Flow Validation)
+**Next Review:** After Phase 2.1 (Database Cleanup)

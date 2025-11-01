@@ -17,10 +17,23 @@ agenttesting/golf-enrichment/
 ├── results/
 │   ├── TEMPLATE.md                    # Results documentation template
 │   └── [course_id]_response.json      # Individual test results
-└── docs/
-    ├── PROGRESS.md                    # Session log & tracking
-    ├── ARCHITECTURE.md                # Technical design
-    └── IMPLEMENTATION_MAP.md          # Business → code mapping
+├── docs/
+│   ├── PROGRESS.md                    # Session log & tracking
+│   ├── ARCHITECTURE.md                # Technical design
+│   └── IMPLEMENTATION_MAP.md          # Business → code mapping
+├── docker/                            # Docker test infrastructure
+│   ├── docker-compose.validator.yml   # Services configuration
+│   ├── test_validator.sh              # Main test script
+│   ├── test_harness.py                # Python test harness
+│   └── README.md                      # Docker testing guide
+├── testing/data/                      # Test data for Docker/integration tests
+│   ├── v2_test_cases.json             # Test inputs
+│   └── expected_outputs.json          # Expected results
+├── render/                            # Render deployment service
+│   └── validator/                     # V2 validator API
+└── supabase/                          # Supabase migrations & edge functions
+    ├── migrations/
+    └── functions/
 ```
 
 ## Quick Start
@@ -78,3 +91,46 @@ The enhanced prompt tests **8 critical sections**:
 - **Test courses:** Defined courses with expected outcomes
 - **Test runner:** Automated testing with validation
 - **Results template:** Structured documentation format
+
+---
+
+## Docker Testing
+
+**Location:** `docker/`
+**Purpose:** Test Render validator service in Docker before production deployment
+
+### Quick Start
+
+```bash
+cd docker
+cp .env.example .env
+# Edit .env with Supabase credentials
+./test_validator.sh
+```
+
+### What Gets Tested
+
+- V2 JSON validation (all 5 sections)
+- Database writes to Supabase
+- Error handling & validation flags
+- Performance & cost tracking
+
+**See:** `docker/README.md` for complete guide
+
+---
+
+## Development Workflow
+
+**Important:** All development and testing stays in `agenttesting/golf-enrichment/` until ready for production.
+
+### Testing Environment
+- **Prompt testing:** `test_prompt.py` for LLM research validation
+- **Docker testing:** `docker/` for validator service validation
+- **Test data:** `testing/data/` for integration test fixtures
+
+### Production Deployment
+- **When ready:** Sync code to `production/golf-enrichment/`
+- **Use:** Deployment scripts in `production/scripts/`
+- **Deploy:** Via Render (git push triggers deployment)
+
+**This ensures clean separation between development/testing and production environments.**

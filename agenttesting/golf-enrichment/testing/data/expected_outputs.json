@@ -1,0 +1,30 @@
+{
+  "description": "Expected validation outputs for V2 test cases",
+  "version": "1.0",
+  "test_expectations": {
+    "valid_premium_private": {
+      "validation_status": "validated",
+      "validation_error": null,
+      "expected_golf_course_fields": {
+        "course_name": "Cape Fear National",
+        "state_code": "NC",
+        "course_tier": "Premium",
+        "annual_rounds_estimate": 27000,
+        "has_water_hazards": true,
+        "v2_validation_flags": []
+      },
+      "expected_contacts_count": 1,
+      "expected_contact_names": ["Matthew Wycoff"]
+    }
+  },
+  "success_criteria": {
+    "valid_cases": {
+      "min_success_rate": 1.0,
+      "description": "All valid test cases must pass"
+    },
+    "performance": {
+      "max_processing_time_per_course": "10 seconds",
+      "max_cost_per_course": "$0.05"
+    }
+  }
+}

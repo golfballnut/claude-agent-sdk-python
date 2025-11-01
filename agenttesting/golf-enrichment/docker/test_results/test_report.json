@@ -1,0 +1,257 @@
+{
+  "test_suite": "Golf Enrichment V2 Validator",
+  "timestamp": "2025-11-01T02:55:01.112704",
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "success_rate": 100.0,
+    "total_duration_seconds": 0.84956955909729,
+    "avg_duration_seconds": 0.84956955909729
+  },
+  "results": [
+    {
+      "test_id": "valid_premium_private",
+      "description": "Valid V2 JSON - Premium private course with full data",
+      "passed": true,
+      "error": null,
+      "duration_seconds": 0.84956955909729,
+      "cost_estimate": 0,
+      "validation_response": {
+        "success": true,
+        "course_id": 2054,
+        "contacts_created": 1,
+        "validation_flags": [],
+        "error": null
+      },
+      "db_records": {
+        "staging": {
+          "id": "44527e7d-283c-4441-963b-0c403b9c8a8e",
+          "course_id": null,
+          "course_name": "Cape Fear National",
+          "state_code": "NC",
+          "v2_json": {
+            "section1": {
+              "tier": "Premium",
+              "tier_confidence": 0.95,
+              "pricing_evidence": [
+                {
+                  "claim": "Private membership club",
+                  "source": "https://heritagegolfgroup.com"
+                },
+                {
+                  "claim": "Initiation fee $10k-25k",
+                  "source": "https://heritagegolfgroup.com/membership"
+                }
+              ]
+            },
+            "section2": {
+              "source": "https://heritagegolfgroup.com/cape-fear-national/course",
+              "hazard_count": 18,
+              "hazard_details": "18/18 holes have water in play - nearly every hole features water hazards",
+              "has_water_hazards": true
+            },
+            "section3": {
+              "confidence": 0.7,
+              "volume_range": "22k-32k",
+              "estimation_basis": [
+                {
+                  "claim": "Private club with 250-300 members",
+                  "source": "https://heritagegolfgroup.com"
+                }
+              ],
+              "estimated_annual_rounds": 27000
+            },
+            "section4": {
+              "contacts": [
+                {
+                  "name": "Matthew Wycoff",
+                  "title": "General Manager",
+                  "sources": [
+                    "https://linkedin.com/in/matthew-wycoff",
+                    "https://heritagegolfgroup.com/staff"
+                  ],
+                  "work_email": "mwycoff@heritagegolfgroup.com",
+                  "linkedin_url": "https://linkedin.com/in/matthew-wycoff",
+                  "employment_verified": true
+                }
+              ]
+            },
+            "section5": {
+              "ownership": {
+                "owner": "Heritage Golf Group",
+                "ownership_type": "Portfolio Management"
+              },
+              "known_vendors": [
+                "Toro"
+              ],
+              "recent_changes": [
+                "2023: Clubhouse renovation"
+              ],
+              "unique_selling_points": [
+                "Tim Cate design",
+                "Golfweek ranked"
+              ]
+            }
+          },
+          "status": "validated",
+          "validation_error": null,
+          "created_at": "2025-11-01T02:54:59.418077+00:00",
+          "processed_at": "2025-11-01T02:54:59.725336+00:00"
+        },
+        "course": {
+          "id": 2052,
+          "course_name": "Cape Fear National",
+          "state_code": "NC",
+          "city": null,
+          "street_address": null,
+          "zipcode": null,
+          "phone": null,
+          "website": null,
+          "region": null,
+          "course_status": null,
+          "google_place_id": null,
+          "latitude": null,
+          "longitude": null,
+          "data_source": null,
+          "enhancement_status": "pending",
+          "is_verified": false,
+          "last_enhanced": null,
+          "created_at": "2025-11-01T02:53:30.067063",
+          "discovery_difficulty": null,
+          "discovery_notes": null,
+          "google_maps_link": null,
+          "clickup_task_id": null,
+          "clickup_synced_at": null,
+          "discovery_completed_at": null,
+          "enrichment_completed_at": "2025-11-01T02:53:29.937197",
+          "contacts_page_url": null,
+          "contacts_page_found_at": null,
+          "contacts_page_search_method": null,
+          "external_directory_url": null,
+          "external_directory_source": null,
+          "enrichment_requested_at": null,
+          "enrichment_error": null,
+          "retry_count": 0,
+          "google_enriched": false,
+          "segment": null,
+          "segment_confidence": null,
+          "segment_signals": null,
+          "water_hazards": 18,
+          "water_hazard_confidence": "1.0",
+          "opportunities": null,
+          "range_intel": null,
+          "agent_cost_usd": null,
+          "enrichment_status": "completed",
+          "water_hazard_rating": "18/18 holes have water in play - nearly every hole features water hazards",
+          "water_hazard_source": "https://heritagegolfgroup.com/cape-fear-national/course",
+          "phase_1_complete": false,
+          "phase_1_5_complete": false,
+          "phase_2_complete": false,
+          "phase_1_completed_at": null,
+          "phase_1_5_completed_at": null,
+          "phase_2_completed_at": null,
+          "closure_date": null,
+          "closure_verified": false,
+          "closure_source": null,
+          "closure_notes": null,
+          "region_assignment_method": null,
+          "v2_research_json": {
+            "section1": {
+              "tier": "Premium",
+              "tier_confidence": 0.95,
+              "pricing_evidence": [
+                {
+                  "claim": "Private membership club",
+                  "source": "https://heritagegolfgroup.com"
+                },
+                {
+                  "claim": "Initiation fee $10k-25k",
+                  "source": "https://heritagegolfgroup.com/membership"
+                }
+              ]
+            },
+            "section2": {
+              "source": "https://heritagegolfgroup.com/cape-fear-national/course",
+              "hazard_count": 18,
+              "hazard_details": "18/18 holes have water in play - nearly every hole features water hazards",
+              "has_water_hazards": true
+            },
+            "section3": {
+              "confidence": 0.7,
+              "volume_range": "22k-32k",
+              "estimation_basis": [
+                {
+                  "claim": "Private club with 250-300 members",
+                  "source": "https://heritagegolfgroup.com"
+                }
+              ],
+              "estimated_annual_rounds": 27000
+            },
+            "section4": {
+              "contacts": [
+                {
+                  "name": "Matthew Wycoff",
+                  "title": "General Manager",
+                  "sources": [
+                    "https://linkedin.com/in/matthew-wycoff",
+                    "https://heritagegolfgroup.com/staff"
+                  ],
+                  "work_email": "mwycoff@heritagegolfgroup.com",
+                  "linkedin_url": "https://linkedin.com/in/matthew-wycoff",
+                  "employment_verified": true
+                }
+              ]
+            },
+            "section5": {
+              "ownership": {
+                "owner": "Heritage Golf Group",
+                "ownership_type": "Portfolio Management"
+              },
+              "known_vendors": [
+                "Toro"
+              ],
+              "recent_changes": [
+                "2023: Clubhouse renovation"
+              ],
+              "unique_selling_points": [
+                "Tim Cate design",
+                "Golfweek ranked"
+              ]
+            }
+          },
+          "v2_parsed_at": "2025-11-01T02:53:29.937197+00:00",
+          "v2_validation_flags": [],
+          "course_tier": "Premium",
+          "course_tier_confidence": 0.95,
+          "course_tier_evidence": [
+            {
+              "claim": "Private membership club",
+              "source": "https://heritagegolfgroup.com"
+            },
+            {
+              "claim": "Initiation fee $10k-25k",
+              "source": "https://heritagegolfgroup.com/membership"
+            }
+          ],
+          "annual_rounds_estimate": 27000,
+          "annual_rounds_range": "22k-32k",
+          "annual_rounds_confidence": 0.7,
+          "v2_intelligence": {
+            "ownership": {
+              "type": "",
+              "source": "",
+              "entity_name": ""
+            },
+            "recent_changes": [],
+            "selling_points": [],
+            "current_vendors": []
+          },
+          "has_water_hazards": true,
+          "water_hazards_count": "18 holes"
+        },
+        "contacts": []
+      }
+    }
+  ]
+}

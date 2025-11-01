@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  validator:
+    build:
+      context: ../render/validator
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # Supabase configuration
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+
+      # API keys for enrichment (if testing enrichment waterfall)
+      - APOLLO_API_KEY=${APOLLO_API_KEY:-}
+      - HUNTER_API_KEY=${HUNTER_API_KEY:-}
+      - CLICKUP_API_TOKEN=${CLICKUP_API_TOKEN:-}
+
+      # Testing mode flags
+      - USE_TEST_TABLES=true
+      - TEST_MODE=true
+      - LOG_LEVEL=DEBUG
+    volumes:
+      # Mount test data
+      - ../testing/data:/app/test_data:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health').raise_for_status()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - golf-test-network
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      - validator
+    environment:
+      - VALIDATOR_URL=http://validator:8000
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+    volumes:
+      # Mount test scripts and data
+      - ../testing/data:/app/test_data:ro
+      - ./test_results:/app/results
+      - ./test_harness.py:/app/test_harness.py:ro
+    command: python test_harness.py
+    networks:
+      - golf-test-network
+
+networks:
+  golf-test-network:
+    driver: bridge
+
+volumes:
+  test_results:
