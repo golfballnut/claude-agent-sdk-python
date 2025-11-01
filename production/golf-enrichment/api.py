@@ -13,6 +13,7 @@ Endpoints:
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
+from typing import Any
 import sys
 import os
 from pathlib import Path
@@ -36,6 +37,14 @@ try:
     logger.info("Successfully imported Agent 7")
 except ImportError as e:
     logger.error(f"Failed to import Agent 7: {e}")
+    raise
+
+# Import V2 Validator (Phase 2.4)
+try:
+    from validator import V2Validator
+    logger.info("Successfully imported V2 Validator")
+except ImportError as e:
+    logger.error(f"Failed to import V2 Validator: {e}")
     raise
 
 # Import Both Orchestrators (full pipeline)
@@ -196,6 +205,24 @@ class ErrorResponse(BaseModel):
     timestamp: str
 
 
+# V2 Validator Models (Phase 2.4)
+class ValidationRequest(BaseModel):
+    """Request payload from validate-v2-research edge function"""
+    staging_id: str = Field(..., description="UUID of llm_research_staging record")
+    course_id: int | None = Field(None, description="INTEGER ID of existing course (if updating)")
+    course_name: str = Field(..., description="Name of golf course")
+    state_code: str = Field(..., description="State code (e.g., NC, VA)")
+    v2_json: dict[str, Any] = Field(..., description="V2 LLM research JSON (5 sections)")
+
+class ValidationResponse(BaseModel):
+    """Response payload sent back to edge function"""
+    success: bool
+    course_id: int | None = None  # INTEGER not UUID (matches golf_courses.id type)
+    contacts_created: int = 0
+    validation_flags: list[str] = Field(default_factory=list)
+    error: str | None = None
+
+
 # Exception handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
@@ -222,6 +249,7 @@ async def root():
         "endpoints": {
             "health": "GET /health",
             "orchestrator_info": "GET /orchestrator-info (Check active orchestrator)",
+            "validate_and_write": "POST /validate-and-write (V2 Validator - Phase 2.4)",
             "count_hazards": "POST /count-hazards (Agent 7 only)",
             "test_agent8": "POST /test-agent8 (Test Agent 8 in isolation)",
             "enrich_course": "POST /enrich-course (Full pipeline)",
@@ -440,6 +468,81 @@ async def test_agent8():
             status_code=500,
             detail=f"Agent 8 test failed: {str(e)}"
         )
+
+
+@app.post("/validate-and-write", response_model=ValidationResponse)
+async def validate_and_write(request: ValidationRequest):
+    """
+    Validate V2 LLM research JSON and write to Supabase (Phase 2.4)
+
+    This endpoint is called by the validate-v2-research edge function.
+    It validates the V2 JSON structure, parses all 5 sections, and writes
+    clean data to golf_courses + golf_course_contacts tables.
+
+    Steps:
+    1. Validate V2 JSON structure (CRITICAL validations)
+    2. Parse each of 5 sections
+    3. Perform quality validations (soft warnings)
+    4. Write to golf_courses + golf_course_contacts tables
+    5. Return success + validation flags
+
+    CRITICAL validations (hard failures):
+    - All 5 sections present
+    - Tier field exists with valid value
+    - Tier confidence ≥ 0.5
+
+    QUALITY validations (soft warnings):
+    - Tier confidence < 0.7 → flag LOW_TIER_CONFIDENCE
+    - Zero contacts → flag NO_CONTACTS_FOUND
+    - No email/LinkedIn on contacts → flag NO_CONTACT_METHODS
+
+    Args:
+        request: ValidationRequest with staging_id, course info, v2_json
+
+    Returns:
+        ValidationResponse with success, course_id, contacts_created, validation_flags
+
+    Raises:
+        HTTPException: If validation or database write fails
+    """
+    logger.info(f"🚀 V2 Validation request: {request.course_name} ({request.state_code})")
+    logger.info(f"   Staging ID: {request.staging_id}")
+    logger.info(f"   Course ID: {request.course_id or 'NEW COURSE'}")
+
+    try:
+        # Initialize validator
+        use_test_tables = os.getenv("USE_TEST_TABLES", "false").lower() == "true"
+        validator = V2Validator(
+            supabase_url=os.getenv("SUPABASE_URL"),
+            supabase_key=os.getenv("SUPABASE_SERVICE_ROLE_KEY"),
+            use_test_tables=use_test_tables
+        )
+
+        # Process validation + database write
+        result = await validator.process(
+            staging_id=request.staging_id,
+            course_id=request.course_id,
+            course_name=request.course_name,
+            state_code=request.state_code,
+            v2_json=request.v2_json
+        )
+
+        if not result["success"]:
+            logger.error(f"❌ Validation failed: {result['error']}")
+            raise HTTPException(status_code=400, detail=result["error"])
+
+        logger.info(f"✅ Validation succeeded")
+        logger.info(f"   Course ID: {result['course_id']}")
+        logger.info(f"   Contacts: {result['contacts_created']}")
+        logger.info(f"   Flags: {result['validation_flags']}")
+
+        return ValidationResponse(**result)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception(f"❌ Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/enrich-course", response_model=EnrichCourseResponse)
