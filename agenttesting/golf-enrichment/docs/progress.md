@@ -2,15 +2,15 @@
 
 **Project:** Enhanced enrichment workflow with BUY/SELL opportunity classification
 **Started:** October 31, 2025
-**Status:** 🟡 In Progress - Phase 2.0 (Data Flow Validation)
+**Status:** ✅ Phase 2.1 Complete - Ready for Phase 2.2 (Contact Enrichment)
 
 ---
 
 ## 📍 Current Phase
 
-**Phase 2.0: Data Flow Validation**
-- Goal: Validate V2 JSON → Render parsers → Supabase data flow
-- Status: Ready to begin implementation
+**Phase 2.1: Database Cleanup**
+- Goal: Consolidate database schema, remove redundant tables, fix broken relationships
+- Status: ✅ COMPLETE (22 → 17 tables, 23% reduction)
 
 ---
 
@@ -647,6 +647,59 @@ agenttesting/golf-enrichment/
 
 ---
 
+### Session 7 - November 1, 2025
+
+**Completed:**
+- ✅ Created comprehensive database audit report (22 tables analyzed)
+- ✅ Created Migration 016: Remove legacy Apollo test tables (test_golf_courses, test_golf_course_contacts)
+- ✅ Created Migration 017: Fix outreach foreign keys, remove duplicate outreach_activities_agent table
+- ✅ Created Migration 018: Remove unused staging tables (golf_courses_staging, golf_course_contacts_staging)
+- ✅ Applied all 3 migrations to Supabase successfully
+- ✅ Verified database state: 22 → 17 tables (23% reduction)
+- ✅ Created SCHEMA.md: Comprehensive final schema documentation
+- ✅ Updated PROGRESS.md with Session 7
+
+**Cleanup Summary:**
+- **Removed 5 tables total:**
+  - 2 legacy Apollo test tables (outdated schema, replaced by Migration 015)
+  - 1 duplicate outreach table (0 rows, broken foreign keys)
+  - 2 unused staging tables (978 courses, no code references, user confirmed not needed)
+- **Fixed 2 foreign key relationships:**
+  - outreach_communications.outreach_activity_id → outreach_activities.activity_id ✅
+  - outreach_sequences.outreach_activity_id → outreach_activities.activity_id ✅
+
+**Database State After Cleanup:**
+| Category | Count | Tables |
+|----------|-------|--------|
+| Core Production | 6 | golf_courses, golf_course_contacts, llm_research_staging, outreach_activities, outreach_communications, outreach_sequences |
+| Test Tables (V2) | 3 | golf_courses_test, golf_course_contacts_test, llm_research_staging_test |
+| Supporting | 8 | agent_tool_usage, test_agent_tool_usage, city_region_mapping, zipcode_region_mapping, contact_changes, opt_out_log, monitoring_checks, monitoring_settings |
+| **TOTAL** | **17** | (down from 22) |
+
+**Key Decisions Made:**
+1. **Keep V2 test tables** (Migration 015) - Active for Docker validation, production-safe
+2. **Delete legacy Apollo test tables** - Outdated schema (50 vs 68 cols, 54 vs 53 cols)
+3. **Delete staging tables** - User confirmed 978 courses not needed, no code references
+4. **Fix foreign keys** - Point to correct active table (activity_id not id)
+
+**Files Created:**
+```
+agenttesting/golf-enrichment/
+├── supabase/migrations/
+│   ├── 016_cleanup_legacy_test_tables.sql
+│   ├── 017_fix_outreach_foreign_keys.sql
+│   └── 018_remove_unused_staging_tables.sql
+└── docs/
+    └── SCHEMA.md                              # Final schema documentation
+```
+
+**Blockers/Questions:**
+- None - Phase 2.1 Database Cleanup COMPLETE ✅
+
+**Ready for:** Phase 2.2 (Contact Enrichment)
+
+---
+
 ## 📊 Test Results
 
 ### V2 Tier Classification Tests
@@ -715,11 +768,13 @@ agenttesting/golf-enrichment/
 
 **Status:** ✅ COMPLETE - All tests passing, production-safe architecture validated
 
-### ⚪ Phase 2.1: Database Cleanup (Next)
-- [ ] Audit redundant tables in Supabase (course, contacts, outreach schemas)
-- [ ] Remove/consolidate duplicate tables
-- [ ] Document final schema structure
-- [ ] Validate no breaking changes to existing workflows
+### ✅ Phase 2.1: Database Cleanup (Complete)
+- [x] Audit redundant tables in Supabase (22 tables analyzed)
+- [x] Remove legacy Apollo test tables (2 tables)
+- [x] Fix outreach foreign keys, remove duplicate table (1 table)
+- [x] Remove unused staging tables (2 tables, user confirmed not needed)
+- [x] Document final schema structure (SCHEMA.md)
+- [x] Validate no breaking changes to existing workflows (✅ all clear)
 
 ### ⚪ Phase 2.2: Contact Enrichment
 - [ ] Create edge function to send contacts to Apollo
@@ -812,4 +867,20 @@ testing/golf-enrichment/
 
 ---
 
-**Last Updated:** October 31, 2025 (Session 3 - V2 Testing Complete)
+**Session 6:**
+- agent-debugging skill invaluable - DOCKER_VALIDATION.md solved env var issue immediately
+- --env-file flag required - Docker Compose doesn't auto-load parent directory .env
+- Type mismatches caught early - INTEGER vs UUID discovered in Docker, not production
+- Enum validation works - Prevented invalid "validated" status from reaching DB
+- End-to-end testing reveals integration bugs - Parsers work in isolation but miss fields in integration
+
+**Session 7:**
+- Comprehensive audits pay off - 22 tables analyzed, 5 redundant tables identified
+- User confirmation essential - Always ask before deleting data (978 staging courses confirmed not needed)
+- Fix broken relationships proactively - Foreign keys pointed to wrong table (outreach_activities_agent vs outreach_activities)
+- Document schema thoroughly - SCHEMA.md prevents future confusion about table purposes
+- Test tables are valuable - Keep isolated test infrastructure (Migration 015) for Docker validation
+
+---
+
+**Last Updated:** November 1, 2025 (Session 7 - Phase 2.1 Database Cleanup Complete)
