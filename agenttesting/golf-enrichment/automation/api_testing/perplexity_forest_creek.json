@@ -1,0 +1,256 @@
+{
+  "success": true,
+  "metadata": {
+    "course_name": "Forest Creek Golf Club",
+    "state_code": "NC",
+    "city": "Pinehurst",
+    "api_provider": "perplexity",
+    "model": "sonar-pro",
+    "response_time_ms": 5774,
+    "timestamp": "2025-11-01T22:38:21.326Z"
+  },
+  "quality_metrics": {
+    "citations_provided": true,
+    "citation_count": 10,
+    "citations_have_urls": true,
+    "json_parsed_successfully": true,
+    "has_tier_classification": false,
+    "contact_count": 1
+  },
+  "cost_metrics": {
+    "estimated_cost_usd": 0.005,
+    "token_usage": {
+      "prompt_tokens": 1694,
+      "completion_tokens": 591,
+      "total_tokens": 2285,
+      "search_context_size": "low",
+      "cost": {
+        "input_tokens_cost": 0.005,
+        "output_tokens_cost": 0.009,
+        "request_cost": 0.006,
+        "total_cost": 0.02
+      }
+    }
+  },
+  "raw_response": {
+    "content": "```json\n{\n  \"course_name\": \"Forest Creek Golf Club\",\n  \"city\": \"Pinehurst\",\n  \"state\": \"NC\",\n  \"research_date\": \"2025-11-01\",\n  \"section1_classification\": {\n    \"classification\": \"INSUFFICIENT_DATA\",\n    \"confidence\": \"low\",\n    \"buy_signals\": [],\n    \"sell_signals\": [],\n    \"recommended_strategy\": \"insufficient_data\",\n    \"reasoning\": \"No direct or indirect evidence was found in current sources regarding range ball disposal practices or procurement pain points. The club is private and undergoing significant course restoration, but there are no explicit or implicit signals about range ball supply or waste needs in the available 2024-2025 information.\"\n  },\n  \"section2_water_hazards\": {\n    \"water_hazards\": {\n      \"total_count\": 0,\n      \"details\": [],\n      \"ball_accumulation_estimate\": \"unknown\",\n      \"current_retrieval_service\": null,\n      \"source\": \"not_found\"\n    }\n  },\n  \"section3_practice_facilities\": {\n    \"range\": {\n      \"stations\": 0,\n      \"type\": \"unknown\",\n      \"size_description\": \"Practice range remains open during South Course restoration, but no details on number of stations or surface type are provided.\",\n      \"source\": \"https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/\"\n    },\n    \"current_supplier\": {\n      \"name\": null,\n      \"source\": \"not_found\"\n    },\n    \"quality_mentions\": []\n  },\n  \"section4_decision_makers\": [\n    {\n      \"name\": \"David Lee\",\n      \"title\": \"Superintendent\",\n      \"priority\": 2,\n      \"email\": null,\n      \"email_source\": \"not_found\",\n      \"phone\": null,\n      \"linkedin\": null,\n      \"employment_verified\": true,\n      \"verification_source\": \"https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/\"\n    }\n  ],\n  \"section5_course_tier\": {\n    \"course_tier\": {\n      \"classification\": \"premium\",\n      \"confidence\": \"high\",\n      \"pricing\": {\n        \"green_fee_range\": null,\n        \"source\": \"not_found\"\n      },\n      \"course_type\": \"private\",\n      \"quality_indicators\": [\n        {\n          \"indicator\": \"Significant investment in course restoration with Tom Fazio and top agronomy consultants; exclusive private club with high-value real estate.\",\n          \"source\": \"https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/\"\n        }\n      ]\n    }\n  }\n}\n```",
+    "citations": [
+      "https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/",
+      "https://web.raleighchamber.org/demo/events/Golf-Tournament-2025-10202025-800-AM-10202025-500-PM-2944/details",
+      "https://thegreensidegallery.com/products/forest-creek-golf-club-south-course-pinehurst-north-carolina-usa",
+      "https://www.zillow.com/homedetails/51-Chestertown-Dr-Pinehurst-NC-28374/93044223_zpid/",
+      "https://www.thepinestimes.com/golf-in-the-pines/",
+      "https://www.usga.org/content/usga/home-page/media/online-media-center/usga-records/host-states-and-clubs--1895-to-present.html",
+      "https://www.zillow.com/southern-pines-nc/forest-creek_att/",
+      "https://www.commercialsearch.com/commercial-property/us/nc/franklin/100-acre-golf-course-potential-for-independent-senior-housing-development/",
+      "https://www.golfpass.com/travel-advisor/courses/15000-mid-pines-inn-golf-club",
+      "https://www.realtor.com/realestateandhomes-search/Forest-Creek_Pinehurst_NC/show-recently-sold"
+    ],
+    "usage": {
+      "prompt_tokens": 1694,
+      "completion_tokens": 591,
+      "total_tokens": 2285,
+      "search_context_size": "low",
+      "cost": {
+        "input_tokens_cost": 0.005,
+        "output_tokens_cost": 0.009,
+        "request_cost": 0.006,
+        "total_cost": 0.02
+      }
+    },
+    "full_api_response": {
+      "id": "7383ada0-a836-49ac-8ef2-77dbfe3a33d2",
+      "model": "sonar-pro",
+      "created": 1762036701,
+      "usage": {
+        "prompt_tokens": 1694,
+        "completion_tokens": 591,
+        "total_tokens": 2285,
+        "search_context_size": "low",
+        "cost": {
+          "input_tokens_cost": 0.005,
+          "output_tokens_cost": 0.009,
+          "request_cost": 0.006,
+          "total_cost": 0.02
+        }
+      },
+      "citations": [
+        "https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/",
+        "https://web.raleighchamber.org/demo/events/Golf-Tournament-2025-10202025-800-AM-10202025-500-PM-2944/details",
+        "https://thegreensidegallery.com/products/forest-creek-golf-club-south-course-pinehurst-north-carolina-usa",
+        "https://www.zillow.com/homedetails/51-Chestertown-Dr-Pinehurst-NC-28374/93044223_zpid/",
+        "https://www.thepinestimes.com/golf-in-the-pines/",
+        "https://www.usga.org/content/usga/home-page/media/online-media-center/usga-records/host-states-and-clubs--1895-to-present.html",
+        "https://www.zillow.com/southern-pines-nc/forest-creek_att/",
+        "https://www.commercialsearch.com/commercial-property/us/nc/franklin/100-acre-golf-course-potential-for-independent-senior-housing-development/",
+        "https://www.golfpass.com/travel-advisor/courses/15000-mid-pines-inn-golf-club",
+        "https://www.realtor.com/realestateandhomes-search/Forest-Creek_Pinehurst_NC/show-recently-sold"
+      ],
+      "search_results": [
+        {
+          "title": "Golf Course Restoration at Forest Creek Revealed",
+          "url": "https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/",
+          "date": "2025-10-28",
+          "last_updated": "2025-11-01",
+          "snippet": "Forest Creek Logo · (910) 295-9000. Forest Creek Golf Club. 100 Forest Creek Dr. Pinehurst, NC 28374. Get Driving Directions · facebook instagram youtube · Golf.",
+          "source": "web"
+        },
+        {
+          "title": "Golf Tournament 2025 - Greater Raleigh Chamber of Commerce",
+          "url": "https://web.raleighchamber.org/demo/events/Golf-Tournament-2025-10202025-800-AM-10202025-500-PM-2944/details",
+          "date": "2025-10-20",
+          "snippet": "Golf Tournament 2025. This event is no longer active. Monday, October 20, 2025 8:00 AM - 5:00 PM EST. Prestonwood Country Club 300 Prestonwood Parkway Cary, NC ...",
+          "source": "web"
+        },
+        {
+          "title": "Forest Creek Golf Club - South Course - The Greenside Gallery",
+          "url": "https://thegreensidegallery.com/products/forest-creek-golf-club-south-course-pinehurst-north-carolina-usa",
+          "date": "2025-10-29",
+          "last_updated": "2025-01-20",
+          "snippet": "Forest Creek Golf Club - South Course. Pinehurst, North Carolina, USA. Sale price$89. FREE SHIPPING. Size: 16\" x 12\". Size chart. Print Size Guide.",
+          "source": "web"
+        },
+        {
+          "title": "51 Chestertown Drive, Pinehurst, NC 28374 | Zillow",
+          "url": "https://www.zillow.com/homedetails/51-Chestertown-Dr-Pinehurst-NC-28374/93044223_zpid/",
+          "date": "2025-10-17",
+          "last_updated": "2025-04-16",
+          "snippet": "Welcome home to the prestigious Forest Creek Golf Club. 51 Chestertown Drive boasts over 5,300 square feet of living space on a 1.79-acre lot with ...",
+          "source": "web"
+        },
+        {
+          "title": "Golf in The Pines",
+          "url": "https://www.thepinestimes.com/golf-in-the-pines/",
+          "date": "2025-10-28",
+          "last_updated": "2025-10-31",
+          "snippet": "Forest Creek Golf Club (North & South), 115 Tom Fazio Dr, Pinehurst, NC 28374, (910) 215-5509. Foxfire Golf Club (Grey Fox & Red Fox), 20 Red Fox Trail ...",
+          "source": "web"
+        },
+        {
+          "title": "Host States and Clubs: 1895 to Present - USGA",
+          "url": "https://www.usga.org/content/usga/home-page/media/online-media-center/usga-records/host-states-and-clubs--1895-to-present.html",
+          "date": "2025-10-13",
+          "last_updated": "2025-10-27",
+          "snippet": "Host States and Clubs: 1895 to Present ; Arizona (11 host sites, 18 championships) Forest Highlands G.C., Flagstaff (4) 1996 Junior Amateur 2006 Mid-Amateur 2014 ...",
+          "source": "web"
+        },
+        {
+          "title": "Forest Creek - Southern Pines NC Real Estate - 2 Homes For Sale",
+          "url": "https://www.zillow.com/southern-pines-nc/forest-creek_att/",
+          "date": "2025-10-17",
+          "snippet": "Zillow has 2 homes for sale in Southern Pines NC matching Forest Creek. View listing photos, review sales history, and use our detailed real estate filters ...",
+          "source": "web"
+        },
+        {
+          "title": "100+ Acre Golf Course | Potential for Golf Resort Hotel/Spa ...",
+          "url": "https://www.commercialsearch.com/commercial-property/us/nc/franklin/100-acre-golf-course-potential-for-independent-senior-housing-development/",
+          "date": "2025-10-10",
+          "last_updated": "2025-10-04",
+          "snippet": "The property is located approximately 19.5 miles from Highlands, NC, a very desirable area that has been a mountain respite for vacationers and retirees for ...",
+          "source": "web"
+        },
+        {
+          "title": "Mid Pines Inn & Golf Club - North Carolina - GolfPass",
+          "url": "https://www.golfpass.com/travel-advisor/courses/15000-mid-pines-inn-golf-club",
+          "date": "2025-10-10",
+          "last_updated": "2025-09-25",
+          "snippet": "Mid Pines Inn & Golf Club is located at 1010 Midland Rd, Southern Pines ... Forest Creek Golf Club - South Course. Pinehurst, North Carolina. Private. 5.0.",
+          "source": "web"
+        },
+        {
+          "title": "Recently Sold Homes in Forest Creek, Pinehurst | Realtor.com®",
+          "url": "https://www.realtor.com/realestateandhomes-search/Forest-Creek_Pinehurst_NC/show-recently-sold",
+          "date": "2025-10-27",
+          "last_updated": "2025-09-23",
+          "snippet": "Recently sold homes in Forest Creek, NC had a median listing home price of $1,547,000. There were 33 properties sold in Forest Creek, NC, which spent an average ...",
+          "source": "web"
+        }
+      ],
+      "object": "chat.completion",
+      "choices": [
+        {
+          "index": 0,
+          "finish_reason": "stop",
+          "message": {
+            "role": "assistant",
+            "content": "```json\n{\n  \"course_name\": \"Forest Creek Golf Club\",\n  \"city\": \"Pinehurst\",\n  \"state\": \"NC\",\n  \"research_date\": \"2025-11-01\",\n  \"section1_classification\": {\n    \"classification\": \"INSUFFICIENT_DATA\",\n    \"confidence\": \"low\",\n    \"buy_signals\": [],\n    \"sell_signals\": [],\n    \"recommended_strategy\": \"insufficient_data\",\n    \"reasoning\": \"No direct or indirect evidence was found in current sources regarding range ball disposal practices or procurement pain points. The club is private and undergoing significant course restoration, but there are no explicit or implicit signals about range ball supply or waste needs in the available 2024-2025 information.\"\n  },\n  \"section2_water_hazards\": {\n    \"water_hazards\": {\n      \"total_count\": 0,\n      \"details\": [],\n      \"ball_accumulation_estimate\": \"unknown\",\n      \"current_retrieval_service\": null,\n      \"source\": \"not_found\"\n    }\n  },\n  \"section3_practice_facilities\": {\n    \"range\": {\n      \"stations\": 0,\n      \"type\": \"unknown\",\n      \"size_description\": \"Practice range remains open during South Course restoration, but no details on number of stations or surface type are provided.\",\n      \"source\": \"https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/\"\n    },\n    \"current_supplier\": {\n      \"name\": null,\n      \"source\": \"not_found\"\n    },\n    \"quality_mentions\": []\n  },\n  \"section4_decision_makers\": [\n    {\n      \"name\": \"David Lee\",\n      \"title\": \"Superintendent\",\n      \"priority\": 2,\n      \"email\": null,\n      \"email_source\": \"not_found\",\n      \"phone\": null,\n      \"linkedin\": null,\n      \"employment_verified\": true,\n      \"verification_source\": \"https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/\"\n    }\n  ],\n  \"section5_course_tier\": {\n    \"course_tier\": {\n      \"classification\": \"premium\",\n      \"confidence\": \"high\",\n      \"pricing\": {\n        \"green_fee_range\": null,\n        \"source\": \"not_found\"\n      },\n      \"course_type\": \"private\",\n      \"quality_indicators\": [\n        {\n          \"indicator\": \"Significant investment in course restoration with Tom Fazio and top agronomy consultants; exclusive private club with high-value real estate.\",\n          \"source\": \"https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/\"\n        }\n      ]\n    }\n  }\n}\n```"
+          },
+          "delta": {
+            "role": "assistant",
+            "content": ""
+          }
+        }
+      ]
+    }
+  },
+  "parsed_json": {
+    "course_name": "Forest Creek Golf Club",
+    "city": "Pinehurst",
+    "state": "NC",
+    "research_date": "2025-11-01",
+    "section1_classification": {
+      "classification": "INSUFFICIENT_DATA",
+      "confidence": "low",
+      "buy_signals": [],
+      "sell_signals": [],
+      "recommended_strategy": "insufficient_data",
+      "reasoning": "No direct or indirect evidence was found in current sources regarding range ball disposal practices or procurement pain points. The club is private and undergoing significant course restoration, but there are no explicit or implicit signals about range ball supply or waste needs in the available 2024-2025 information."
+    },
+    "section2_water_hazards": {
+      "water_hazards": {
+        "total_count": 0,
+        "details": [],
+        "ball_accumulation_estimate": "unknown",
+        "current_retrieval_service": null,
+        "source": "not_found"
+      }
+    },
+    "section3_practice_facilities": {
+      "range": {
+        "stations": 0,
+        "type": "unknown",
+        "size_description": "Practice range remains open during South Course restoration, but no details on number of stations or surface type are provided.",
+        "source": "https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/"
+      },
+      "current_supplier": {
+        "name": null,
+        "source": "not_found"
+      },
+      "quality_mentions": []
+    },
+    "section4_decision_makers": [
+      {
+        "name": "David Lee",
+        "title": "Superintendent",
+        "priority": 2,
+        "email": null,
+        "email_source": "not_found",
+        "phone": null,
+        "linkedin": null,
+        "employment_verified": true,
+        "verification_source": "https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/"
+      }
+    ],
+    "section5_course_tier": {
+      "course_tier": {
+        "classification": "premium",
+        "confidence": "high",
+        "pricing": {
+          "green_fee_range": null,
+          "source": "not_found"
+        },
+        "course_type": "private",
+        "quality_indicators": [
+          {
+            "indicator": "Significant investment in course restoration with Tom Fazio and top agronomy consultants; exclusive private club with high-value real estate.",
+            "source": "https://forestcreekgolfclub.com/about/news/south-course-restoration-preserving-our-legacy-elevating-our-play/"
+          }
+        ]
+      }
+    }
+  },
+  "validation": {
+    "ready_for_staging": true,
+    "issues": []
+  }
+}

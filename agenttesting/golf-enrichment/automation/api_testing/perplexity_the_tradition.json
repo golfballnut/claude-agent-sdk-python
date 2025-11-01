@@ -1,0 +1,223 @@
+{
+  "success": true,
+  "metadata": {
+    "course_name": "The Tradition Golf Club",
+    "state_code": "NC",
+    "city": "Charlotte",
+    "api_provider": "perplexity",
+    "model": "sonar-pro",
+    "response_time_ms": 14360,
+    "timestamp": "2025-11-01T22:37:36.309Z"
+  },
+  "quality_metrics": {
+    "citations_provided": true,
+    "citation_count": 7,
+    "citations_have_urls": true,
+    "json_parsed_successfully": true,
+    "has_tier_classification": false,
+    "contact_count": 1
+  },
+  "cost_metrics": {
+    "estimated_cost_usd": 0.005,
+    "token_usage": {
+      "prompt_tokens": 1689,
+      "completion_tokens": 587,
+      "total_tokens": 2276,
+      "search_context_size": "low",
+      "cost": {
+        "input_tokens_cost": 0.005,
+        "output_tokens_cost": 0.009,
+        "request_cost": 0.006,
+        "total_cost": 0.02
+      }
+    }
+  },
+  "raw_response": {
+    "content": "```json\n{\n  \"course_name\": \"The Tradition Golf Club\",\n  \"city\": \"Charlotte\",\n  \"state\": \"NC\",\n  \"research_date\": \"2025-11-01\",\n  \"section1_classification\": {\n    \"classification\": \"INSUFFICIENT_DATA\",\n    \"confidence\": \"low\",\n    \"buy_signals\": [],\n    \"sell_signals\": [],\n    \"recommended_strategy\": \"insufficient_data\",\n    \"reasoning\": \"No current (2024-2025) public information was found regarding range ball disposal practices, excess inventory, or pain points with range ball procurement at The Tradition Golf Club.\"\n  },\n  \"section2_water_hazards\": {\n    \"water_hazards\": {\n      \"total_count\": 0,\n      \"details\": [],\n      \"ball_accumulation_estimate\": \"unknown\",\n      \"current_retrieval_service\": null,\n      \"source\": \"not_found\"\n    }\n  },\n  \"section3_practice_facilities\": {\n    \"range\": {\n      \"stations\": 0,\n      \"type\": \"unknown\",\n      \"size_description\": \"No current (2024-2025) public details found about the number of hitting stations or range type at The Tradition Golf Club.\",\n      \"source\": \"not_found\"\n    },\n    \"current_supplier\": {\n      \"name\": null,\n      \"source\": \"not_found\"\n    },\n    \"quality_mentions\": []\n  },\n  \"section4_decision_makers\": [\n    {\n      \"name\": null,\n      \"title\": null,\n      \"priority\": 1,\n      \"email\": null,\n      \"email_source\": \"not_found\",\n      \"phone\": null,\n      \"linkedin\": null,\n      \"employment_verified\": false,\n      \"verification_source\": \"not_found\"\n    }\n  ],\n  \"section5_course_tier\": {\n    \"course_tier\": {\n      \"classification\": \"medium\",\n      \"confidence\": \"low\",\n      \"pricing\": {\n        \"green_fee_range\": null,\n        \"source\": \"not_found\"\n      },\n      \"course_type\": \"public\",\n      \"quality_indicators\": []\n    }\n  }\n}\n```\n\n**Notes on Research Process and Data Gaps:**\n- No 2024-2025 sources provided direct evidence of range ball disposal, procurement pain points, or practice facility specifics for The Tradition Golf Club.\n- No water hazard details or ball retrieval service information were found in the available results.\n- No verified contact information for decision makers was available in the search results.\n- The course is referenced as a public, daily-fee facility in general listings, supporting a \"medium\" tier classification, but without recent pricing or quality indicators, confidence is low[1][2].\n- All factual claims are either directly supported by the search results or marked as \"not_found\" where data is unavailable.\n",
+    "citations": [
+      "https://www.marriott.com/en-us/hotels/cltup-courtyard-charlotte-city-center/experiences/",
+      "https://www.marriott.com/en-us/hotels/cltul-aloft-charlotte-city-center/experiences/",
+      "https://fun4charlottekids.com/Fun-Around-Town/Golf-Courses/",
+      "https://www.usga.org/content/usga/home-page/videos/2025/10/16/test-center-pinehurst.html",
+      "https://www.birdgolf.com",
+      "https://www.usga.org/content/usga/home-page/course-care/green-section-record/63/issue-18/storm-readiness-and-response-for-golf-courses.html",
+      "https://www.ngf.org"
+    ],
+    "usage": {
+      "prompt_tokens": 1689,
+      "completion_tokens": 587,
+      "total_tokens": 2276,
+      "search_context_size": "low",
+      "cost": {
+        "input_tokens_cost": 0.005,
+        "output_tokens_cost": 0.009,
+        "request_cost": 0.006,
+        "total_cost": 0.02
+      }
+    },
+    "full_api_response": {
+      "id": "adaae194-2f47-4821-bfd6-88936f76e898",
+      "model": "sonar-pro",
+      "created": 1762036656,
+      "usage": {
+        "prompt_tokens": 1689,
+        "completion_tokens": 587,
+        "total_tokens": 2276,
+        "search_context_size": "low",
+        "cost": {
+          "input_tokens_cost": 0.005,
+          "output_tokens_cost": 0.009,
+          "request_cost": 0.006,
+          "total_cost": 0.02
+        }
+      },
+      "citations": [
+        "https://www.marriott.com/en-us/hotels/cltup-courtyard-charlotte-city-center/experiences/",
+        "https://www.marriott.com/en-us/hotels/cltul-aloft-charlotte-city-center/experiences/",
+        "https://fun4charlottekids.com/Fun-Around-Town/Golf-Courses/",
+        "https://www.usga.org/content/usga/home-page/videos/2025/10/16/test-center-pinehurst.html",
+        "https://www.birdgolf.com",
+        "https://www.usga.org/content/usga/home-page/course-care/green-section-record/63/issue-18/storm-readiness-and-response-for-golf-courses.html",
+        "https://www.ngf.org"
+      ],
+      "search_results": [
+        {
+          "title": "Things To Do | Courtyard by Marriott Charlotte City Center",
+          "url": "https://www.marriott.com/en-us/hotels/cltup-courtyard-charlotte-city-center/experiences/",
+          "date": "2025-10-30",
+          "last_updated": "2025-10-21",
+          "snippet": "Golf. The Tradition Golf Club. 15.8 Miles. 3800 Prosperity Church Rd, Charlotte, North Carolina, USA, 28269. Club House. The Tradition Golf Club. 18 holes , ...",
+          "source": "web"
+        },
+        {
+          "title": "Things To Do | Aloft Charlotte City Center - Marriott",
+          "url": "https://www.marriott.com/en-us/hotels/cltul-aloft-charlotte-city-center/experiences/",
+          "date": "2025-10-27",
+          "last_updated": "2025-09-16",
+          "snippet": "Located near University Research Park & the I-485 Beltway in Northeast Charlotte, The Tradition Golf Club is a par-72 course designed opened in 1996. The course ...",
+          "source": "web"
+        },
+        {
+          "title": "Golf Courses - Fun 4 Charlotte Kids",
+          "url": "https://fun4charlottekids.com/Fun-Around-Town/Golf-Courses/",
+          "date": "2025-10-10",
+          "last_updated": "2025-10-18",
+          "snippet": "Learn more! 4100 Pineville-Mathews Road, Charlotte, NC, 28226. (704) 542-0206 · Charles T. Myers Golf Course.",
+          "source": "web"
+        },
+        {
+          "title": "Inside the USGA Research & Test Center",
+          "url": "https://www.usga.org/content/usga/home-page/videos/2025/10/16/test-center-pinehurst.html",
+          "date": "2025-10-16",
+          "last_updated": "2025-10-20",
+          "snippet": "Each year, the USGA Research & Test Center, located in Pinehurst, N.C., tests roughly 2500 pieces of equipment and anywhere from 13000 to 15000 golf balls.",
+          "source": "web"
+        },
+        {
+          "title": "Bird Golf Academy: The Best Golf Schools in the World",
+          "url": "https://www.birdgolf.com",
+          "date": "2025-10-27",
+          "last_updated": "2025-10-29",
+          "snippet": "Take your next golf school at the largest and newest Gulf Coast destination at Sunseeker Resort Charlotte Harbor. Your golf school will be at the nearby ...",
+          "source": "web"
+        },
+        {
+          "title": "Storm Readiness and Response for Golf Courses - USGA",
+          "url": "https://www.usga.org/content/usga/home-page/course-care/green-section-record/63/issue-18/storm-readiness-and-response-for-golf-courses.html",
+          "date": "2025-10-03",
+          "last_updated": "2025-10-28",
+          "snippet": "From tropical systems to surprise thunderstorms, golf courses are dealing with increasing impacts from unpredictable and extreme weather.",
+          "source": "web"
+        },
+        {
+          "title": "National Golf Foundation",
+          "url": "https://www.ngf.org",
+          "date": "2025-10-30",
+          "last_updated": "2025-11-01",
+          "snippet": "The NGF has the leading research and business services team in golf, providing you and the industry with the most accurate and latest golf business data and ...",
+          "source": "web"
+        }
+      ],
+      "object": "chat.completion",
+      "choices": [
+        {
+          "index": 0,
+          "finish_reason": "stop",
+          "message": {
+            "role": "assistant",
+            "content": "```json\n{\n  \"course_name\": \"The Tradition Golf Club\",\n  \"city\": \"Charlotte\",\n  \"state\": \"NC\",\n  \"research_date\": \"2025-11-01\",\n  \"section1_classification\": {\n    \"classification\": \"INSUFFICIENT_DATA\",\n    \"confidence\": \"low\",\n    \"buy_signals\": [],\n    \"sell_signals\": [],\n    \"recommended_strategy\": \"insufficient_data\",\n    \"reasoning\": \"No current (2024-2025) public information was found regarding range ball disposal practices, excess inventory, or pain points with range ball procurement at The Tradition Golf Club.\"\n  },\n  \"section2_water_hazards\": {\n    \"water_hazards\": {\n      \"total_count\": 0,\n      \"details\": [],\n      \"ball_accumulation_estimate\": \"unknown\",\n      \"current_retrieval_service\": null,\n      \"source\": \"not_found\"\n    }\n  },\n  \"section3_practice_facilities\": {\n    \"range\": {\n      \"stations\": 0,\n      \"type\": \"unknown\",\n      \"size_description\": \"No current (2024-2025) public details found about the number of hitting stations or range type at The Tradition Golf Club.\",\n      \"source\": \"not_found\"\n    },\n    \"current_supplier\": {\n      \"name\": null,\n      \"source\": \"not_found\"\n    },\n    \"quality_mentions\": []\n  },\n  \"section4_decision_makers\": [\n    {\n      \"name\": null,\n      \"title\": null,\n      \"priority\": 1,\n      \"email\": null,\n      \"email_source\": \"not_found\",\n      \"phone\": null,\n      \"linkedin\": null,\n      \"employment_verified\": false,\n      \"verification_source\": \"not_found\"\n    }\n  ],\n  \"section5_course_tier\": {\n    \"course_tier\": {\n      \"classification\": \"medium\",\n      \"confidence\": \"low\",\n      \"pricing\": {\n        \"green_fee_range\": null,\n        \"source\": \"not_found\"\n      },\n      \"course_type\": \"public\",\n      \"quality_indicators\": []\n    }\n  }\n}\n```\n\n**Notes on Research Process and Data Gaps:**\n- No 2024-2025 sources provided direct evidence of range ball disposal, procurement pain points, or practice facility specifics for The Tradition Golf Club.\n- No water hazard details or ball retrieval service information were found in the available results.\n- No verified contact information for decision makers was available in the search results.\n- The course is referenced as a public, daily-fee facility in general listings, supporting a \"medium\" tier classification, but without recent pricing or quality indicators, confidence is low[1][2].\n- All factual claims are either directly supported by the search results or marked as \"not_found\" where data is unavailable.\n"
+          },
+          "delta": {
+            "role": "assistant",
+            "content": ""
+          }
+        }
+      ]
+    }
+  },
+  "parsed_json": {
+    "course_name": "The Tradition Golf Club",
+    "city": "Charlotte",
+    "state": "NC",
+    "research_date": "2025-11-01",
+    "section1_classification": {
+      "classification": "INSUFFICIENT_DATA",
+      "confidence": "low",
+      "buy_signals": [],
+      "sell_signals": [],
+      "recommended_strategy": "insufficient_data",
+      "reasoning": "No current (2024-2025) public information was found regarding range ball disposal practices, excess inventory, or pain points with range ball procurement at The Tradition Golf Club."
+    },
+    "section2_water_hazards": {
+      "water_hazards": {
+        "total_count": 0,
+        "details": [],
+        "ball_accumulation_estimate": "unknown",
+        "current_retrieval_service": null,
+        "source": "not_found"
+      }
+    },
+    "section3_practice_facilities": {
+      "range": {
+        "stations": 0,
+        "type": "unknown",
+        "size_description": "No current (2024-2025) public details found about the number of hitting stations or range type at The Tradition Golf Club.",
+        "source": "not_found"
+      },
+      "current_supplier": {
+        "name": null,
+        "source": "not_found"
+      },
+      "quality_mentions": []
+    },
+    "section4_decision_makers": [
+      {
+        "name": null,
+        "title": null,
+        "priority": 1,
+        "email": null,
+        "email_source": "not_found",
+        "phone": null,
+        "linkedin": null,
+        "employment_verified": false,
+        "verification_source": "not_found"
+      }
+    ],
+    "section5_course_tier": {
+      "course_tier": {
+        "classification": "medium",
+        "confidence": "low",
+        "pricing": {
+          "green_fee_range": null,
+          "source": "not_found"
+        },
+        "course_type": "public",
+        "quality_indicators": []
+      }
+    }
+  },
+  "validation": {
+    "ready_for_staging": true,
+    "issues": []
+  }
+}

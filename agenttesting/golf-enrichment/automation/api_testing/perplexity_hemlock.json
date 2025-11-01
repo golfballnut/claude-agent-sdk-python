@@ -1,0 +1,242 @@
+{
+  "success": true,
+  "metadata": {
+    "course_name": "Hemlock Golf Course",
+    "state_code": "NC",
+    "city": "Walnut Cove",
+    "api_provider": "perplexity",
+    "model": "sonar-pro",
+    "response_time_ms": 6771,
+    "timestamp": "2025-11-01T22:38:48.703Z"
+  },
+  "quality_metrics": {
+    "citations_provided": true,
+    "citation_count": 10,
+    "citations_have_urls": true,
+    "json_parsed_successfully": true,
+    "has_tier_classification": false,
+    "contact_count": 0
+  },
+  "cost_metrics": {
+    "estimated_cost_usd": 0.005,
+    "token_usage": {
+      "prompt_tokens": 1696,
+      "completion_tokens": 530,
+      "total_tokens": 2226,
+      "search_context_size": "low",
+      "cost": {
+        "input_tokens_cost": 0.005,
+        "output_tokens_cost": 0.008,
+        "request_cost": 0.006,
+        "total_cost": 0.019
+      }
+    }
+  },
+  "raw_response": {
+    "content": "```json\n{\n  \"course_name\": \"Hemlock Golf Course\",\n  \"city\": \"Walnut Cove\",\n  \"state\": \"NC\",\n  \"research_date\": \"2025-11-01\",\n  \"section1_classification\": {\n    \"classification\": \"INSUFFICIENT_DATA\",\n    \"confidence\": \"low\",\n    \"buy_signals\": [],\n    \"sell_signals\": [],\n    \"recommended_strategy\": \"insufficient_data\",\n    \"reasoning\": \"No direct or indirect evidence was found in the available 2024-2025 sources regarding Hemlock Golf Course's range ball disposal practices or purchasing pain points. No practice range details or supplier mentions were located.\"\n  },\n  \"section2_water_hazards\": {\n    \"water_hazards\": {\n      \"total_count\": 0,\n      \"details\": [],\n      \"ball_accumulation_estimate\": \"unknown\",\n      \"current_retrieval_service\": null,\n      \"source\": \"not_found\"\n    }\n  },\n  \"section3_practice_facilities\": {\n    \"range\": {\n      \"stations\": 0,\n      \"type\": \"unknown\",\n      \"size_description\": \"No information found regarding practice range size, type, or amenities.\",\n      \"source\": \"not_found\"\n    },\n    \"current_supplier\": {\n      \"name\": null,\n      \"source\": \"not_found\"\n    },\n    \"quality_mentions\": []\n  },\n  \"section4_decision_makers\": [],\n  \"section5_course_tier\": {\n    \"course_tier\": {\n      \"classification\": \"budget\",\n      \"confidence\": \"low\",\n      \"pricing\": {\n        \"green_fee_range\": null,\n        \"source\": \"not_found\"\n      },\n      \"course_type\": \"public\",\n      \"quality_indicators\": []\n    }\n  }\n}\n```\n\n**Notes on methodology and findings:**\n- No direct or indirect evidence was found in the search results for 2024-2025 regarding Hemlock Golf Course in Walnut Cove, NC, beyond a calendar mention of \"Stokes Hemlock Golf Course\" as a location for a high school golf event[3]. No official website, reviews, or facility details were found.\n- No information was available on range ball disposal, purchasing, water hazards, practice facility size, or decision makers.\n- The course is presumed to be a public/budget facility based on its use as a high school match venue[3], but this is not confirmed by authoritative sources.\n- All factual claims are either directly cited or marked as \"not_found\" or null where data is unavailable.\n",
+    "citations": [
+      "https://catcountry1073.com/improvement-at-atlantic-county-golf-course/",
+      "https://www.zillow.com/homedetails/811-Hemlock-Dr-Newland-NC-28657/2092452824_zpid/",
+      "https://www.bmhs.us/calendar.cfm",
+      "https://www.corteva.com/us/sitemap.html",
+      "https://www.zillow.com/homedetails/832-Hemlock-Dr-Newland-NC-28657/2125972624_zpid/",
+      "https://www.zillow.com/homedetails/9999-Hemlock-Trl-Hendersonville-NC-28739/457903573_zpid/",
+      "https://raleighrealty.com/home/3111-hemlock-forest-cir-raleigh-nc-27612-10126444",
+      "https://www.cwu.edu/academics/research/undergrad-research/_documents/journal_of_source-vol.1-september2025.pdf",
+      "https://www.nctripping.com/north-carolina-travel-maps/",
+      "https://www.nctripping.com/day-trips-from-raleigh-nc/"
+    ],
+    "usage": {
+      "prompt_tokens": 1696,
+      "completion_tokens": 530,
+      "total_tokens": 2226,
+      "search_context_size": "low",
+      "cost": {
+        "input_tokens_cost": 0.005,
+        "output_tokens_cost": 0.008,
+        "request_cost": 0.006,
+        "total_cost": 0.019
+      }
+    },
+    "full_api_response": {
+      "id": "ddc777e1-5c4f-4de3-b965-9e73d7bafe9b",
+      "model": "sonar-pro",
+      "created": 1762036728,
+      "usage": {
+        "prompt_tokens": 1696,
+        "completion_tokens": 530,
+        "total_tokens": 2226,
+        "search_context_size": "low",
+        "cost": {
+          "input_tokens_cost": 0.005,
+          "output_tokens_cost": 0.008,
+          "request_cost": 0.006,
+          "total_cost": 0.019
+        }
+      },
+      "citations": [
+        "https://catcountry1073.com/improvement-at-atlantic-county-golf-course/",
+        "https://www.zillow.com/homedetails/811-Hemlock-Dr-Newland-NC-28657/2092452824_zpid/",
+        "https://www.bmhs.us/calendar.cfm",
+        "https://www.corteva.com/us/sitemap.html",
+        "https://www.zillow.com/homedetails/832-Hemlock-Dr-Newland-NC-28657/2125972624_zpid/",
+        "https://www.zillow.com/homedetails/9999-Hemlock-Trl-Hendersonville-NC-28739/457903573_zpid/",
+        "https://raleighrealty.com/home/3111-hemlock-forest-cir-raleigh-nc-27612-10126444",
+        "https://www.cwu.edu/academics/research/undergrad-research/_documents/journal_of_source-vol.1-september2025.pdf",
+        "https://www.nctripping.com/north-carolina-travel-maps/",
+        "https://www.nctripping.com/day-trips-from-raleigh-nc/"
+      ],
+      "search_results": [
+        {
+          "title": "Thumbs Up To This Much Improved AC Area Golf Course",
+          "url": "https://catcountry1073.com/improvement-at-atlantic-county-golf-course/",
+          "date": "2025-10-07",
+          "last_updated": "2025-10-07",
+          "snippet": "Asheville, NC. Est. Population: 86,789. While certainly the most populous location on our list, Asheville sneaks onto our ranking with a truly remarkable leaf ...",
+          "source": "web"
+        },
+        {
+          "title": "811 Hemlock Drive, Newland, NC 28657 | MLS #258544 - Zillow",
+          "url": "https://www.zillow.com/homedetails/811-Hemlock-Dr-Newland-NC-28657/2092452824_zpid/",
+          "date": "2025-10-15",
+          "last_updated": "2025-09-22",
+          "snippet": "Custom-built mountain home located in the desirable Mountain Glen Golf Course community! This beautiful property features a post and beam design with tongue ...",
+          "source": "web"
+        },
+        {
+          "title": "Event Calendar - Bishop McGuinness Catholic High School",
+          "url": "https://www.bmhs.us/calendar.cfm",
+          "date": "2025-10-28",
+          "last_updated": "2025-10-03",
+          "snippet": "Stokes Hemlock Golf Course 3:30. October 2, 2025. Early Mass 7:55am Chapel ... Kernersville, North Carolina 27284. Phone: (336) 564-1010. Fax: (336) 564 ...",
+          "source": "web"
+        },
+        {
+          "title": "Sitemap | Corteva Agriscience™",
+          "url": "https://www.corteva.com/us/sitemap.html",
+          "date": "2025-10-31",
+          "last_updated": "2025-10-31",
+          "snippet": "T&O: Golf Course Management · Golf Course Management Library · Native Area Maintenance Made Easy · Weeds 101: Goosegrass · Got Goosegrass? Tough Turf Diseases?",
+          "source": "web"
+        },
+        {
+          "title": "832 Hemlock Drive, Newland, NC 28657 | MLS #258088 - Zillow",
+          "url": "https://www.zillow.com/homedetails/832-Hemlock-Dr-Newland-NC-28657/2125972624_zpid/",
+          "date": "2025-10-18",
+          "last_updated": "2025-09-21",
+          "snippet": "High quality build, with golf course and long range views, thoughtfully laid out for one level living plus a finished lower level to accommodate visiting family ...",
+          "source": "web"
+        },
+        {
+          "title": "9999 Hemlock Trl, Hendersonville, NC 28739 | MLS #4316252 | Zillow",
+          "url": "https://www.zillow.com/homedetails/9999-Hemlock-Trl-Hendersonville-NC-28739/457903573_zpid/",
+          "date": "2025-11-01",
+          "last_updated": "2025-11-01",
+          "snippet": "Conveniently located just a short drive from downtown Hendersonville, and surrounded by the beautiful Blue Ridge Mountains, along with all the parks, recreation ...",
+          "source": "web"
+        },
+        {
+          "title": "3111 Hemlock Forest Cir, Raleigh, NC 27612 | MLS# 10126444",
+          "url": "https://raleighrealty.com/home/3111-hemlock-forest-cir-raleigh-nc-27612-10126444",
+          "date": "2025-10-08",
+          "last_updated": "2025-10-08",
+          "snippet": "Address. 3111 Hemlock Forest Cir ; City Raleigh ; State. North Carolina ; Zip Code 27612 ; County Wake.",
+          "source": "web"
+        },
+        {
+          "title": "[PDF] journal .pdf here - Central Washington University",
+          "url": "https://www.cwu.edu/academics/research/undergrad-research/_documents/journal_of_source-vol.1-september2025.pdf",
+          "date": "2025-10-14",
+          "snippet": "SOURCE is open to all CWU students and participating Ellensburg High School students to present research or creative works. The. Journal of SOURCE (ISSN 2997- ...",
+          "source": "web"
+        },
+        {
+          "title": "North Carolina Travel Map with 1000 Great Places Included",
+          "url": "https://www.nctripping.com/north-carolina-travel-maps/",
+          "date": "2025-10-03",
+          "last_updated": "2025-11-01",
+          "snippet": "This North Carolina travel map (created using Google Maps) will help you find places near your home or wherever you're staying.",
+          "source": "web"
+        },
+        {
+          "title": "50 of the Best Day Trips from Raleigh (Fun Getaways!)",
+          "url": "https://www.nctripping.com/day-trips-from-raleigh-nc/",
+          "date": "2025-10-24",
+          "last_updated": "2025-10-23",
+          "snippet": "After years of living in the area, here are favorite day trips from Raleigh, with each of these quick getaways within a two hour drive.",
+          "source": "web"
+        }
+      ],
+      "object": "chat.completion",
+      "choices": [
+        {
+          "index": 0,
+          "finish_reason": "stop",
+          "message": {
+            "role": "assistant",
+            "content": "```json\n{\n  \"course_name\": \"Hemlock Golf Course\",\n  \"city\": \"Walnut Cove\",\n  \"state\": \"NC\",\n  \"research_date\": \"2025-11-01\",\n  \"section1_classification\": {\n    \"classification\": \"INSUFFICIENT_DATA\",\n    \"confidence\": \"low\",\n    \"buy_signals\": [],\n    \"sell_signals\": [],\n    \"recommended_strategy\": \"insufficient_data\",\n    \"reasoning\": \"No direct or indirect evidence was found in the available 2024-2025 sources regarding Hemlock Golf Course's range ball disposal practices or purchasing pain points. No practice range details or supplier mentions were located.\"\n  },\n  \"section2_water_hazards\": {\n    \"water_hazards\": {\n      \"total_count\": 0,\n      \"details\": [],\n      \"ball_accumulation_estimate\": \"unknown\",\n      \"current_retrieval_service\": null,\n      \"source\": \"not_found\"\n    }\n  },\n  \"section3_practice_facilities\": {\n    \"range\": {\n      \"stations\": 0,\n      \"type\": \"unknown\",\n      \"size_description\": \"No information found regarding practice range size, type, or amenities.\",\n      \"source\": \"not_found\"\n    },\n    \"current_supplier\": {\n      \"name\": null,\n      \"source\": \"not_found\"\n    },\n    \"quality_mentions\": []\n  },\n  \"section4_decision_makers\": [],\n  \"section5_course_tier\": {\n    \"course_tier\": {\n      \"classification\": \"budget\",\n      \"confidence\": \"low\",\n      \"pricing\": {\n        \"green_fee_range\": null,\n        \"source\": \"not_found\"\n      },\n      \"course_type\": \"public\",\n      \"quality_indicators\": []\n    }\n  }\n}\n```\n\n**Notes on methodology and findings:**\n- No direct or indirect evidence was found in the search results for 2024-2025 regarding Hemlock Golf Course in Walnut Cove, NC, beyond a calendar mention of \"Stokes Hemlock Golf Course\" as a location for a high school golf event[3]. No official website, reviews, or facility details were found.\n- No information was available on range ball disposal, purchasing, water hazards, practice facility size, or decision makers.\n- The course is presumed to be a public/budget facility based on its use as a high school match venue[3], but this is not confirmed by authoritative sources.\n- All factual claims are either directly cited or marked as \"not_found\" or null where data is unavailable.\n"
+          },
+          "delta": {
+            "role": "assistant",
+            "content": ""
+          }
+        }
+      ]
+    }
+  },
+  "parsed_json": {
+    "course_name": "Hemlock Golf Course",
+    "city": "Walnut Cove",
+    "state": "NC",
+    "research_date": "2025-11-01",
+    "section1_classification": {
+      "classification": "INSUFFICIENT_DATA",
+      "confidence": "low",
+      "buy_signals": [],
+      "sell_signals": [],
+      "recommended_strategy": "insufficient_data",
+      "reasoning": "No direct or indirect evidence was found in the available 2024-2025 sources regarding Hemlock Golf Course's range ball disposal practices or purchasing pain points. No practice range details or supplier mentions were located."
+    },
+    "section2_water_hazards": {
+      "water_hazards": {
+        "total_count": 0,
+        "details": [],
+        "ball_accumulation_estimate": "unknown",
+        "current_retrieval_service": null,
+        "source": "not_found"
+      }
+    },
+    "section3_practice_facilities": {
+      "range": {
+        "stations": 0,
+        "type": "unknown",
+        "size_description": "No information found regarding practice range size, type, or amenities.",
+        "source": "not_found"
+      },
+      "current_supplier": {
+        "name": null,
+        "source": "not_found"
+      },
+      "quality_mentions": []
+    },
+    "section4_decision_makers": [],
+    "section5_course_tier": {
+      "course_tier": {
+        "classification": "budget",
+        "confidence": "low",
+        "pricing": {
+          "green_fee_range": null,
+          "source": "not_found"
+        },
+        "course_type": "public",
+        "quality_indicators": []
+      }
+    }
+  },
+  "validation": {
+    "ready_for_staging": true,
+    "issues": [
+      "NO_CONTACTS: No decision makers found"
+    ]
+  }
+}

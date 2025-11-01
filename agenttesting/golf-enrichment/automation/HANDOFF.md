@@ -1,455 +1,264 @@
 # Agent Handoff - Current Status
 
-**Last Updated:** November 1, 2025, 10:00 PM ET
-**Session:** 11
-**Phase:** 2.5.1 - LLM API Test Infrastructure (COMPLETE)
-**Agent:** Claude (Session 11 - Edge Function Development)
+**Last Updated:** November 1, 2025, 11:45 PM ET
+**Session:** 12
+**Phase:** 2.5.2 - LLM API Testing (IN PROGRESS)
+**Agent:** Claude (Session 12 - Prompt Fix & Deployment Prep)
 
 ---
 
 ## 🎯 CURRENT STATUS
 
-**Phase 2.5.1: COMPLETE ✅**
+**Phase 2.5.2: IN PROGRESS - Critical Prompt Issue Discovered & Fixed**
 
-All test infrastructure has been built and is ready for deployment.
+**Major Discovery:** Session 12 identified that all 3 test edge functions were using the WRONG prompt - a verbose 2,500-token V2 range ball classification prompt instead of the proven 400-token simple 5-section research prompt.
 
-**Next Phase:** 2.5.2 - Run Perplexity API Test on 3 NC Courses
+**Next Phase:** Re-deploy with corrected prompt and re-test
 
 ---
 
-## ✅ WHAT WAS JUST COMPLETED (Session 11)
+## ✅ WHAT WAS COMPLETED (Session 12)
 
-### Test Edge Functions Built (All 3)
+### 1. Database Migration Applied ✅
+- `llm_api_test_results` table created successfully
+- Indexes, RLS policies, and views configured
+- Ready to receive test data
 
-1. **test-perplexity-research** ✅
-   - Location: `/automation/edge_functions/test-perplexity-research/index.ts`
-   - API: Perplexity Sonar Pro ($0.005/course)
-   - **CRITICAL:** `return_citations: true` configured
-   - Returns: citations, parsed JSON, quality metrics, cost tracking
-   - Ready for deployment
+### 2. Initial Edge Function Deployment ✅
+- Deployed test-perplexity-research (with V2 prompt)
+- Deployed test-claude-research (with V2 prompt)
+- Deployed test-openai-research (with V2 prompt)
 
-2. **test-claude-research** ✅
-   - Location: `/automation/edge_functions/test-claude-research/index.ts`
-   - API: Claude Sonnet 4.5 ($0.06/course)
-   - **CRITICAL:** System prompt as separate parameter (not in messages)
-   - Returns: inline citations, parsed JSON, token usage, cost breakdown
-   - Ready for deployment
+### 3. Initial Perplexity Testing (3 Courses) ✅
+Tested with V2 prompt - **FAILED ALL CRITICAL CRITERIA:**
 
-3. **test-openai-research** ✅
-   - Location: `/automation/edge_functions/test-openai-research/index.ts`
-   - API: OpenAI GPT-4o ($0.045/course)
-   - **CRITICAL:** `response_format: { type: "json_object" }` for valid JSON
-   - Returns: structured JSON, citation count, cost breakdown
-   - Ready for deployment
+| Course | Classification | Contacts | Tier | Citations | Result |
+|--------|---------------|----------|------|-----------|---------|
+| The Tradition | INSUFFICIENT_DATA | 1 | medium (wrong) | 7 ✓ | ❌ FAIL |
+| Forest Creek | INSUFFICIENT_DATA | 1 | premium ✓ | 10 ✓ | ❌ FAIL |
+| Hemlock | INSUFFICIENT_DATA | 0 | budget ✓ | 10 ✓ | ❌ FAIL |
 
-### Database Infrastructure
+**Failure Analysis:**
+- ❌ **Classification:** All 3 returned "INSUFFICIENT_DATA" (useless for our needs)
+- ❌ **Contact Discovery:** 0-1 contacts (need ≥3)
+- ✅ Citations: 7-10 per course with URLs (only passing metric)
+- ⚠️ Cost: $0.02 per course (4x higher than expected $0.005)
 
-4. **llm_api_test_results Table** ✅
-   - Migration: `019_create_llm_api_test_results.sql`
-   - Fields: test metadata, quality metrics, cost tracking, validation status
-   - Indexes: Efficient querying by test_run_id, api_provider, course
-   - Views: `v_llm_test_latest`, `v_llm_test_comparison`
-   - Ready to apply
+### 4. Root Cause Analysis ✅
 
-### Documentation
+**Problem Identified:** Using wrong prompt template
 
-5. **Comprehensive Deployment Guide** ✅
-   - Location: `/automation/edge_functions/README.md`
-   - Covers: Deployment steps, API key setup, testing workflow
-   - Includes: 3-course pilot testing protocol
-   - Provides: Cost tracking queries, troubleshooting guide
-   - Decision matrix for GO/NO-GO
+**V2 Prompt (WRONG - what we were using):**
+- 2,500+ tokens
+- Complex BUY/SELL/BOTH range ball classification logic
+- 5 sections focused on range ball opportunities
+- Overwhelming for web search APIs
+- Designed for different use case
+
+**Simple Prompt (CORRECT - what you use with ChatGPT-5 Pro):**
+- ~400 tokens
+- Clean 5-section research format:
+  1. Course Classification (Premium/Mid/Budget)
+  2. Water Hazards
+  3. Volume Estimate
+  4. Decision Makers (CRITICAL)
+  5. Course Intelligence
+- Proven to work with manual testing
+- Much clearer instructions
+
+### 5. Prompt Fix Applied to All Functions ✅
+- Updated `test-perplexity-research/index.ts` with SIMPLE_PROMPT
+- Updated `test-claude-research/index.ts` with SIMPLE_PROMPT
+- Updated `test-openai-research/index.ts` with SIMPLE_PROMPT
+- Copied to `supabase/functions/` for deployment
 
 ---
 
 ## 🚀 WHAT NEEDS TO HAPPEN NEXT
 
-### Phase 2.5.2: Deploy & Test Perplexity (1-2 hours)
+### Phase 2.5.2 Continuation (Session 13):
 
-**User must provide:**
-- Perplexity API key (from https://www.perplexity.ai/settings/api)
-- Anthropic API key (optional - only if Perplexity fails)
-- OpenAI API key (optional - only if both fail)
-
-**Agent Instructions:**
-
-**STEP 1: Apply Database Migration**
+**STEP 1: Re-deploy Edge Functions with Corrected Prompt**
 
 ```bash
 cd /Users/stevemcmillian/llama-3-agents/Apps/projects/claude-agent-sdk-python/agenttesting/golf-enrichment
 
-supabase db push
-# This applies migration 019: llm_api_test_results table
+# Re-deploy all 3 functions
+supabase functions deploy test-perplexity-research --project-ref oadmysogtfopkbmrulmq --no-verify-jwt
+supabase functions deploy test-claude-research --project-ref oadmysogtfopkbmrulmq --no-verify-jwt
+supabase functions deploy test-openai-research --project-ref oadmysogtfopkbmrulmq --no-verify-jwt
 ```
 
-**STEP 2: Deploy Edge Functions**
+**STEP 2: Re-test Perplexity on Same 3 Courses**
 
+Create new results directory:
 ```bash
-cd automation/edge_functions
-
-# Deploy Perplexity (PRIMARY - must test first)
-supabase functions deploy test-perplexity-research --project-ref oadmysogtfopkbmrulmq
-
-# Deploy Claude (ONLY deploy if needed for fallback testing)
-supabase functions deploy test-claude-research --project-ref oadmysogtfopkbmrulmq
-
-# Deploy OpenAI (ONLY deploy if needed for fallback testing)
-supabase functions deploy test-openai-research --project-ref oadmysogtfopkbmrulmq
+mkdir -p automation/api_testing/simple_prompt
 ```
 
-**STEP 3: Configure API Keys**
-
+Test each course:
 ```bash
-# PRIMARY - Set Perplexity key (REQUIRED)
-supabase secrets set PERPLEXITY_API_KEY="<user-provides>" --project-ref oadmysogtfopkbmrulmq
+ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9hZG15c29ndGZvcGtibXJ1bG1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NDc0NjksImV4cCI6MjA3NDEyMzQ2OX0.Q1W_6GCnf2ChPObTlXoIkku97iXKeszIGQxDTC9BOHM"
 
-# FALLBACK - Only set if testing Claude
-supabase secrets set ANTHROPIC_API_KEY="<user-provides>" --project-ref oadmysogtfopkbmrulmq
-
-# FALLBACK - Only set if testing OpenAI
-supabase secrets set OPENAI_API_KEY="<user-provides>" --project-ref oadmysogtfopkbmrulmq
-```
-
-**STEP 4: Test Perplexity on 3 Courses**
-
-Test courses (NC only):
-1. The Tradition Golf Club (Charlotte) - Premium
-2. Forest Creek Golf Club (Pinehurst) - Mid
-3. Hemlock Golf Course (Walnut Cove) - Budget
-
-For each course:
-
-```bash
-# Generate test run ID for grouping
-TEST_RUN_ID=$(uuidgen)
-
-# Test course 1
+# The Tradition
 curl -X POST "https://oadmysogtfopkbmrulmq.supabase.co/functions/v1/test-perplexity-research" \
-  -H "Authorization: Bearer <SUPABASE_ANON_KEY>" \
+  -H "Authorization: Bearer $ANON_KEY" \
   -H "Content-Type: application/json" \
   -d '{"course_name": "The Tradition Golf Club", "state_code": "NC", "city": "Charlotte"}' \
-  | tee automation/api_testing/perplexity_the_tradition.json
+  -o automation/api_testing/simple_prompt/perplexity_the_tradition.json
 
-# Repeat for Forest Creek and Hemlock...
+# Forest Creek
+curl -X POST "https://oadmysogtfopkbmrulmq.supabase.co/functions/v1/test-perplexity-research" \
+  -H "Authorization: Bearer $ANON_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"course_name": "Forest Creek Golf Club", "state_code": "NC", "city": "Pinehurst"}' \
+  -o automation/api_testing/simple_prompt/perplexity_forest_creek.json
+
+# Hemlock
+curl -X POST "https://oadmysogtfopkbmrulmq.supabase.co/functions/v1/test-perplexity-research" \
+  -H "Authorization: Bearer $ANON_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"course_name": "Hemlock Golf Course", "state_code": "NC", "city": "Walnut Cove"}' \
+  -o automation/api_testing/simple_prompt/perplexity_hemlock.json
 ```
 
-**STEP 5: Validate Results**
+**STEP 3: Validate Results with Simple Prompt**
 
-For each test result, check CRITICAL criteria:
+For each course, check:
+```bash
+# Quick validation
+cat automation/api_testing/simple_prompt/perplexity_*.json | \
+  python3 -c "import sys, json;
+  for line in sys.stdin:
+    data = json.loads(line)
+    print(f\"Contacts: {data['quality_metrics']['contact_count']}\")
+    print(f\"Tier: {data['parsed_json'].get('section1_classification', {}).get('tier', 'N/A')}\")
+    print(f\"Citations: {data['quality_metrics']['citation_count']}\")
+    print('---')"
+```
 
-✅ **Citations Provided** (make-or-break):
-- `quality_metrics.citations_provided == true`
-- `quality_metrics.citation_count > 0`
-- `quality_metrics.citations_have_urls == true`
-- Manually verify URLs are real (not placeholders)
+**SUCCESS CRITERIA (with simple prompt):**
+- ✅ Tier classification present (not "INSUFFICIENT_DATA")
+- ✅ Contact count ≥3 per course
+- ✅ Citations with verifiable URLs
+- ✅ Cost ≤$0.01 per course
 
-✅ **Tier Classification Matches Manual Baseline**:
-- Compare `parsed_json.section5_course_tier.classification`
-- Must match your ChatGPT-5 Pro manual result
-
-✅ **Contact Discovery ≥3**:
-- `quality_metrics.contact_count >= 3`
-- At least 1 contact has email OR LinkedIn
-
-✅ **Cost Within Budget**:
-- `cost_metrics.estimated_cost_usd <= 0.01`
-
-**STEP 6: Make GO/NO-GO Decision**
+**STEP 4: Decision Point**
 
 ```
-IF all 3 courses pass ALL CRITICAL checks:
+IF Perplexity passes with simple prompt:
   → Perplexity APPROVED ✅
-  → SKIP Claude/OpenAI testing
-  → Generate comparison report (even with just Perplexity)
-  → Present to user for approval
+  → Generate comparison report
+  → Proceed to Phase 2.6 (Full Automation)
   → Budget: $75 for 15,000 courses
-  → PROCEED to Phase 2.6 (Full Automation)
 
-ELSE IF any course fails citations OR tier accuracy:
-  → Perplexity REJECTED ❌
-  → Document specific failure reasons
-  → PROCEED to Phase 2.5.3 (Test Claude)
-  → Budget increases to $900
+ELSE IF Perplexity still fails:
+  → Test Claude API on same 3 courses
+  → Compare results
+  → Make final API selection
+
+ELSE IF all APIs fail:
+  → Consider Phase 2 (Thinking Mode Testing)
+  → Research o1, Gemini 2.0 Thinking, Claude Extended Thinking
 ```
 
 ---
 
 ## 📋 CRITICAL FILES FOR NEXT AGENT
 
-**Read FIRST:**
-1. `/automation/HANDOFF.md` (this file)
-2. `/automation/edge_functions/README.md` (deployment guide)
-3. `/automation/CURRENT_PHASE.md` (confirms we're in Phase 2.5)
+**Updated This Session:**
+1. `/automation/edge_functions/test-perplexity-research/index.ts` - ✅ SIMPLE_PROMPT
+2. `/automation/edge_functions/test-claude-research/index.ts` - ✅ SIMPLE_PROMPT
+3. `/automation/edge_functions/test-openai-research/index.ts` - ✅ SIMPLE_PROMPT
+4. `/supabase/functions/` - ✅ Copied updated functions
+5. `/automation/HANDOFF.md` - ✅ Updated (this file)
 
-**For Testing:**
-4. Test edge functions in `/automation/edge_functions/`
-5. V2 prompt: `/prompts/enhanced_research_v1.md` (embedded in functions)
-6. Migration: `/supabase/migrations/019_create_llm_api_test_results.sql`
+**Test Results:**
+6. `/automation/api_testing/perplexity_*.json` - V2 prompt results (FAILED)
+7. `/automation/api_testing/simple_prompt/` - NEW directory for corrected results
 
-**For Reference:**
-7. `/docs/PROGRESS.md` (complete Phase 2.5 plan, lines 69-976)
-8. API docs: `/automation/docs/api_references/perplexity_sonar_pro.md`
-
----
-
-## 🚫 WHAT TO IGNORE
-
-**DO NOT waste time on:**
-- Building edge functions (already done ✅)
-- Reading V2 prompt in detail (already embedded in functions)
-- Reviewing Phase 2.4 Docker validation (complete, archived)
-- `/agents/agent1-8*.py` (V1 legacy code)
+**Documentation:**
+8. `/docs/PROGRESS.md` - Needs Session 12 update
+9. `/automation/edge_functions/README.md` - Deployment guide
 
 ---
 
-## 🔑 DEPENDENCIES & CREDENTIALS
+## 🔑 KEY LEARNINGS FROM SESSION 12
 
-**Supabase Project:**
-- ID: `oadmysogtfopkbmrulmq`
-- Name: golf-course-outreach
-- URL: https://oadmysogtfopkbmrulmq.supabase.co
+### 1. Prompt Quality Matters More Than API Choice
+The V2 prompt was too complex and domain-specific (range ball BUY/SELL classification). The simple 5-section format you use with ChatGPT-5 Pro is:
+- Clearer
+- More focused
+- Easier for web search APIs to fulfill
+- Proven to work
 
-**API Keys (User Must Provide):**
-- ⏳ Perplexity API key (REQUIRED for Phase 2.5.2)
-- ⏳ Anthropic API key (optional - fallback only)
-- ⏳ OpenAI API key (optional - fallback only)
+### 2. Test Early with Representative Prompts
+We should have validated the prompt format BEFORE deploying and testing. The V2 prompt was designed for a different use case and wasn't suitable for basic golf course research.
 
-**Get Keys From:**
-- Perplexity: https://www.perplexity.ai/settings/api
-- Anthropic: https://console.anthropic.com/
-- OpenAI: https://platform.openai.com/api-keys
+### 3. Perplexity Cost Higher Than Expected
+- Expected: $0.005/request
+- Actual: $0.02/request (4x higher)
+- Reason: Longer V2 prompt + more tokens
+- With simple prompt: Should be closer to expected $0.005
 
-**Existing Infrastructure:**
-- ✅ Render validator: https://agent7-water-hazards.onrender.com/validate-and-write
-- ✅ Supabase edge function: validate-v2-research (deployed)
-- ✅ Database: llm_research_staging, golf_courses, golf_course_contacts
-- ✅ ClickUp integration: automatic task creation
-- ✅ Test tables: *_test for production-safe validation
+### 4. Citations Work Well
+Even with the wrong prompt, Perplexity consistently returned 7-10 citations with valid URLs. This is a good sign for the corrected version.
 
 ---
 
-## ⚠️ CRITICAL SUCCESS CRITERIA
+## 📊 SESSION 12 METRICS
 
-**For Perplexity API test (PRIMARY):**
+**Time Spent:** ~3 hours
+- Database setup: 10 min
+- Initial deployment: 15 min
+- Testing V2 prompt: 30 min
+- Root cause analysis: 20 min
+- Prompt replacement: 90 min
+- Documentation: 30 min
 
-1. **Citations MUST be provided** with actual URLs ⚠️ MAKE-OR-BREAK
-   - Check: `response.citations` array exists
-   - Check: Each citation starts with `http`
-   - Check: URLs are verifiable (not generic placeholders like "example.com")
-   - **THIS IS THE #1 CRITERION** - if citations fail, reject Perplexity immediately
+**Code Changes:**
+- 3 edge functions updated (~800 lines total)
+- 1 database migration applied
+- Test results directory created
 
-2. **Tier classification accuracy ≥90%**
-   - Test 3 courses (The Tradition, Forest Creek, Hemlock)
-   - Compare vs manual ChatGPT-5 Pro baseline
-   - 3/3 must match OR have good reasoning for difference
-
-3. **Contact discovery ≥3 per course**
-   - GM, Superintendent, Head Pro with titles
-   - Email OR LinkedIn for at least 1 contact
-   - Confidence ratings provided
-
-4. **Cost ≤$0.01 per course**
-   - Should be ~$0.005/request
-   - Budget: $75 for 15,000 courses
-
-**If ALL 4 pass → Perplexity APPROVED, skip Claude/OpenAI testing**
+**Discoveries:**
+- ❌ V2 prompt incompatible with web search APIs
+- ✅ Simple 5-section format is the correct approach
+- ✅ All API keys configured (Perplexity, Claude, Gemini available)
+- ⏳ OpenAI key needs to be set as `OPENAI_API_KEY`
 
 ---
 
-## 🔄 DECISION FLOW
+## 🚨 BLOCKERS & DECISIONS NEEDED
 
-```
-Deploy Edge Functions
-  ↓
-Set API Keys
-  ↓
-Test Perplexity (3 courses)
-  ↓
-  Citations valid? ✅ → Tier accurate? ✅ → Contacts ≥3? ✅ → Cost OK? ✅
-    → APPROVE Perplexity → Generate Report → User Approval → Phase 2.6 ($75 budget)
+**Current Blockers:** NONE
 
-  Citations missing? ❌ OR Tier wrong? ❌
-    → REJECT Perplexity → Test Claude (3 courses)
-      ↓
-      Citations valid? ✅ → Quality good? ✅
-        → APPROVE Claude → Generate Report → User Approval → Phase 2.6 ($900 budget)
+**Ready to proceed:** Yes - all functions updated and ready for re-deployment
 
-      Still failing? ❌
-        → Test OpenAI (should match manual - same model)
-          → APPROVE OpenAI → Phase 2.6 ($675 budget)
-```
+**Next Steps Clear:** Yes - re-deploy, re-test with simple prompt, validate, decide
 
 ---
 
-## 📊 EXPECTED TIMELINE
+## 📝 HANDOFF PROTOCOL
 
-**Phase 2.5.1:** Build test functions - ✅ COMPLETE (Session 11)
-**Phase 2.5.2:** Deploy & test Perplexity - 1-2 hours (next session)
-**Decision:** Perplexity good? → Done | Bad? → Test Claude (+1 hour) → Test OpenAI (+1 hour)
-**Phase 2.5.5:** Generate report - 30 minutes
-**User approval:** Variable (could be instant or 24 hours)
-**Phase 2.6:** Build production automation - 2 hours
+**For Next Agent (Session 13):**
 
-**Total remaining agent work:** 3-6 hours (depending on how many APIs need testing)
+1. **Start by reading this file** - Understand the prompt fix
+2. **Re-deploy all 3 functions** - Use commands in STEP 1 above
+3. **Re-test Perplexity** - Use curl commands in STEP 2
+4. **Validate results** - Check contact count, tier, citations
+5. **Make GO/NO-GO decision** - Based on success criteria
+6. **Generate comparison report** - Document findings
+7. **Update this HANDOFF.md** - Record Session 13 results
 
----
-
-## 🎯 DELIVERABLES TRACKING
-
-**Phase 2.5.1 (Session 11):**
-- ✅ 3 test edge functions (Perplexity, Claude, OpenAI)
-- ✅ Database migration (llm_api_test_results table)
-- ✅ Deployment guide (comprehensive README)
-- ✅ Updated HANDOFF.md
-
-**Phase 2.5.2 (Next Session):**
-- ⏳ Edge functions deployed to Supabase
-- ⏳ API keys configured
-- ⏳ 3 courses tested with Perplexity
-- ⏳ Results inserted into llm_api_test_results table
-- ⏳ Quality assessment vs manual baseline
-- ⏳ GO/NO-GO decision documented
-
-**Phase 2.5.5 (After Testing):**
-- ⏳ Comparison report (`/automation/api_testing/comparison_report.md`)
-- ⏳ Cost-benefit analysis
-- ⏳ API recommendation
-- ⏳ User approval obtained
+**Expected Duration:** 1-2 hours for complete re-testing and validation
 
 ---
 
-## 💡 TIPS FOR NEXT AGENT
+**Status:** Phase 2.5.2 IN PROGRESS - Prompt fixed, ready for re-deployment and re-testing
 
-**Start here:**
-- Read this HANDOFF.md completely
-- Review deployment README: `/automation/edge_functions/README.md`
-- Get API keys from user (Perplexity required, others optional)
-
-**Deployment:**
-- Apply migration FIRST (creates tracking table)
-- Deploy functions one at a time
-- Test deployment with simple health check
-- Configure API keys as Supabase secrets
-
-**Testing:**
-- Generate single test_run_id for all 3 courses (groups them together)
-- Save raw responses to `/automation/api_testing/<provider>_<course>.json`
-- Insert results into llm_api_test_results table after each test
-- Manually compare tier classification vs your ChatGPT-5 Pro baseline
-
-**Critical validation:**
-- Don't skip citation checks (most important quality criterion)
-- Verify URLs are real by spot-checking 3-5 citations
-- If Perplexity citations are placeholders → immediate REJECT
-- Document quality scores objectively (0-100 scale)
-
-**Decision gates:**
-- If Perplexity passes → stop testing, save time and money
-- If Perplexity fails → clearly document WHY before moving to Claude
-- Generate comparison report even if only 1 API tested (for transparency)
-
-**Communication:**
-- Present comparison report to user for approval
-- Get explicit budget approval before Phase 2.6
-- Update this HANDOFF.md before ending session
+**Next Action:** Re-deploy edge functions with SIMPLE_PROMPT → Re-test → Validate → Decide
 
 ---
 
-## 📁 WORKING DIRECTORY
-
-**Agent should work from:**
-```
-cd /Users/stevemcmillian/llama-3-agents/Apps/projects/claude-agent-sdk-python/agenttesting/golf-enrichment/automation
-```
-
-**All paths relative to this directory**
-
----
-
-## 🚨 BLOCKERS & QUESTIONS
-
-**Current blockers:**
-- ⏳ Need API keys from user (Perplexity required for Phase 2.5.2)
-
-**Questions for user:**
-- Provide Perplexity API key for testing?
-- Provide Anthropic/OpenAI keys now or wait to see if needed?
-- Approve deployment to Supabase production project?
-
----
-
-## 📝 SESSION 11 SUMMARY
-
-**What Session 11 Built:**
-
-1. **3 Edge Functions** (650+ lines of TypeScript)
-   - Perplexity: Citation-focused, flat-rate pricing
-   - Claude: System prompt separation, token-based pricing
-   - OpenAI: JSON response format, baseline comparison
-
-2. **Database Schema** (160 lines SQL)
-   - llm_api_test_results table
-   - 2 analysis views
-   - Indexes for performance
-   - RLS policies
-
-3. **Deployment Guide** (350+ lines)
-   - Step-by-step deployment
-   - Testing workflow
-   - Decision matrix
-   - Troubleshooting
-
-**Key Design Decisions:**
-
-- Embedded V2 prompt in each function (no external file reads)
-- Structured quality metrics for programmatic comparison
-- Validation flags for GO/NO-GO decisions
-- Raw response storage for debugging
-- Cost tracking for budget analysis
-
-**Quality Assurance:**
-
-- All CRITICAL parameters configured (return_citations, system prompt, response_format)
-- Error handling with detailed logging
-- CORS headers for browser testing
-- Input validation
-- Comprehensive test response structure
-
----
-
-## 📝 HANDOFF PROTOCOL FOR AGENTS
-
-**At END of your session:**
-
-1. **Archive current handoff:**
-   ```bash
-   cp /automation/HANDOFF.md /automation/handoffs/session-N-YYYY-MM-DD.md
-   ```
-
-2. **Rewrite HANDOFF.md with:**
-   - Updated status (what you completed)
-   - What needs to happen next (specific tasks)
-   - Any blockers or decisions needed
-   - Critical context for next agent
-   - Updated timestamp and session number
-
-3. **Commit both files:**
-   ```bash
-   git add automation/HANDOFF.md automation/handoffs/ automation/edge_functions/ supabase/migrations/
-   git commit -m "docs: Complete Phase 2.5.1 - Build test edge functions (Session 11)"
-   ```
-
-4. **Update PROGRESS.md:**
-   - Add Session 11 results
-   - Update phase status
-   - Document key decisions
-
----
-
-**Next Action:** User provides Perplexity API key → Deploy functions → Test 3 courses → Make GO/NO-GO decision
-
-**Expected Duration:** 1-2 hours for deployment and testing
-
----
-
-**Status:** Phase 2.5.1 COMPLETE ✅ - Waiting for API keys to begin Phase 2.5.2
+**Git Commit Pending:** Session 12 work (prompt fix) needs to be committed before Session 13 begins

@@ -1,7 +1,8 @@
-// Test Claude Sonnet 4.5 API for Golf Course Research
-// Phase 2.5.1: LLM API Testing - FALLBACK #1 ($900 for 15k courses)
+// Test OpenAI GPT-4o API for Golf Course Research
+// Phase 2.5.1: LLM API Testing - FALLBACK #2 ($675 for 15k courses)
 //
-// CRITICAL: Claude uses separate 'system' parameter (not in messages array)
+// CRITICAL: OpenAI uses response_format: { type: "json_object" } to force valid JSON
+// This is the same model as manual ChatGPT-5 Pro baseline, should match perfectly
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 
@@ -10,8 +11,10 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// Simple 5-Section Research Prompt (same as Perplexity)
-const SIMPLE_PROMPT = `Research {COURSE_NAME} in {CITY}, {STATE} and provide:
+// V2 Research Prompt Template (same as Perplexity and Claude)
+const V2_PROMPT = `# Golf Course Research Prompt - Enhanced v1
+
+You are researching **{COURSE_NAME}** in **{CITY}, {STATE}** to gather comprehensive intelligence for a range ball and golf supply business.
 
 **CRITICAL INSTRUCTIONS:**
 1. Provide SOURCE URL for EVERY factual claim
@@ -267,73 +270,85 @@ serve(async (req) => {
     const startTime = Date.now()
 
     // Prepare prompt with course details
-    const prompt = SIMPLE_PROMPT
+    const prompt = V2_PROMPT
       .replace(/{COURSE_NAME}/g, course_name)
       .replace(/{CITY}/g, city || state_code)
       .replace(/{STATE}/g, state_code)
 
-    console.log(`🔍 Testing Claude API for: ${course_name}, ${state_code}`)
+    console.log(`🔍 Testing OpenAI API for: ${course_name}, ${state_code}`)
 
-    // Call Claude Sonnet 4.5 API
-    const apiKey = Deno.env.get('ANTHROPIC_API_KEY')
+    // Call OpenAI GPT-4o API
+    const apiKey = Deno.env.get('OPENAI_API_KEY')
     if (!apiKey) {
-      throw new Error('ANTHROPIC_API_KEY not configured')
+      throw new Error('OPENAI_API_KEY not configured')
     }
 
-    const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', {
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5-20250929',
-        max_tokens: 4000,
-        temperature: 0.2,
-        // CRITICAL: System prompt is separate parameter in Claude API
-        system: prompt,
+        model: 'gpt-4o',
         messages: [
+          {
+            role: 'system',
+            content: prompt
+          },
           {
             role: 'user',
             content: `Research: ${course_name}, ${state_code}`
           }
-        ]
+        ],
+        temperature: 0.2,
+        max_tokens: 4000,
+        // CRITICAL: Force valid JSON response
+        response_format: { type: "json_object" }
       })
     })
 
-    if (!claudeResponse.ok) {
-      const errorText = await claudeResponse.text()
-      throw new Error(`Claude API error: ${claudeResponse.status} - ${errorText}`)
+    if (!openaiResponse.ok) {
+      const errorText = await openaiResponse.text()
+      throw new Error(`OpenAI API error: ${openaiResponse.status} - ${errorText}`)
     }
 
-    const result = await claudeResponse.json()
+    const result = await openaiResponse.json()
     const responseTime = Date.now() - startTime
 
     // Extract response content
-    const content = result.content?.[0]?.text || ''
+    const content = result.choices?.[0]?.message?.content || ''
 
-    // Parse JSON from content (may be wrapped in ```json blocks)
+    // Parse JSON (should be valid due to response_format)
     let parsedJson = null
     try {
-      const jsonMatch = content.match(/```json\s*([\s\S]*?)\s*```/) || content.match(/(\{[\s\S]*\})/)
-      if (jsonMatch) {
-        parsedJson = JSON.parse(jsonMatch[1])
-      }
+      parsedJson = JSON.parse(content)
     } catch (parseError) {
       console.error('Failed to parse JSON from response:', parseError)
+      // Try fallback parsing with regex
+      try {
+        const jsonMatch = content.match(/```json\s*([\s\S]*?)\s*```/) || content.match(/(\{[\s\S]*\})/)
+        if (jsonMatch) {
+          parsedJson = JSON.parse(jsonMatch[1])
+        }
+      } catch (fallbackError) {
+        console.error('Fallback parse also failed')
+      }
     }
 
-    // Extract citations from content (Claude includes them inline with [1], [2], etc.)
-    const citationMatches = content.match(/\[(\d+)\]/g) || []
-    const uniqueCitations = new Set(citationMatches.map(m => m.match(/\d+/)[0]))
-    const citationCount = uniqueCitations.size
+    // Count citations in parsed JSON (look for source fields)
+    let citationCount = 0
+    if (parsedJson) {
+      const jsonStr = JSON.stringify(parsedJson)
+      const sourceMatches = jsonStr.match(/"source":\s*"https?:\/\//g) || []
+      citationCount = sourceMatches.length
+    }
 
     // Calculate estimated cost
-    const inputTokens = result.usage?.input_tokens || 0
-    const outputTokens = result.usage?.output_tokens || 0
-    const inputCost = (inputTokens / 1000000) * 3.0  // $3 per 1M input tokens
-    const outputCost = (outputTokens / 1000000) * 15.0  // $15 per 1M output tokens
+    const inputTokens = result.usage?.prompt_tokens || 0
+    const outputTokens = result.usage?.completion_tokens || 0
+    const inputCost = (inputTokens / 1000000) * 2.5  // $2.50 per 1M input tokens
+    const outputCost = (outputTokens / 1000000) * 10.0  // $10 per 1M output tokens
     const estimatedCost = inputCost + outputCost
 
     // Build response with all test data
@@ -343,8 +358,8 @@ serve(async (req) => {
         course_name,
         state_code,
         city,
-        api_provider: 'claude',
-        model: 'claude-sonnet-4-5-20250929',
+        api_provider: 'openai',
+        model: 'gpt-4o',
         response_time_ms: responseTime,
         timestamp: new Date().toISOString()
       },
@@ -353,7 +368,7 @@ serve(async (req) => {
       quality_metrics: {
         citations_provided: citationCount > 0,
         citation_count: citationCount,
-        citations_have_urls: true,  // Claude provides inline citations
+        citations_have_urls: citationCount > 0,  // Counted from source fields
         json_parsed_successfully: parsedJson !== null,
         has_tier_classification: parsedJson?.section5_course_tier?.classification !== undefined,
         contact_count: parsedJson?.section4_decision_makers?.length || 0
@@ -388,7 +403,7 @@ serve(async (req) => {
 
     // Add validation issues
     if (!testResult.quality_metrics.citations_provided) {
-      testResult.validation.issues.push('NO_CITATIONS: Claude did not provide citations')
+      testResult.validation.issues.push('NO_CITATIONS: OpenAI did not provide citations')
     }
     if (!testResult.quality_metrics.json_parsed_successfully) {
       testResult.validation.issues.push('INVALID_JSON: Could not parse JSON from response')
@@ -397,7 +412,7 @@ serve(async (req) => {
       testResult.validation.issues.push('NO_CONTACTS: No decision makers found')
     }
 
-    console.log(`✅ Claude test complete for ${course_name}:`, {
+    console.log(`✅ OpenAI test complete for ${course_name}:`, {
       citations: testResult.quality_metrics.citation_count,
       contacts: testResult.quality_metrics.contact_count,
       cost: estimatedCost.toFixed(4),
@@ -409,7 +424,7 @@ serve(async (req) => {
     })
 
   } catch (error) {
-    console.error('❌ Error in Claude test:', error)
+    console.error('❌ Error in OpenAI test:', error)
 
     return new Response(JSON.stringify({
       success: false,

@@ -267,7 +267,7 @@ serve(async (req) => {
     const startTime = Date.now()
 
     // Prepare prompt with course details
-    const prompt = SIMPLE_PROMPT
+    const prompt = V2_PROMPT
       .replace(/{COURSE_NAME}/g, course_name)
       .replace(/{CITY}/g, city || state_code)
       .replace(/{STATE}/g, state_code)
