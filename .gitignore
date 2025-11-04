@@ -75,3 +75,4 @@ results/
 
 # Old teams archive (excluded from git)
 archive/teams-old/
+.archive/
