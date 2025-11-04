@@ -9,19 +9,20 @@
 
 ## 🎯 CURRENT STATUS
 
-**Phase 2.5.4: LOCAL POC COMPLETE (HYBRID SDK)**
+**Phase 2.5.5: READY FOR DOCKER TESTING**
 
-**Session 16 Focus:** Test hybrid SDK orchestrator with direct API calls (no MCP packages)
+**Session 16 Complete:** ✅ Local POC validated hybrid approach (88.3% quality)
 
-**Result:** ✅ **POC validates approach - 88.3% quality achieved**
-- Perplexity-first workflow with verified citations
-- Hunter.io B2B contact discovery (66.7% email rate)
-- All data has citation sources (no guessing)
-- Cost: $0.026/course (74% under $0.10 budget)
+**Session 17 Goal:** Test `orchestrator_hybrid.py` in Docker environment
+
+**Current State:**
+- ✅ Hybrid orchestrator built and tested locally
+- ✅ 88.3% quality on 3 courses (exceeds 85% target)
+- ✅ All data has citation sources
+- ✅ Cost: $0.026/course (74% under budget)
+- ⏳ Need: Docker testing before Render deployment
 
 **⚠️ STATUS: LOCAL POC ONLY - NOT PRODUCTION READY**
-
-**Next Phase (Session 17):** Docker testing of hybrid orchestrator
 
 ---
 
@@ -396,51 +397,58 @@ All files in `/teams/golf-enrichment/`:
 
 ## 🚨 BLOCKERS & RISKS
 
-**Current Blockers:** NONE
+**Current Blockers:** NONE (Session 16 validated approach)
 
-**Risks:**
-1. ⚠️ MCP server packages may not exist (mitigated by hybrid approach)
-2. ⚠️ Accuracy may not reach 85% (need POC data)
-3. ⚠️ Cost per course may be higher than $0.10 (need real data)
+**Remaining Risks:**
+1. ⚠️ Docker results may differ from local POC
+2. ⚠️ Render deployment may have API timeout issues
+3. ⚠️ End-to-end pipeline may have integration gaps
 
 **Mitigation:**
-- Hybrid approach bypasses MCP dependency
-- Have edge function fallback ready
-- Can pivot to GPT-5 Pro if needed
+- Test in Docker first (Session 17)
+- Monitor API response times
+- Validate each pipeline step incrementally
 
 ---
 
-## 📝 HANDOFF PROTOCOL FOR SESSION 15
+## 📝 HANDOFF PROTOCOL FOR SESSION 17
 
 **1. Read these files FIRST:**
-- `/teams/golf-enrichment/SESSION_13_14_SUMMARY.md` (comprehensive notes)
-- `/docs/PROGRESS.md` (Sessions 13-14 sections)
-- This HANDOFF.md
+- This `HANDOFF.md` (current status)
+- `/golf-enrichment-sdk-poc/SESSION_16_SUMMARY.md` (POC results)
+- `/golf-enrichment-active/docs/PROGRESS.md` (Session 16 section)
 
-**2. Choose implementation path:**
-- Recommended: Option B (Hybrid SDK + Direct APIs)
-- Alternative: Option A (Full MCP) or Option C (Edge Functions)
+**2. Understand what was proven in Session 16:**
+- ✅ Hybrid orchestrator achieves 88.3% quality (local testing)
+- ✅ Cost: $0.026/course (74% under budget)
+- ✅ All data has citation sources
+- ⚠️ LOCAL ONLY - need Docker validation
 
-**3. If choosing Hybrid (recommended):**
-- Update `orchestrator.py` with direct API calls
-- Test on The Tradition (single course)
-- Test on 3 courses
-- Calculate quality metrics
-- Make GO/NO-GO decision
+**3. Session 17 Tasks:**
+1. Create Dockerfile for `orchestrator_hybrid.py`
+2. Test same 3 NC courses in Docker
+3. Compare results to local POC baseline
+4. Validate quality metrics match (±5%)
+5. Document any differences
 
-**4. Document results:**
-- Update PROGRESS.md with Session 15
-- Update this HANDOFF.md for Session 16
-- Commit changes
+**4. Success Criteria:**
+- Docker quality ≥85% (same as local)
+- Cost similar to local ($0.026 ±$0.01)
+- No critical errors or timeouts
 
-**Expected Timeline:** 2 hours for Hybrid, 3+ hours for Full MCP
+**5. Document results:**
+- Update PROGRESS.md with Session 17
+- Update this HANDOFF.md for Session 18
+- Commit Docker configuration
+
+**Expected Timeline:** 1-2 hours
 
 ---
 
-**Status:** Phase 2.5.2 - Infrastructure Complete, Ready for Implementation
+**Status:** Phase 2.5.5 - Ready for Docker Testing
 
-**Next Action:** Choose path (Hybrid recommended) → Implement → Test → Decide
+**Next Action:** Session 17 - Test orchestrator_hybrid.py in Docker environment
 
 ---
 
-**Git Commit Status:** Sessions 13-14 work ready to commit after Session 15 testing
+**Git Status:** Session 16 complete and committed (4 commits pushed to GitHub)
